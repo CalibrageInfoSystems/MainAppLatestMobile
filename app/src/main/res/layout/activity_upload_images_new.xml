@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".cropmaintenance.UploadImagesNew">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/addrecoveryfarmers"
+                android:layout_gravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                style="@style/basicBtnStyle"
+                android:padding="10dp"
+                android:text="Add Recovery Farmer"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:text="Upload Farmer Photo"
+                android:background="@color/green"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:layout_margin="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.7"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:layout_margin="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.4"
+                            android:textStyle="bold"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:text="Farmer Code"
+                            />
+
+                        <TextView
+                            android:id="@+id/farmercode"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.6"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:layout_margin="4dp">
+
+                        <TextView
+
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.4"
+                            android:textStyle="bold"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:text="Farmer Name"/>
+
+                        <TextView
+                            android:id="@+id/farmername"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.6"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:layout_margin="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.4"
+                            android:textStyle="bold"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:text="Father Name"/>
+
+                        <TextView
+                            android:id="@+id/fathername"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.6"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:layout_margin="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.4"
+                            android:textStyle="bold"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:text="Mobile Number"/>
+
+                        <TextView
+                            android:id="@+id/mobilenumber"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.6"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:layout_margin="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.4"
+                            android:textStyle="bold"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:text="Farmer Village"/>
+
+                        <TextView
+                            android:id="@+id/farmerviallge"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.6"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:layout_margin="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.4"
+                            android:textStyle="bold"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:text="Farmer Mandal"/>
+
+                        <TextView
+                            android:id="@+id/farmermandal"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.6"
+                            android:textColor="@color/header_txt"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    >
+
+                    <ImageView
+                        android:id="@+id/farmerimage"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:src="@mipmap/ic_launcher"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:text="Upload Aadhar Card Photo"
+                android:background="@color/green"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/norecordsforidproofs"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="No Records Found"
+                    android:textColor="@color/header_txt"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:id="@+id/idproofslayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.7"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1"
+                            android:layout_margin="4dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.4"
+                                android:textStyle="bold"
+                                android:textColor="@color/header_txt"
+                                android:textSize="16sp"
+                                android:text="Aadhar Number"/>
+
+                            <TextView
+                                android:id="@+id/aadharnumber"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.6"
+                                android:textColor="@color/header_txt"
+                                android:textSize="16sp"
+                                android:textStyle="bold"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3">
+
+                        <ImageView
+                            android:id="@+id/idproofimage"
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:src="@mipmap/ic_launcher"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:text="Upload Bank Passbook Photo"
+                android:background="@color/green"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/norecordsforbank"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="No Records Found"
+                    android:textColor="@color/header_txt"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+
+                    android:id="@+id/bankdetailslayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.7"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1"
+                            android:layout_margin="4dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.4"
+                                android:textStyle="bold"
+                                android:textColor="@color/header_txt"
+                                android:textSize="16sp"
+                                android:text="Bank Account Number"/>
+
+                            <TextView
+                                android:id="@+id/accountnumber"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.6"
+                                android:textColor="@color/header_txt"
+                                android:textSize="16sp"
+                                android:textStyle="bold"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1"
+                            android:layout_margin="4dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.4"
+                                android:textStyle="bold"
+                                android:textColor="@color/header_txt"
+                                android:textSize="16sp"
+                                android:text="Account Holder Name"/>
+
+                            <TextView
+                                android:id="@+id/accountname"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.6"
+                                android:textColor="@color/header_txt"
+                                android:textSize="16sp"
+                                android:textStyle="bold"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1"
+                            android:layout_margin="4dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.4"
+                                android:textStyle="bold"
+                                android:textColor="@color/header_txt"
+                                android:textSize="16sp"
+                                android:text="Bank IFSC Code"/>
+
+                            <TextView
+                                android:id="@+id/ifsccode"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.6"
+                                android:textColor="@color/header_txt"
+                                android:textSize="16sp"
+                                android:textStyle="bold"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1"
+                            android:layout_margin="4dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.4"
+                                android:textStyle="bold"
+                                android:textColor="@color/header_txt"
+                                android:textSize="16sp"
+                                android:text="Bank Name"/>
+
+                            <TextView
+                                android:id="@+id/bankname"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.6"
+                                android:textColor="@color/header_txt"
+                                android:textSize="16sp"
+                                android:textStyle="bold"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        >
+
+                        <ImageView
+                            android:id="@+id/bankpassbookimage"
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:src="@mipmap/ic_launcher"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/submitBtn"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="Submit"
+                style="@style/basicBtnStyle" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

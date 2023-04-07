@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="10"
+    android:orientation="vertical"
+    tools:context=".cropmaintenance.RecoveryFarmers">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight="9"
+        android:layout_height="0dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/mainlayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:layout_margin="10dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:textStyle="bold"
+                        android:textColor="@color/header_txt"
+                        android:textSize="16sp"
+                        android:text="Main Farmer Code"
+                        />
+
+                    <TextView
+                        android:id="@+id/mainfarmercode"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.6"
+                        android:textColor="@color/header_txt"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:layout_margin="10dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:textStyle="bold"
+                        android:textColor="@color/header_txt"
+                        android:textSize="16sp"
+                        android:text="Main Farmer Name"
+                        />
+
+                    <TextView
+                        android:id="@+id/mainfarmername"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.6"
+                        android:textColor="@color/header_txt"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/addfarmer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    style="@style/basicBtnStyle"
+                    android:layout_margin="10dp"
+                    android:text="Add"/>
+
+                <LinearLayout
+                    android:id="@+id/addrecoveryfarmer1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:background="@color/white"
+                    android:layout_margin="10dp">
+
+                    <AutoCompleteTextView
+                        style="@style/editTxt_normal"
+                        android:id="@+id/autoCompletefarmer1"
+                        android:layout_width="match_parent"
+                        android:padding="@dimen/activity_vertical_margin"
+                        android:hint="Select Recovery Farmer"
+                        android:layout_height="wrap_content">
+                    </AutoCompleteTextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:weightSum="1"
+                        android:orientation="horizontal"
+                        android:padding="5dp">
+
+                        <TextView
+                            style="@style/textbasic_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.4"
+                            android:text="Village Name" />
+
+                        <TextView
+                            android:id="@+id/recovery_village"
+                            style="@style/textbasic_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:singleLine="true"
+                            android:text="" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="1"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:padding="5dip">
+
+                        <TextView
+                            style="@style/textbasic_title"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.4"
+                            android:layout_height="wrap_content"
+                            android:text="Mandal Name" />
+
+                        <TextView
+                            android:id="@+id/recovery_mandal"
+                            style="@style/textbasic_title"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.6"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:weightSum="1"
+                        android:orientation="horizontal"
+                        android:padding="5dip">
+
+                        <TextView
+
+                            style="@style/textbasic_title"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.4"
+                            android:layout_height="wrap_content"
+                            android:text="District Name" />
+
+                        <TextView
+                            android:id="@+id/recovery_district"
+                            style="@style/textbasic_title"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.6"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="" />
+
+                    </LinearLayout>
+                    <!--                    <EditText-->
+                    <!--                        android:id="@+id/recovery_district"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:editable="false"-->
+                    <!--                        style="@style/editTxt_normal"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_margin="10dp"-->
+                    <!--                        android:hint="District Name" />-->
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:weightSum="1"
+                        android:orientation="horizontal"
+                        android:padding="5dip">
+
+                        <TextView
+                            style="@style/textbasic_title"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.4"
+                            android:layout_height="wrap_content"
+                            android:text="State Name" />
+
+                        <TextView
+                            android:id="@+id/recovery_state"
+                            style="@style/textbasic_title"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.6"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="" />
+
+                    </LinearLayout>
+                    <!--                    <EditText-->
+                    <!--                        android:id="@+id/recovery_state"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:editable="false"-->
+                    <!--                        android:layout_margin="10dp"-->
+                    <!--                        style="@style/editTxt_normal"-->
+                    <!--                        android:hint="State Name" />-->
+                    <LinearLayout
+                        android:id="@+id/palmArealyt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="1"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:padding="5dip">
+
+                        <TextView
+
+                            style="@style/textbasic_title"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.4"
+                            android:layout_height="wrap_content"
+                            android:text="Palm Area" />
+
+                        <TextView
+                            android:id="@+id/recovery_palmarea"
+                            style="@style/textbasic_title"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.6"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="" />
+
+                    </LinearLayout>
+
+                    <!--                    <EditText-->
+                    <!--                        android:id="@+id/recovery_palmarea"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:editable="false"-->
+                    <!--                        android:layout_margin="10dp"-->
+                    <!--                        style="@style/editTxt_normal"-->
+                    <!--                        android:hint="Palm Area (Yeilding And Non-Yeilding)" />-->
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:id="@+id/addnewfarmer"
+                        android:text="Save Recovery Farmer"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:layout_margin="@dimen/activity_vertical_margin"
+                        style="@style/basicBtnStyle"
+                        android:layout_height="wrap_content">
+
+                    </Button>
+
+                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recoveryfarmerslist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginTop="2dp">
+
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+        <Button
+            android:layout_width="match_parent"
+            android:id="@+id/save"
+            android:text="Submit"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            style="@style/basicBtnStyle"
+            android:layout_height="wrap_content">
+
+        </Button>
+    </LinearLayout>
+
+</LinearLayout>
