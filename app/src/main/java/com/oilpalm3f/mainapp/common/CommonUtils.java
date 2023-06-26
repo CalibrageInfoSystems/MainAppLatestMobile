@@ -563,6 +563,8 @@ public class CommonUtils {
         return toMap;
     }
 
+
+
     public static List<String> listFromPair(LinkedHashMap<String, Pair> inputMap, String type) {
         String[] array = arrayFromPair(inputMap, type);
         return Arrays.asList(array);
@@ -874,19 +876,19 @@ public class CommonUtils {
             deviceId = mTelephony.getDeviceId();
         }
 
-         //return deviceId;
+         return deviceId;
 
         //return "351558072968326";// KA User(AnandGoud)
         //return "358525086163783"; //AR & CH State User(Nikhil)
-        return "351558072360896"; //AR State User(Myself)
+        //return "351558072360896"; //AR State User(Myself)
         //return "358525086382797"; //Live Harvesting Visits not synced
-         //return "351558072434071"; //mytab
+        //return "351558072434071"; //NikHil
 
         // return telephonyManager.getDeviceId();
     }
 
     //Empty Spinner Validation
-    public static boolean isEmptySpinner(final Spinner inputSpinner) {       
+    public static boolean isEmptySpinner(final Spinner inputSpinner) {
         if (null == inputSpinner) return true;
         return inputSpinner.getSelectedItemPosition() == -1 || inputSpinner.getSelectedItemPosition() == 0;
     }
@@ -1516,6 +1518,10 @@ public class CommonUtils {
 
     public static boolean isFromHarvesting() {
         return (CommonConstants.REGISTRATION_SCREEN_FROM.equalsIgnoreCase(CommonConstants.REGISTRATION_SCREEN_FROM_HARVESTING));
+    }
+
+    public static boolean isFromPlantationAudit() {
+        return (CommonConstants.REGISTRATION_SCREEN_FROM.equalsIgnoreCase(CommonConstants.REGISTRATION_SCREEN_FROM_PLANTATION_AUDIT));
     }
 
     public static boolean isFromImagesUploading() {

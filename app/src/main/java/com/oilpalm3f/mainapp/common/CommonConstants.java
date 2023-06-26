@@ -67,6 +67,9 @@ public class CommonConstants {
     public static String USER_NAME = "";
     public static String FARMER_CODE = "";
     public static String PLOT_CODE = null;
+    public static Boolean isFromPlotDetails = false;
+
+    public static Boolean isGeoTagTaken = false;
     public static String TotalPlot_Area = "0";
     public static String ServerUpdatedStatus = "0";
     public static String countryID = "1";
@@ -113,6 +116,9 @@ public class CommonConstants {
     public static String REGISTRATION_SCREEN_FROM_CP_MAINTENANCE = "registration_screen_from_cp_maintenance";
     public static String REGISTRATION_SCREEN_FROM_HARVESTING = "registration_screen_from_harvesting";
 
+    public static String REGISTRATION_SCREEN_FROM_PLANTATION_AUDIT = "registration_screen_from_plantation_audit";
+
+
     public static String REGISTRATION_SCREEN_FROM_IMAGESUPLOADING = "registration_screen_from_imagesuploading";
 
 
@@ -131,6 +137,7 @@ public class CommonConstants {
 
     public static String STATUS_TYPE_ID_PROSPECTIVE = "Prospective";
     public static String STATUS_TYPE_ID_READY_TO_CONVERT = "Ready to Convert";
+    public static String STATUS_TYPE_ID_Initiated = "Pre Prospective Plots";
     public static String STATUS_TYPE_ID_APPROVED = "Approved";
     public static String STATUS_TYPE_ID_DECLINED = "Declined";
     public static String STATUS_TYPE_ID_CONVERTED = "Converted";

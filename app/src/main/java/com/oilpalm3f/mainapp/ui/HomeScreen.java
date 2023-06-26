@@ -51,7 +51,7 @@ public class HomeScreen extends AppCompatActivity {
     private android.widget.RelativeLayout prospectiveFarmersRel;
     private android.widget.RelativeLayout conversionRel;
     private android.widget.RelativeLayout cropMaintenanceRel;
-    private android.widget.RelativeLayout harvestingRel, imagesRel;
+    private android.widget.RelativeLayout harvestingRel, imagesRel, planationAuditRel;
     private RelativeLayout visitDetails,transportServiceLayout;
     private LinearLayout refreshRel;
     private CircleView circleView;
@@ -79,6 +79,8 @@ public class HomeScreen extends AppCompatActivity {
         circleView = (CircleView) findViewById(R.id.countTxt);
         ImageView extension_logbook = (ImageView) findViewById(R.id.extensionlogbook);
         transportServiceLayout=(RelativeLayout)findViewById(R.id.transportServiceLayout);
+
+        planationAuditRel = (RelativeLayout) findViewById(R.id.planationAuditRel);
 
         dataAccessHandler = new DataAccessHandler(this);
 
@@ -125,6 +127,12 @@ public class HomeScreen extends AppCompatActivity {
         harvestingRel.setOnClickListener(view -> {
             resetPrevRegData();
             CommonConstants.REGISTRATION_SCREEN_FROM = CommonConstants.REGISTRATION_SCREEN_FROM_HARVESTING;
+            startActivity(new Intent(HomeScreen.this, SearchFarmerScreen.class));
+        });
+
+        planationAuditRel.setOnClickListener(view -> {
+            resetPrevRegData();
+            CommonConstants.REGISTRATION_SCREEN_FROM = CommonConstants.REGISTRATION_SCREEN_FROM_PLANTATION_AUDIT;
             startActivity(new Intent(HomeScreen.this, SearchFarmerScreen.class));
         });
 

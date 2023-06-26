@@ -64,6 +64,8 @@ public class RegistrationFlowScreen extends OilPalmBaseActivity implements Updat
     private ConversionPotentialFragment conversionPotentialFragment;
     private DataAccessHandler dataAccessHandler;
 
+    //Boolean isGeoTagTaken = false;
+
 
     //Initializing the Class & UI
     @Override
@@ -244,6 +246,7 @@ public class RegistrationFlowScreen extends OilPalmBaseActivity implements Updat
                 }
                 else {
                     ProgressBar.showProgressBar(RegistrationFlowScreen.this,"Please wait data is Inserting in DataBase.....");
+
                     DataSavingHelper.saveFarmerAddressData(this, new ApplicationThread.OnComplete<String>() {
                         @Override
                         public void execute(boolean success, String result, String msg) {

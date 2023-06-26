@@ -66,8 +66,12 @@ import com.oilpalm3f.mainapp.dbmodels.Ownershipfilerepository;
 import com.oilpalm3f.mainapp.dbmodels.Pest;
 import com.oilpalm3f.mainapp.dbmodels.PestChemicalXref;
 import com.oilpalm3f.mainapp.dbmodels.Plantation;
+import com.oilpalm3f.mainapp.dbmodels.PlantationAuditAnswersModel;
+import com.oilpalm3f.mainapp.dbmodels.PlantationAuditOptionsModel;
+import com.oilpalm3f.mainapp.dbmodels.PlantationAuditQuestionsModel;
 import com.oilpalm3f.mainapp.dbmodels.PlantationFileRepositoryXref;
 import com.oilpalm3f.mainapp.dbmodels.Plot;
+import com.oilpalm3f.mainapp.dbmodels.PlotAuditDetails;
 import com.oilpalm3f.mainapp.dbmodels.PlotCurrentCrop;
 import com.oilpalm3f.mainapp.dbmodels.PlotFFBDetails;
 import com.oilpalm3f.mainapp.dbmodels.PlotGradingDetails;
@@ -1101,7 +1105,7 @@ f
         String query = null;
         if (CommonUtils.isFromConversion()) {
             query = Queries.getInstance().getFilterBasedFarmers(83, key, offset, limit);
-        } else if (CommonUtils.isFromCropMaintenance() || CommonUtils.isFromHarvesting()) {
+        } else if (CommonUtils.isFromCropMaintenance() || CommonUtils.isFromHarvesting() || CommonUtils.isFromPlantationAudit()) {
             query = Queries.getInstance().getFilterBasedFarmersCrop(key,offset,limit);
         } else if (CommonUtils.isViewProspectiveFarmers()) {
             query = Queries.getInstance().getFilterBasedProspectiveFarmers(81, key, offset, limit);
@@ -2027,6 +2031,7 @@ f
             cursor = mDatabase.rawQuery(query, null);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
+                    //Log.d("SendPotentialScore", cursor.getInt(3) + "");
                     mFarmerHistory = new FarmerHistory();
                     mFarmerHistory.setFarmercode(cursor.getString(1));
                     mFarmerHistory.setPlotcode(cursor.getString(2));
@@ -4775,4 +4780,142 @@ f
         }
         return (T) ((type == 0) ? mfarmerrecoverygroup : recoveryFarmerGroupsRefresh);
     }
+
+    public ArrayList<PlotAuditDetails> getPlotDetailsforAudit(final String query) {
+        ArrayList<PlotAuditDetails> plotAuditDetails = new ArrayList<>();
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "Query for getting farmers " + query);
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    PlotAuditDetails mplotAudit = new PlotAuditDetails();
+
+                    mplotAudit = new PlotAuditDetails();
+                    mplotAudit.setTotalPalmArea(cursor.getDouble(0));
+                    mplotAudit.setCropVareity(cursor.getString(1));
+                    mplotAudit.setDateofPlanting(cursor.getString(2));
+                    mplotAudit.setClusterName(cursor.getString(3));
+                    mplotAudit.setVillageName(cursor.getString(4));
+                    mplotAudit.setMandalName(cursor.getString(5));
+                    mplotAudit.setDistrictName(cursor.getString(6));
+
+                    plotAuditDetails.add(mplotAudit);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.v(LOG_TAG, "getting failed fromLocalDb" + e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            closeDataBase();
+
+
+        }
+        return plotAuditDetails;
+    }
+
+    public ArrayList<PlantationAuditQuestionsModel> getPlantationAuditQuestions(final String query) {
+        ArrayList<PlantationAuditQuestionsModel> auditQuestions = new ArrayList<>();
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "Query for getting farmers " + query);
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    PlantationAuditQuestionsModel mAuditQuestions = new PlantationAuditQuestionsModel();
+
+                    mAuditQuestions = new PlantationAuditQuestionsModel();
+                    mAuditQuestions.setId(cursor.getInt(0));
+                    mAuditQuestions.setQuestion(cursor.getString(1));
+                    mAuditQuestions.setQuestionTypeId(cursor.getInt(2));
+                    mAuditQuestions.setIsActive(cursor.getInt(3));
+                    mAuditQuestions.setCreatedDate(cursor.getString(4));
+
+                    auditQuestions.add(mAuditQuestions);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.v(LOG_TAG, "getting failed fromLocalDb" + e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            closeDataBase();
+
+
+        }
+        return auditQuestions;
+    }
+
+    public ArrayList<PlantationAuditOptionsModel> getPlantationAuditOptions(final String query) {
+        ArrayList<PlantationAuditOptionsModel> auditoptions = new ArrayList<>();
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "Query for getting farmers " + query);
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    PlantationAuditOptionsModel mauditoptions = new PlantationAuditOptionsModel(0, 0,null,0,null);
+
+                    mauditoptions = new PlantationAuditOptionsModel(0, 0,null,0,null);
+                    mauditoptions.setId(cursor.getInt(0));
+                    mauditoptions.setQuestionId(cursor.getInt(1));
+                    mauditoptions.setOption(cursor.getString(2));
+                    mauditoptions.setIsActive(cursor.getInt(3));
+                    mauditoptions.setCreatedDate(cursor.getString(4));
+
+                    auditoptions.add(mauditoptions);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.v(LOG_TAG, "getting failed fromLocalDb" + e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            closeDataBase();
+
+
+        }
+        return auditoptions;
+    }
+
+    public T getPlantationAuditAnswerData(final String query, int type) {
+
+        List<PlantationAuditAnswersModel> plantationAuditAnswersRefresh = new ArrayList<>();
+        Cursor cursor = null;
+        PlantationAuditAnswersModel mPlantationAuditAnswersRefresh = null;
+        Log.v(LOG_TAG, "@@@ farmer details query " + query);
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    mPlantationAuditAnswersRefresh = new PlantationAuditAnswersModel();
+                    mPlantationAuditAnswersRefresh.setId(cursor.getInt(0));
+                    mPlantationAuditAnswersRefresh.setPlotCode(cursor.getString(1));
+                    mPlantationAuditAnswersRefresh.setQuestionId(cursor.getInt(2));
+                    mPlantationAuditAnswersRefresh.setOptionId(cursor.getInt(3));
+                    mPlantationAuditAnswersRefresh.setValue(cursor.getString(4));
+                    mPlantationAuditAnswersRefresh.setIsActive(cursor.getInt(5));
+                    mPlantationAuditAnswersRefresh.setCreatedByUserId(cursor.getInt(6));
+                    mPlantationAuditAnswersRefresh.setCreatedDate(cursor.getString(7));
+                    mPlantationAuditAnswersRefresh.setServerUpdatedStatus(cursor.getInt(8));
+
+                    if (type == 1) {
+                        plantationAuditAnswersRefresh.add(mPlantationAuditAnswersRefresh);
+
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "@@@ getting user details " + e.getMessage());
+        }
+        return (T) ((type == 0) ? mPlantationAuditAnswersRefresh : plantationAuditAnswersRefresh);
+    }
+
 }

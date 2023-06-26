@@ -80,6 +80,7 @@ public class DatabaseKeys {
     public static String TABLE_NOTIFICATIONS = "notifications";
 
     public static String TABLE_Recovery_Farmer_Group = "RecoveryFarmerGroup";
+    public static String TABLE_Plantation_Audit_Answers = "PlotPlantationAuditDetails";
 
 
     // MasterVersionTrackingSystem

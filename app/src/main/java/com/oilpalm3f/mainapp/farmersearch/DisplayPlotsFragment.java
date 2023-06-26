@@ -31,6 +31,7 @@ import com.oilpalm3f.mainapp.common.CommonUtils;
 import com.oilpalm3f.mainapp.conversion.ConversionMainFlowActivity;
 import com.oilpalm3f.mainapp.cropmaintenance.CropMaintenanceHomeScreen;
 import com.oilpalm3f.mainapp.cropmaintenance.HarvestingActivity;
+import com.oilpalm3f.mainapp.cropmaintenance.PlantationAudit;
 import com.oilpalm3f.mainapp.database.CCDataAccessHandler;
 import com.oilpalm3f.mainapp.database.DataAccessHandler;
 import com.oilpalm3f.mainapp.database.Palm3FoilDatabase;
@@ -204,7 +205,7 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
         dataAccessHandler = new DataAccessHandler(getActivity());
         if (CommonUtils.isFromConversion()) {
             plotStatus = 83;
-        } else if (CommonUtils.isFromCropMaintenance() || CommonUtils.isComplaint() || CommonUtils.isVisitRequests() || CommonUtils.isFromHarvesting()) {
+        } else if (CommonUtils.isFromCropMaintenance() || CommonUtils.isComplaint() || CommonUtils.isVisitRequests() || CommonUtils.isFromHarvesting() || CommonUtils.isFromPlantationAudit() ) {
             plotStatus = 88;
         } else if (CommonUtils.isFromFollowUp()) {
             plotStatus = 81;
@@ -308,22 +309,22 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
 
                 } else {
 
-                   moveToNextScreen();
-//                    getLocationDetails();
-//                    if (CommonUtils.isFromConversion()) {
-//                        if ((IsRetakeGeoTagRequired == 1)) {
-//                            ReTakeGeoTagLL.setVisibility(View.VISIBLE);
-//                        }
-//                    }
-//                    String units = "meters";
-//                    if (actualDistance > 1000) {
-//
-//                        actualDistance = actualDistance * 0.001;
-//                        units = "kilometers";
-//                    }
-//                    actualDistance = Double.parseDouble(CommonUtils.twoDForm.format(actualDistance));
-//
-//                    UiUtils.showCustomToastMessageLong("This location is not actual plot location, distance from plot is " + actualDistance + " " + units + " and it should be with in 200 meters", getActivity(), 1, Toast.LENGTH_LONG);
+                //   moveToNextScreen();
+                    getLocationDetails();
+                    if (CommonUtils.isFromConversion()) {
+                        if ((IsRetakeGeoTagRequired == 1)) {
+                            ReTakeGeoTagLL.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    String units = "meters";
+                    if (actualDistance > 1000) {
+
+                        actualDistance = actualDistance * 0.001;
+                        units = "kilometers";
+                    }
+                    actualDistance = Double.parseDouble(CommonUtils.twoDForm.format(actualDistance));
+
+                    UiUtils.showCustomToastMessageLong("This location is not actual plot location, distance from plot is " + actualDistance + " " + units + " and it should be with in 200 meters", getActivity(), 1, Toast.LENGTH_LONG);
                 }
             } else {
                 UiUtils.showCustomToastMessage("Geo tag was not available in database", getActivity(), 1);
@@ -371,6 +372,11 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
                     startActivity(intent);
                     getActivity().finish();
                 }
+                else if (CommonUtils.isFromPlantationAudit()) {
+                    Intent intent = new Intent(getActivity(), PlantationAudit.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
 //                else if (CommonUtils.isComplaint()) {
 //                    Intent intent = new Intent(getActivity(), ComplaintsScreenActivity.class);
 //                    startActivity(intent);
@@ -383,6 +389,7 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
                 }
             } catch (Exception e) {
                 UiUtils.showCustomToastMessage("Error while moving to next screen", getActivity(), 1);
+               Log.d("ExepectionMessage",e.getMessage());
             }
         }
     }

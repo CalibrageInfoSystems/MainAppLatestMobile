@@ -39,6 +39,7 @@ import com.oilpalm3f.mainapp.utils.UiUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import letsrock.areaviewlib.GPSCoordinate;
 
@@ -60,6 +61,7 @@ public class PreViewAreaCalScreen extends OilPalmBaseActivity {
     public String UpdatedDate, UpdatedByUserId, ServerUpdatedStatus, Is_Active;
     private Palm3FoilDatabase palm3FoilDatabase;
     LocationManager lm;
+    int RESULT_OK = 222;
 
     @Override
     public void Initialize() {
@@ -103,32 +105,94 @@ public class PreViewAreaCalScreen extends OilPalmBaseActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String generatedplotCode = CommonConstants.PLOT_CODE;
+
+//                if (CommonUtils.isNewPlotRegistration()){
+//                    Log.d("FromnewPlotReg", "Yes");
+//                }else{
+//                    Log.d("FromnewPlotReg", "No");
+//                }
+
                 if (null != firstFourCoordinates && !firstFourCoordinates.isEmpty() && !TextUtils.isEmpty(gpsArea)) {
-                    plot = (Plot) DataManager.getInstance().getDataFromManager(DataManager.PLOT_DETAILS);
-                    if (plot == null) {
-                        DataAccessHandler dataAccessHandler = new DataAccessHandler(PreViewAreaCalScreen.this);
-                        plot = (Plot) dataAccessHandler.getSelectedPlotData(Queries.getInstance().getSelectedPlot(CommonConstants.PLOT_CODE), 0);
-                    }
-                    try {
-                        plot.setGpsplotarea(Double.parseDouble(gpsArea));
-                    } catch (NumberFormatException nfe) {
-                        Log.e(PreViewAreaCalScreen.class.getSimpleName(), "" + nfe.getMessage());
-                    }
 
-                    DataManager.getInstance().addData(DataManager.PLOT_DETAILS, plot);
-                    DataManager.getInstance().addData(DataManager.PLOT_GEO_TAG, getGeoBoundriesData());
-                    if (CommonUtils.isPlotSplitFarmerPlots()) {
-                        updateFarmerHistory();
-                    }
-
-                    if (!CommonUtils.isPlotSplitFarmerPlots()) {
+//                    if (generatedplotCode != null && CommonUtils.isNewRegistration()){
+//                        Log.d("isNewRegistration", "I am here");
+//                        DataManager.getInstance().addData(DataManager.PLOT_GEO_BOUNDARIES, getGeoBoundriesData());
+//                        CommonConstants.isFromPlotDetails = true;
+//                        Intent intent = new Intent();
+//                        intent.putExtra("result_key", gpsArea);
+//                        setResult(RESULT_OK, intent);
+//                        firstFourCoordinates.clear();
+//                        recordedBoundries.clear();
+//                        finish();
+//                    }
+//
+//                   else if (generatedplotCode != null && CommonUtils.isNewPlotRegistration()){
+//                       Log.d("isNewPlotRegistration", "I am here");
+//
+//                        DataManager.getInstance().addData(DataManager.PLOT_GEO_BOUNDARIES, getGeoBoundriesData());
+//                        CommonConstants.isFromPlotDetails = true;
+//                        Intent intent = new Intent();
+//                        intent.putExtra("result_key", gpsArea);
+//                        setResult(RESULT_OK, intent);
+//                        firstFourCoordinates.clear();
+//                        recordedBoundries.clear();
+//                        finish();
+//                    }
+                    if (CommonUtils.isNewPlotRegistration() || CommonUtils.isNewRegistration()){
+                        Log.d("isNewRegistration", "I am here");
+                        DataManager.getInstance().addData(DataManager.PLOT_GEO_BOUNDARIES, getGeoBoundriesData());
+                        CommonConstants.isFromPlotDetails = true;
+                        Intent intent = new Intent();
+                        intent.putExtra("result_key", gpsArea);
+                        setResult(RESULT_OK, intent);
                         firstFourCoordinates.clear();
                         recordedBoundries.clear();
-                        gpsArea = null;
                         finish();
                     }
 
-                } else {
+                   else {
+                       Log.d("InRetake", "yes");
+
+                        plot = (Plot) DataManager.getInstance().getDataFromManager(DataManager.PLOT_DETAILS);
+                        if (plot == null) {
+                            DataAccessHandler dataAccessHandler = new DataAccessHandler(PreViewAreaCalScreen.this);
+                            plot = (Plot) dataAccessHandler.getSelectedPlotData(Queries.getInstance().getSelectedPlot(CommonConstants.PLOT_CODE), 0);
+                        }
+                        try {
+                            plot.setGpsplotarea(Double.parseDouble(gpsArea));
+                        } catch (NumberFormatException nfe) {
+                            Log.e(PreViewAreaCalScreen.class.getSimpleName(), "" + nfe.getMessage());
+                        }
+
+                        DataManager.getInstance().addData(DataManager.PLOT_DETAILS, plot);
+                        DataManager.getInstance().addData(DataManager.PLOT_GEO_BOUNDARIES, getGeoBoundriesData());
+                        if (CommonUtils.isPlotSplitFarmerPlots()) {
+                            updateFarmerHistory();
+                        }
+
+                        if (!CommonUtils.isPlotSplitFarmerPlots()) {
+                            firstFourCoordinates.clear();
+                            recordedBoundries.clear();
+                            gpsArea = null;
+                            finish();
+                        }
+
+//                    if (CommonUtils.isNewRegistration()) {
+//                        Intent intent = new Intent();
+//                        intent.putExtra("result_key", gpsArea);
+//                        setResult(RESULT_OK, intent);
+//                        firstFourCoordinates.clear();
+//                        recordedBoundries.clear();
+//                        gpsArea = null;
+//                        finish();
+//                    }
+                    }
+
+                }
+                else {
+                    Log.d("nocoordinates", "I am here");
+                    Log.d("generatedplotCode", generatedplotCode + "");
                     UiUtils.showCustomToastMessage("Please Calculate Area", PreViewAreaCalScreen.this, 1);
                 }
             }
@@ -201,39 +265,93 @@ public class PreViewAreaCalScreen extends OilPalmBaseActivity {
         }
     }
 
-    public List<GeoBoundaries> getGeoBoundriesData() {
-        List<GeoBoundaries> geoBoundaries = new ArrayList<>();
-
-                HashSet<GPSCoordinate> hashSet = new HashSet<GPSCoordinate>();
-                hashSet.addAll(recordedBoundries);
-                recordedBoundries.clear();
-                recordedBoundries.addAll(hashSet);
-
-        if (null != recordedBoundries && !recordedBoundries.isEmpty()) {
-            for (int i = 0; i < recordedBoundries.size(); i++) {
-                GeoBoundaries geoBoundary = new GeoBoundaries();
-                geoBoundary.setLatitude(recordedBoundries.get(i).latitude);
-                geoBoundary.setLongitude(recordedBoundries.get(i).longitude);
-                geoBoundary.setGeocategorytypeid(206);
-                geoBoundaries.add(geoBoundary);
-            }
-//            for (GPSCoordinate gpsCoordinate : recordedBoundries) {
+//    public List<GeoBoundaries> getGeoBoundriesData() {
+//        List<GeoBoundaries> geoBoundaries = new ArrayList<>();
 //
-//                geoBoundary.setLatitude(gpsCoordinate.latitude);
-//                geoBoundary.setLongitude(gpsCoordinate.longitude);
-//                geoBoundary.setGeocategorytypeid(206);
+//                HashSet<GPSCoordinate> hashSet = new HashSet<GPSCoordinate>();
+//                hashSet.addAll(recordedBoundries);
+//                recordedBoundries.clear();
+//                recordedBoundries.addAll(hashSet);
+//
+//        if (null != recordedBoundries && !recordedBoundries.isEmpty()) {
+//            for (int i = 0; i < recordedBoundries.size(); i++) {
+//                GeoBoundaries geoBoundary = new GeoBoundaries();
+//                geoBoundary.setLatitude(recordedBoundries.get(i).latitude);
+//                geoBoundary.setLongitude(recordedBoundries.get(i).longitude);
+//                if (CommonUtils.isNewPlotRegistration() || CommonUtils.isNewRegistration()) {
+//                    geoBoundary.setGeocategorytypeid(384);
+//                }else{
+//                    geoBoundary.setGeocategorytypeid(206);
+//                }
 //                geoBoundaries.add(geoBoundary);
 //            }
+////            for (GPSCoordinate gpsCoordinate : recordedBoundries) {
+////
+////                geoBoundary.setLatitude(gpsCoordinate.latitude);
+////                geoBoundary.setLongitude(gpsCoordinate.longitude);
+////                geoBoundary.setGeocategorytypeid(206);
+////                geoBoundaries.add(geoBoundary);
+////            }
+//            if (CommonUtils.isPlotSplitFarmerPlots()) {
+//                GeoBoundaries geoBoundary = new GeoBoundaries();
+//                geoBoundary.setLatitude(recordedBoundries.get(0).latitude);
+//                geoBoundary.setLongitude(recordedBoundries.get(0).longitude);
+//                geoBoundary.setGeocategorytypeid(207);
+//                geoBoundaries.add(geoBoundary);
+//            }
+//        }
+//        return geoBoundaries;
+//    }
+
+    public List<GeoBoundaries> getGeoBoundriesData() {
+        List<GeoBoundaries> geoBoundaries = new ArrayList<>();
+        Set<String> coordinateSet = new HashSet<>();
+
+        if (null != recordedBoundries && !recordedBoundries.isEmpty()) {
+            for (GPSCoordinate gpsCoordinate : recordedBoundries) {
+                String coordinateKey = getCoordinateKey(gpsCoordinate);
+
+                // Check if the coordinate already exists in the set
+                if (!coordinateSet.contains(coordinateKey)) {
+                    GeoBoundaries geoBoundary = new GeoBoundaries();
+                    geoBoundary.setLatitude(gpsCoordinate.latitude);
+                    geoBoundary.setLongitude(gpsCoordinate.longitude);
+
+                    if (CommonUtils.isNewPlotRegistration() || CommonUtils.isNewRegistration()) {
+                        geoBoundary.setGeocategorytypeid(384);
+                    } else {
+                        geoBoundary.setGeocategorytypeid(206);
+                    }
+
+                    geoBoundaries.add(geoBoundary);
+
+                    // Add the coordinate key to the set
+                    coordinateSet.add(coordinateKey);
+                }
+            }
+
             if (CommonUtils.isPlotSplitFarmerPlots()) {
-                GeoBoundaries geoBoundary = new GeoBoundaries();
-                geoBoundary.setLatitude(recordedBoundries.get(0).latitude);
-                geoBoundary.setLongitude(recordedBoundries.get(0).longitude);
-                geoBoundary.setGeocategorytypeid(207);
-                geoBoundaries.add(geoBoundary);
+                GPSCoordinate firstCoordinate = recordedBoundries.get(0);
+                String firstCoordinateKey = getCoordinateKey(firstCoordinate);
+
+                // Check if the first coordinate already exists in the set
+                if (!coordinateSet.contains(firstCoordinateKey)) {
+                    GeoBoundaries geoBoundary = new GeoBoundaries();
+                    geoBoundary.setLatitude(firstCoordinate.latitude);
+                    geoBoundary.setLongitude(firstCoordinate.longitude);
+                    geoBoundary.setGeocategorytypeid(207);
+                    geoBoundaries.add(geoBoundary);
+                }
             }
         }
+
         return geoBoundaries;
     }
+
+    private String getCoordinateKey(GPSCoordinate coordinate) {
+        return coordinate.latitude + ":" + coordinate.longitude;
+    }
+
 
     public void displayDialogWindow(String s, AlertDialog alertDialog, final Context context) {
         // get prompts.xml view

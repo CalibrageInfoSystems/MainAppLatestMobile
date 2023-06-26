@@ -206,20 +206,43 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
         }
 
 
+//        saveBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                //signature_popup();
+//                if (null != digitalContract) {
+//                    signature_popup();
+//                    Log.d("digitalContracttt", "isnotnull");
+//                }else{
+//                    isContractAgreed = true;
+//                    updateUiListener.updateUserInterface(0);
+//                    getFragmentManager().popBackStack();
+//                }
+//
+//            }
+//        });
+
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //signature_popup();
-                if (null != digitalContract) {
-                    signature_popup();
-                    Log.d("digitalContracttt", "isnotnull");
-                }else{
-                    isContractAgreed = true;
-                    updateUiListener.updateUserInterface(0);
-                    getFragmentManager().popBackStack();
-                }
+//                isContractAgreed = true;
+//                savedFarmerData.setFileName(CommonConstants.FARMER_CODE + ".pdf");
+//                savedFarmerData.setFileLocation(fileToDownLoad + "");
+//                savedFarmerData.setFileExtension(".pdf");
+//
+//                DataManager.getInstance().addData(DataManager.FARMER_PERSONAL_DETAILS, savedFarmerData);
+//
+//                if (isUpdateData) {
+//                    DataManager.getInstance().addData(DataManager.IS_FARMER_DATA_UPDATED, true);
+//                } else {
+//                    DataManager.getInstance().addData(DataManager.IS_FARMER_DATA_UPDATED, false);
+//                }
+//                CommonConstants.Flags.isFarmersDataUpdated = true;
 
+                updateUiListener.updateUserInterface(0);
+                getFragmentManager().popBackStack();
             }
         });
 
@@ -231,7 +254,7 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
                 } else {
                     saveBtn.setAlpha(0.5f);
                 }
-
+                isContractAgreed = isChecked;//added 16th June by Arun
                 saveBtn.setEnabled(isChecked);
                 saveBtn.setFocusable(isChecked);
                 saveBtn.setClickable(isChecked);

@@ -40,6 +40,9 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".PlantationAudit"
+            android:exported="false" />
+        <activity
             android:name=".cropmaintenance.ViewRecoveryFarmers"
             android:exported="false">
             <meta-data
@@ -60,7 +63,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity android:name=".cropmaintenance.HarvestingActivity" />
+        <activity android:name=".cropmaintenance.PlantationAudit" />
         <activity android:name=".transportservice.TransportActivity" />
         <activity android:name=".transportservice.TransportServiceQuestionerActivity" />
 

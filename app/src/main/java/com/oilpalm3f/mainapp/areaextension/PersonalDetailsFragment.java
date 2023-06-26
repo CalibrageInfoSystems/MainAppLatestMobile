@@ -225,7 +225,6 @@ public class PersonalDetailsFragment extends Fragment implements RecyclerItemCli
             secondLayout.setVisibility(View.VISIBLE);
         }
 
-
         bindMasterData();
         handleListeners();
 
@@ -441,7 +440,6 @@ public class PersonalDetailsFragment extends Fragment implements RecyclerItemCli
             } else {
                 dispatchTakePictureIntent(CAMERA_REQUEST);
             }
-
 
         });
 

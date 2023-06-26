@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oilpalm3f.mainapp.R;
+import com.oilpalm3f.mainapp.cloudhelper.Log;
 import com.oilpalm3f.mainapp.common.CommonConstants;
 import com.oilpalm3f.mainapp.common.CommonUtils;
 import com.oilpalm3f.mainapp.cropmaintenance.CommonUtilsNavigation;
@@ -224,6 +225,7 @@ public class ConversionPotentialFragment extends Fragment  {
                     if (farmerReadytoConverSpin_value.equalsIgnoreCase("Yes")){
 
                         if ((SearchFarmerScreen.FarmerImage == true) || (null !=DataManager.getInstance().getDataFromManager(DataManager.FILE_REPOSITORY))){
+                            //Log.d("ReadyconvertValueyes", farmerReadytoConverSpin.getSelectedItemPosition() +"Yes"+ farmerReadytoConverSpin_value);
                             saveConversionData();
                         }else {
                             UiUtils.showCustomToastMessage("Please Take Farmer Photo  ",getActivity(),1);
@@ -233,6 +235,7 @@ public class ConversionPotentialFragment extends Fragment  {
                             UiUtils.showCustomToastMessage("Conversion Potential Score Should Be Below 9 ",getActivity(),1);
                         }else {
                             saveConversionData();
+                            //Log.d("ReadyconvertValueyes", farmerReadytoConverSpin.getSelectedItemPosition() +"No"+ farmerReadytoConverSpin_value);
                         }
                     }
                 }
@@ -335,6 +338,7 @@ public class ConversionPotentialFragment extends Fragment  {
         followUp.setPotentialscore(potentialscoreSpin.getSelectedItemPosition());
         followUp.setIsfarmerreadytoconvert((farmerReadytoConverSpin.getSelectedItemPosition() == 1) ? 1 : 0);
         followUp.setExpectedMonthofSowing(expectedmonthofshowing.getText().toString());
+        //Log.d("ReadytoConvert",  followUp.getIsfarmerreadytoconvert() + "");
         DataManager.getInstance().addData(DataManager.PLOT_FOLLOWUP, followUp);
         updateUiListener.updateUserInterface(0);
         getFragmentManager().popBackStack();

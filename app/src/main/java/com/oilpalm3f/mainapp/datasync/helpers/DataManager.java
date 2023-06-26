@@ -71,6 +71,7 @@ public class DataManager<T> {
     public static final String PLOT_NEIGHBOURING_PLOTS_DATA_PAIR = "plot_neighbouring_plots_data_pair";
     public static final String PLOT_CURRENT_CROPS_DATA_PAIR = "plot_current_crops_data_pair";
     public static final String PLOT_GEO_TAG = "plot_geo_tag";
+    public static final String PLOT_GEO_BOUNDARIES = "plot_geo_boundaries";
     public static final String PLOT_FOLLOWUP = "plot_followup";
     public static final String REFERRALS_DATA = "referrals_data";
     public static final String MARKET_SURVEY_DATA = "market_survey_data";

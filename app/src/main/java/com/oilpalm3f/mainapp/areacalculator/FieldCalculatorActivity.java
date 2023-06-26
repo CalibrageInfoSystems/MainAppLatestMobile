@@ -46,7 +46,7 @@ public class FieldCalculatorActivity extends AppCompatActivity {
     private static final String LOG_TAG = FieldCalculatorActivity.class.getName();
     private static final int PERMISSION_REQUEST_CODE = 1;
     public static List<GPSCoordinate> firstFourCoordinates = new ArrayList<>();
-    public static List<GPSCoordinate> recordedBoundries = new ArrayList<>();
+    public static ArrayList<GPSCoordinate> recordedBoundries = new ArrayList<>();
     public static List<GPSCoordinate> totalBoundries = new ArrayList<>();
     private AreaView measureView;
     private Button startStopButton, saveBtn, resetBtn;

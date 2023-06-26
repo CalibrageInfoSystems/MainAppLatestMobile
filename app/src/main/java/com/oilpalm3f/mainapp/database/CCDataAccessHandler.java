@@ -42,7 +42,7 @@ public class CCDataAccessHandler {
         List<PlotDetailsObj> plotDetailslistObj = new ArrayList<>();
         Cursor cursor = null;
         String query = null;
-        if (CommonUtils.isFromCropMaintenance()||CommonUtils.isComplaint() || CommonUtils.isFromHarvesting()) {
+        if (CommonUtils.isFromCropMaintenance()||CommonUtils.isComplaint() || CommonUtils.isFromHarvesting() || CommonUtils.isFromPlantationAudit()) {
             query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus, 89, true);
         } else  if (CommonUtils.isFromFollowUp()) {
             query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus);

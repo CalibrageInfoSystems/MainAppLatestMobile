@@ -62,7 +62,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
     private static int consignmentCount = 0, collectionsCount = 0, collectionPlotsCountInt = 0;
     private TextView tvfarmer, tvidproofs, tvaddress, tvfarmerhistory, tvbank, tvplot, tvplotcurrentcrop,
             tvneighbourplot, tvwaterresource, tvsoilresource, tvplotirrigation, geoBoundriesCountTxt, plantationCountTxt, uprootmentCountTxt, hopCountTxt,
-            tvfollowup, tvreferrals, tvmarketsurvey, tvimages, cmpCount, activity_logs, harvestor_visits,recovery_farmers;
+            tvfollowup, tvreferrals, tvmarketsurvey, tvimages, cmpCount, activity_logs, harvestor_visits,recovery_farmers, plantation_Audit;
     private Button btnsend, btnmastersync, btnDBcopy, transSyncBtn, btresetdatabase;
     private DataAccessHandler dataAccessHandler;
     private List<String> collectionCodes, consignmentCodes, farmerCodes, farmerBankCodes, idproofCodes, addressCodes, plotCodes, plotCurrentCropCodes, neighbourPlotCodes, waterResourceCodes,
@@ -141,6 +141,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         allRefreshDataMap.add(DatabaseKeys.TABLE_Location_TRACKING_DETAILS);
         allRefreshDataMap.add(DatabaseKeys.TABLE_HarvestorVisitDetails);
         allRefreshDataMap.add(DatabaseKeys.TABLE_Recovery_Farmer_Group);
+        allRefreshDataMap.add(DatabaseKeys.TABLE_Plantation_Audit_Answers);
 
         dataAccessHandler = new DataAccessHandler(this);
 
@@ -189,6 +190,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         activity_logs = findViewById(R.id.activity_logs);
         harvestor_visits = findViewById(R.id.harvestor_visit);
         recovery_farmers = findViewById(R.id.recovery_farmers);
+        plantation_Audit = findViewById(R.id.plantation_Audit);
 
         btnsend.setOnLongClickListener(view -> {
             Log.v(LOG_TAG, "long pressed");
@@ -323,6 +325,8 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             activity_logs.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("ActivityLog")));
             harvestor_visits.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("HarvestorVisitDetails")));
             recovery_farmers.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("RecoveryFarmerGroup")));
+            plantation_Audit.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("PlotPlantationAuditDetails")));
+
 
 
             isDataUpdated = true;

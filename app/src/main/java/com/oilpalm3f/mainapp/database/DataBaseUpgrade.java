@@ -1519,6 +1519,30 @@ class DataBaseUpgrade {
                 "IsActive BIT NOT NULL,\n" +
                 "ServerUpdatedStatus int NOT NULL)\n";
 
+        String Plantation_Audit_Questions = "CREATE TABLE PlantationAuditQuestions(\n" +
+                "Id Integer primary key Autoincrement,\n" +
+                "Question VARCHAR(500) ,\n" +
+                "QuestionTypeId INT NOT NULL,\n" +
+                "IsActive BIT NOT NULL,\n" +
+                "CreatedDate DATETIME NOT NULL)\n";
+
+        String Plantation_Audit_Options = "CREATE TABLE PlantationAuditOptions(\n" +
+                "Id Integer primary key Autoincrement,\n" +
+                "QuestionId INT NOT NULL,\n" +
+                "Option VARCHAR(250) ,\n" +
+                "IsActive BIT NOT NULL,\n" +
+                "CreatedDate DATETIME NOT NULL)\n";
+
+        String Plot_Plantation_Audit_Details = "CREATE TABLE PlotPlantationAuditDetails(\n" +
+                "Id Integer primary key Autoincrement,\n" +
+                "PlotCode VARCHAR(50) ,\n" +
+                "QuestionId INT NOT NULL,\n" +
+                "OptionId INT NOT NULL,\n" +
+                "Value VARCHAR(500) ,\n" +
+                "IsActive BIT NOT NULL,\n" +
+                "CreatedByUserId INT NOT NULL,\n" +
+                "CreatedDate DATETIME NOT NULL,\n" +
+                "ServerUpdatedStatus int NOT NULL)\n";
 
         try {
 
@@ -1533,6 +1557,9 @@ class DataBaseUpgrade {
             db.execSQL(PlotFFBDetails);
             db.execSQL(PlotGradingDetails);
             db.execSQL(Recovery_Farmer_Group);
+            db.execSQL(Plantation_Audit_Questions);
+            db.execSQL(Plantation_Audit_Options);
+            db.execSQL(Plot_Plantation_Audit_Details);
 
 
         } catch (Exception e) {

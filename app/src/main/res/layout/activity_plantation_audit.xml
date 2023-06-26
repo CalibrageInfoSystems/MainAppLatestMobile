@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".cropmaintenance.PlantationAudit">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:weightSum="1"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/header_h1_text_title"
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="wrap_content"
+            android:text="Farmer Name" />
+
+        <TextView
+            android:id="@+id/nameofthegrower"
+            style="@style/header_h1_text_title_withoutbold"
+            android:layout_width="0dp"
+            android:layout_weight="0.6"
+            android:layout_height="wrap_content"
+            android:text="Name Of The Grower"/>
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:weightSum="1"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_height="wrap_content"
+                android:text="Farmer Code" />
+
+            <TextView
+                android:id="@+id/fcode"
+                style="@style/header_h1_text_title_withoutbold"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:text="Farmer Code"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:weightSum="1"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_height="wrap_content"
+                android:text="Plot Code" />
+
+            <TextView
+                android:id="@+id/pcode"
+                style="@style/header_h1_text_title_withoutbold"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:text="Plot Code"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:weightSum="1"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_height="wrap_content"
+                android:text="Total Palm Area (HA.)" />
+
+            <TextView
+                android:id="@+id/area"
+                style="@style/header_h1_text_title_withoutbold"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:text="Area(HA.)"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:weightSum="1"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_height="wrap_content"
+                android:text="Variety" />
+
+            <TextView
+                android:id="@+id/variety"
+                style="@style/header_h1_text_title_withoutbold"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:text="Variety"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:weightSum="1"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_height="wrap_content"
+                android:text="Date Of Planting" />
+
+            <TextView
+                android:id="@+id/dop"
+                style="@style/header_h1_text_title_withoutbold"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:text="Date Of Planting"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:weightSum="1"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_height="wrap_content"
+                android:text="Cluster Name" />
+
+            <TextView
+                android:id="@+id/clustername"
+                style="@style/header_h1_text_title_withoutbold"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:text="Cluster Name"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:weightSum="1"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_height="wrap_content"
+                android:text="Village Name" />
+
+            <TextView
+                android:id="@+id/villagename"
+                style="@style/header_h1_text_title_withoutbold"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:text="Village Name"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:weightSum="1"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_height="wrap_content"
+                android:text="Mandal Name" />
+
+            <TextView
+                android:id="@+id/mandalname"
+                style="@style/header_h1_text_title_withoutbold"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:text="Mandal Name"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:weightSum="1"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_height="wrap_content"
+                android:text="District Name" />
+
+            <TextView
+                android:id="@+id/districtname"
+                style="@style/header_h1_text_title_withoutbold"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:text="District Name"/>
+        </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/green"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/header_h1_text_title"
+                android:textSize="24sp"
+                android:textColor="@color/green"
+                android:text="Plantation Audit Questionnaire"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/green"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/containerlayout"
+                android:orientation="vertical"/>
+
+            <Button
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:id="@+id/submit"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="30dp"
+                android:gravity="center"
+                android:text="Submit"
+                style="@style/basicBtnStyle"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

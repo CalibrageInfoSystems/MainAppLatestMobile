@@ -122,6 +122,7 @@ public class HttpClient {
             BufferedSource source = responseBody.source();
             source.request(Long.MAX_VALUE); // request the entire body.
             Buffer buffer = source.buffer();
+
             
 // clone buffer before reading from it
             String responseBodyString = buffer.clone().readString(Charset.forName("UTF-8"));

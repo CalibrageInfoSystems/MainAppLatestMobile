@@ -60,6 +60,7 @@ import com.oilpalm3f.mainapp.dbmodels.Ownershipfilerepository;
 import com.oilpalm3f.mainapp.dbmodels.Pest;
 import com.oilpalm3f.mainapp.dbmodels.PestChemicalXref;
 import com.oilpalm3f.mainapp.dbmodels.Plantation;
+import com.oilpalm3f.mainapp.dbmodels.PlantationAuditAnswersModel;
 import com.oilpalm3f.mainapp.dbmodels.PlantationFileRepositoryXref;
 import com.oilpalm3f.mainapp.dbmodels.Plot;
 import com.oilpalm3f.mainapp.dbmodels.PlotCurrentCrop;
@@ -118,11 +119,11 @@ public class DataSyncHelper {
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String LOG_TAG = DataSyncHelper.class.getName();
 
-    public static String PREVIOUS_SYNC_DATE = null;
+    //public static String PREVIOUS_SYNC_DATE = null;
    // public static String PREVIOUS_SYNC_DATE = "previous_sync_date";
     public static String FIRST_TIME = null;
     public static String NULLDATE;
-    //public static String PREVIOUS_SYNC_DATE = "";
+    public static String PREVIOUS_SYNC_DATE = "";
     public static LinkedHashMap<String, List> dataToUpdate = new LinkedHashMap<>();
     public static int countCheck, transactionsCheck = 0, imagesCount = 0, reverseSyncTransCount = 0, innerCountCheck = 0;
     public static List<String> refreshtableNamesList = new ArrayList<>();
@@ -436,6 +437,8 @@ public class DataSyncHelper {
         List<HarvestorVisitHistory> harvestorVisithistoryList = (List<HarvestorVisitHistory>) dataAccessHandler.getSelectedHarvestorHistoryData(Queries.getInstance().getSelectedHarvestorHistoryRefresh(), 1);
         List<HarvestorVisitDetails> harvestorVisitList = (List<HarvestorVisitDetails>) dataAccessHandler.getSelectedHarvestorData(Queries.getInstance().getSelectedHarvestorRefresh(), 1);
         List<RecoveryFarmerGroup> recoveryFarmerGroupList = (List<RecoveryFarmerGroup>) dataAccessHandler.getSelectedRecoveryFarmerData(Queries.getInstance().getSelectedRecoveryFarmersRefresh(), 1);
+        List<PlantationAuditAnswersModel> plantationAuditAnswerList = (List<PlantationAuditAnswersModel>) dataAccessHandler.getPlantationAuditAnswerData(Queries.getInstance().getPlantationAuditAnswersRefresh(), 1);
+
 
 
 
@@ -489,6 +492,7 @@ public class DataSyncHelper {
         allRefreshDataMap.put(DatabaseKeys.TABLE_HarvestorVisitHistory, harvestorVisithistoryList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_HarvestorVisitDetails, harvestorVisitList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_Recovery_Farmer_Group, recoveryFarmerGroupList);
+        allRefreshDataMap.put(DatabaseKeys.TABLE_Plantation_Audit_Answers, plantationAuditAnswerList);
 
 //        allRefreshDataMap.put(DatabaseKeys.TABLE_Location_TRACKING_DETAILS, gpsTrackingList);
 

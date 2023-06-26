@@ -53,6 +53,7 @@ public class CommonUiUtils {
                 && (DataManager.getInstance().getDataFromManager(DataManager.FARMER_BANK_DETAILS) != null || farmerBankRecordExisted)
                 && DataManager.getInstance().getDataFromManager(DataManager.PLANTATION_CON_DATA) != null
                 //&& DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_TAG) != null
+                && DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_BOUNDARIES) != null
                 && ConversionDigitalContractFragment.isContractAgreed;
     }
 
@@ -101,6 +102,7 @@ public class CommonUiUtils {
         DataManager.getInstance().deleteData(DataManager.SOURCE_OF_WATER);
         DataManager.getInstance().deleteData(DataManager.SoilType);
         DataManager.getInstance().deleteData(DataManager.PLOT_GEO_TAG);
+        DataManager.getInstance().deleteData(DataManager.PLOT_GEO_BOUNDARIES);
         DataManager.getInstance().deleteData(DataManager.PLOT_FOLLOWUP);
         DataManager.getInstance().deleteData(DataManager.REFERRALS_DATA);
         DataManager.getInstance().deleteData(DataManager.MARKET_SURVEY_DATA);
@@ -117,6 +119,8 @@ public class CommonUiUtils {
         DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_STATUS_HISTORY);
         DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_TYPE);
         ConversionDigitalContractFragment.isContractAgreed = false;
+        CommonConstants.isGeoTagTaken = false;
+        CommonConstants.isFromPlotDetails = false;
         CommonConstants.PLOT_CODE = "";
         CommonConstants.FARMER_CODE = "";
     }
@@ -132,7 +136,17 @@ public class CommonUiUtils {
         if (followUp == null) {
             return false;
         }
+
         GeoBoundaries geoBoundaries = (GeoBoundaries) DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_TAG);
+//        if(CommonUtils.isNewRegistration() && CommonConstants.isFromPlotDetails == false){
+//        GeoBoundaries geoBoundaries = (GeoBoundaries) DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_TAG);
+//            return followUp.getIsfarmerreadytoconvert() == 1 && geoBoundaries == null;
+//        }else if (CommonUtils.isNewPlotRegistration() && CommonConstants.isFromPlotDetails == false){
+//            GeoBoundaries geoBoundaries = (GeoBoundaries) DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_TAG);
+//            return followUp.getIsfarmerreadytoconvert() == 1 && geoBoundaries == null;
+//        }else{
+//            return followUp.getIsfarmerreadytoconvert() == 1;
+//        }
         return followUp.getIsfarmerreadytoconvert() == 1 && geoBoundaries == null;
     }
 

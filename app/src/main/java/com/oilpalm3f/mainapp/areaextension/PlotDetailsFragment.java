@@ -3,6 +3,7 @@ package com.oilpalm3f.mainapp.areaextension;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oilpalm3f.mainapp.R;
+import com.oilpalm3f.mainapp.areacalculator.PreViewAreaCalScreen;
 import com.oilpalm3f.mainapp.common.CommonConstants;
 import com.oilpalm3f.mainapp.common.CommonUtils;
 import com.oilpalm3f.mainapp.common.FiscalDate;
@@ -142,6 +144,9 @@ public class PlotDetailsFragment extends Fragment implements MultiEntryDialogFra
     private String days = "";
     private String financalSubStringYear = "";
     public static String financalYrDays = "";
+
+    int REQUEST_CODE = 111;
+    int RESULT_OK = 222;
 
 
     public PlotDetailsFragment() {
@@ -564,6 +569,25 @@ public class PlotDetailsFragment extends Fragment implements MultiEntryDialogFra
             }
         });
 
+        plotareaedt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("plotareaedt", "Clicked");
+               // Log.d("PlotCodegenerated", CommonConstants.PLOT_CODE);
+                if (TextUtils.isEmpty(CommonConstants.PLOT_CODE)){
+                    Log.d("PlotCode", "isempty");
+                    Log.d("PlotCodegenerated", CommonConstants.PLOT_CODE);
+                    UiUtils.showCustomToastMessage("Please Select above Location details to Take GeoBoundaries", getActivity(), 0);
+                }else{
+                    Log.d("PlotCode", "isnotempty");
+                    Log.d("PlotCodegenerated", CommonConstants.PLOT_CODE);
+                    Intent gpsarea = new Intent(getContext(), PreViewAreaCalScreen.class);
+                    startActivityForResult(gpsarea, REQUEST_CODE);
+                }
+
+            }
+        });
+
         ownerShipSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -783,6 +807,21 @@ public class PlotDetailsFragment extends Fragment implements MultiEntryDialogFra
         landTypeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         landTypeSpn.setAdapter(landTypeSpinnerAdapter);
 
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            // Get the data from the intent
+            String result = data.getStringExtra("result_key");
+            Log.d("calculatedPlotArea", result + "");
+            plotareaedt.setText(result);
+            // Do something with the data
+            // ...
+        }
     }
 
     //Binding the Landlord fields.

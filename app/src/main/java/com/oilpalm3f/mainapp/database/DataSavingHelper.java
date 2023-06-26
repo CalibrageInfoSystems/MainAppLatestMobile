@@ -70,6 +70,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.oilpalm3f.mainapp.common.CommonConstants.Crop_Maintenance;
+import static com.oilpalm3f.mainapp.common.CommonConstants.isGeoTagTaken;
 import static com.oilpalm3f.mainapp.common.CommonUtils.isFromCropMaintenance;
 import static com.oilpalm3f.mainapp.common.CommonUtils.isNewPlotRegistration;
 
@@ -1401,6 +1402,7 @@ public class DataSavingHelper {
 //to save geo tag data
     public static void saveGeoTagData(final Context context, final ApplicationThread.OnComplete<String> oncomplete) {
         GeoBoundaries geoBoundaries = null;
+
         if (CommonUtils.isFromConversion()) {
             List dataToSave = getGeoBoundriesData();
             if (null != dataToSave && !dataToSave.isEmpty()) {
@@ -1411,7 +1413,7 @@ public class DataSavingHelper {
                     public void execute(boolean success, String result, String msg) {
                         if (success) {
                             Log.v(LOG_TAG, "@@@ saveNeighBourCropsData data saved successfully");
-                            DataManager.getInstance().deleteData(DataManager.PLOT_GEO_TAG);
+                            DataManager.getInstance().deleteData(DataManager.PLOT_GEO_BOUNDARIES);
                             savePlantation(context, oncomplete);
                         } else {
                             Log.e(LOG_TAG, "@@@ saveNeighBourCropsData data saving failed due to " + msg);
@@ -1422,84 +1424,130 @@ public class DataSavingHelper {
             } else {
                 savePlantation(context, oncomplete);
             }
-        } else {
+        } else if (CommonUtils.isNewRegistration() && CommonConstants.isFromPlotDetails == true) {
+            List dataToSave = getGeoBoundriesData();
+            if (null != dataToSave && !dataToSave.isEmpty()) {
+                final DataAccessHandler dataAccessHandler = new DataAccessHandler(context);
+                dataAccessHandler.insertDataOld(DatabaseKeys.TABLE_GEOBOUNDARIES, dataToSave, new ApplicationThread.OnComplete<String>() {
+                    @Override
+                    public void execute(boolean success, String result, String msg) {
+                        if (success) {
+                            Log.v(LOG_TAG, "@@@ Geo Boundaries from Plot data saved successfully");
+                            DataManager.getInstance().deleteData(DataManager.PLOT_GEO_BOUNDARIES);
+                            saveConversionPotential(context, oncomplete);
+                            //oncomplete.execute(true, "GeoBoundaries from Plot data saving success", "");
+
+                        } else {
+                            Log.e(LOG_TAG, "@@@  Geo Boundaries from Plot data data saving failed due to " + msg);
+                            oncomplete.execute(false, "data saving failed for saveGeoBoundariesData", "");
+                        }
+                    }
+                });
+            }
+
+        } else if (CommonUtils.isNewPlotRegistration() && CommonConstants.isFromPlotDetails == true) {
+            List dataToSave = getGeoBoundriesData();
+            if (null != dataToSave && !dataToSave.isEmpty()) {
+                final DataAccessHandler dataAccessHandler = new DataAccessHandler(context);
+                dataAccessHandler.insertDataOld(DatabaseKeys.TABLE_GEOBOUNDARIES, dataToSave, new ApplicationThread.OnComplete<String>() {
+                    @Override
+                    public void execute(boolean success, String result, String msg) {
+                        if (success) {
+                            Log.v(LOG_TAG, "@@@ Geo Boundaries from Plot data saved successfully");
+                            DataManager.getInstance().deleteData(DataManager.PLOT_GEO_BOUNDARIES);
+                            saveConversionPotential(context, oncomplete);
+                            //oncomplete.execute(true, "GeoBoundaries from Plot data saving success", "");
+                        } else {
+                            Log.e(LOG_TAG, "@@@  Geo Boundaries from Plot data data saving failed due to " + msg);
+                            oncomplete.execute(false, "data saving failed for saveGeoBoundariesData", "");
+                        }
+                    }
+                });
+            }
+        }
+
+
+        if (isFromCropMaintenance()) {
             geoBoundaries = (GeoBoundaries) DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_TAG);
-            if (isFromCropMaintenance()) {
 //                DataAccessHandler dataAccessHandler =new DataAccessHandler();
 //                String ccQuery = Queries.getInstance().getMaxCropMaintenanceHistoryCode(CommonConstants.PLOT_CODE);
 //                String cropMaintenanceHistoryCode = dataAccessHandler.getOnlyOneValueFromDb(ccQuery);
 //                CommonConstants.CROP_MAINTENANCE_HISTORY_CODE = generateCropMaintenanceCode(cropMaintenanceHistoryCode);
-                geoBoundaries.setCropMaintenanceCode(CommonConstants.CROP_MAINTENANCE_HISTORY_CODE);
-                geoBoundaries.setCropMaintenanceCode(CommonConstants.CROP_MAINTENANCE_HISTORY_CODE);
-            }
-            if (geoBoundaries != null && geoBoundaries.getLatitude() != 0 && geoBoundaries.getLongitude() != 0) {
-                geoBoundaries.setCreatedbyuserid(Integer.parseInt(CommonConstants.USER_ID));
-                geoBoundaries.setCreateddate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-                geoBoundaries.setUpdatedbyuserid(Integer.parseInt(CommonConstants.USER_ID));
-                geoBoundaries.setUpdateddate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-                geoBoundaries.setServerupdatedstatus(Integer.parseInt(CommonConstants.ServerUpdatedStatus));
-                geoBoundaries.setPlotcode(CommonConstants.PLOT_CODE);
+            geoBoundaries.setCropMaintenanceCode(CommonConstants.CROP_MAINTENANCE_HISTORY_CODE);
+            geoBoundaries.setCropMaintenanceCode(CommonConstants.CROP_MAINTENANCE_HISTORY_CODE);
+        }
+        if (isGeoTagTaken == true){
+            geoBoundaries = (GeoBoundaries) DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_TAG);
+        if (geoBoundaries != null && geoBoundaries.getLatitude() != 0 && geoBoundaries.getLongitude() != 0) {
+            geoBoundaries.setCreatedbyuserid(Integer.parseInt(CommonConstants.USER_ID));
+            geoBoundaries.setCreateddate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+            geoBoundaries.setUpdatedbyuserid(Integer.parseInt(CommonConstants.USER_ID));
+            geoBoundaries.setUpdateddate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+            geoBoundaries.setServerupdatedstatus(Integer.parseInt(CommonConstants.ServerUpdatedStatus));
+            geoBoundaries.setPlotcode(CommonConstants.PLOT_CODE);
 
-                if (null != geoBoundaries) {
-                    Gson gson = new GsonBuilder().serializeNulls().create();
-                    JSONObject ccData = null;
-                    List dataToInsert = null;
-                    try {
-                        ccData = new JSONObject(gson.toJson(geoBoundaries));
-                        dataToInsert = new ArrayList();
-                        dataToInsert.add(CommonUtils.toMap(ccData));
-                    } catch (JSONException e) {
-                        Log.e(LOG_TAG, "@@@ error while converting geo tag data");
-                    }
-                    Log.v(LOG_TAG, "@@ entered data " + ccData.toString());
-                    saveRecordIntoActivityLog(context, CommonConstants.Plot_Point_Geo_Tag);
-                    final DataAccessHandler dataAccessHandler = new DataAccessHandler(context);
-                    if (CommonUtils.isNewRegistration() || CommonUtils.isNewPlotRegistration() || CommonUtils.isFromFollowUp() || CommonUtils.isFromCropMaintenance()|| CommonUtils.isVisitRequests()) {
-                        dataAccessHandler.insertDataOld(DatabaseKeys.TABLE_GEOBOUNDARIES, dataToInsert, new ApplicationThread.OnComplete<String>() {
-                            @Override
-                            public void execute(boolean success, String result, String msg) {
-                                if (success) {
-                                    Log.v(LOG_TAG, "@@@ geo tag data saved successfully");
-                                     DataManager.getInstance().deleteData(DataManager.PLOT_GEO_TAG);
-                                    if (isFromCropMaintenance() || CommonUtils.isVisitRequests()) {
+            if (null != geoBoundaries) {
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                JSONObject ccData = null;
+                List dataToInsert = null;
+                try {
+                    ccData = new JSONObject(gson.toJson(geoBoundaries));
+                    dataToInsert = new ArrayList();
+                    dataToInsert.add(CommonUtils.toMap(ccData));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "@@@ error while converting geo tag data");
+                }
+                Log.v(LOG_TAG, "@@ entered data " + ccData.toString());
+                saveRecordIntoActivityLog(context, CommonConstants.Plot_Point_Geo_Tag);
+                final DataAccessHandler dataAccessHandler = new DataAccessHandler(context);
+                if (CommonUtils.isNewRegistration() || CommonUtils.isNewPlotRegistration() || CommonUtils.isFromFollowUp() || CommonUtils.isFromCropMaintenance() || CommonUtils.isVisitRequests()) {
+                    dataAccessHandler.insertDataOld(DatabaseKeys.TABLE_GEOBOUNDARIES, dataToInsert, new ApplicationThread.OnComplete<String>() {
+                        @Override
+                        public void execute(boolean success, String result, String msg) {
+                            if (success) {
+                                Log.v(LOG_TAG, "@@@ geo tag data saved successfully");
+                                DataManager.getInstance().deleteData(DataManager.PLOT_GEO_TAG);
+                                if (isFromCropMaintenance() || CommonUtils.isVisitRequests()) {
 //                                        oncomplete.execute(true, "data saving success saveGeoTagData", "");
 //                                        saveHarvestData(context, oncomplete);
-                                        ComplaintStatusHistory complaintStatusHistory = (ComplaintStatusHistory) DataManager.getInstance().getDataFromManager(DataManager.NEW_COMPLAINT_STATUS_HISTORY);
-                                        if(complaintStatusHistory!=null) {
-                                            saveComplaintHistoryData(context, oncomplete);
-                                        }else{
-                                            oncomplete.execute(true, "data saving success saveGeoTagData", "");
-                                        }
+                                    ComplaintStatusHistory complaintStatusHistory = (ComplaintStatusHistory) DataManager.getInstance().getDataFromManager(DataManager.NEW_COMPLAINT_STATUS_HISTORY);
+                                    if (complaintStatusHistory != null) {
+                                        saveComplaintHistoryData(context, oncomplete);
                                     } else {
-                                        saveConversionPotential(context, oncomplete);
+                                        oncomplete.execute(true, "data saving success saveGeoTagData", "");
                                     }
                                 } else {
-                                    Log.e(LOG_TAG, "@@@ geo tag data saving failed due to " + msg);
-                                    oncomplete.execute(false, "data saving failed saveGeoTagData", "");
+                                    if (CommonConstants.isFromPlotDetails == false) {
+                                        saveConversionPotential(context, oncomplete);
+                                    }
                                 }
+                            } else {
+                                Log.e(LOG_TAG, "@@@ geo tag data saving failed due to " + msg);
+                                oncomplete.execute(false, "data saving failed saveGeoTagData", "");
                             }
-                        });
-                    } else {
-                        String whereCondition = " where  PlotCode='" + CommonConstants.PLOT_CODE + "'";
-                        dataAccessHandler.updateData(DatabaseKeys.TABLE_GEOBOUNDARIES, dataToInsert, true, whereCondition, new ApplicationThread.OnComplete<String>() {
-                            @Override
-                            public void execute(boolean success, String result, String msg) {
-                                if (success) {
-                                    Log.v(LOG_TAG, "@@@ geo tag data updated successfully");
-                                    DataManager.getInstance().deleteData(DataManager.PLOT_GEO_TAG);
+                        }
+                    });
+                } else {
+                    String whereCondition = " where  PlotCode='" + CommonConstants.PLOT_CODE + "'";
+                    dataAccessHandler.updateData(DatabaseKeys.TABLE_GEOBOUNDARIES, dataToInsert, true, whereCondition, new ApplicationThread.OnComplete<String>() {
+                        @Override
+                        public void execute(boolean success, String result, String msg) {
+                            if (success) {
+                                Log.v(LOG_TAG, "@@@ geo tag data updated successfully");
+                                DataManager.getInstance().deleteData(DataManager.PLOT_GEO_TAG);
 //                                oncomplete.execute(true, "data updated successfully", "");
-                                    saveConversionPotential(context, oncomplete);
-                                } else {
-                                    Log.e(LOG_TAG, "@@@ geo tag data update failed due to " + msg);
-                                    oncomplete.execute(false, "data saving failed for TABLE_GEOBOUNDARIES", "");
-                                }
+                                saveConversionPotential(context, oncomplete);
+                            } else {
+                                Log.e(LOG_TAG, "@@@ geo tag data update failed due to " + msg);
+                                oncomplete.execute(false, "data saving failed for TABLE_GEOBOUNDARIES", "");
                             }
-                        });
-                    }
+                        }
+                    });
                 }
-            } else {
-                saveConversionPotential(context, oncomplete);
             }
+        }
+        }else {
+           // saveConversionPotential(context, oncomplete);
         }
     }
 
@@ -1679,37 +1727,42 @@ public class DataSavingHelper {
         farmerHistory.setFarmercode(CommonConstants.FARMER_CODE);
         farmerHistory.setPlotcode(CommonConstants.PLOT_CODE);
         FollowUp followUp = (FollowUp) DataManager.getInstance().getDataFromManager(DataManager.PLOT_FOLLOWUP);
+
         if (CommonUtils.isFromFollowUp() && (followUp.getIsfarmerreadytoconvert() == 0)){
-            if (CommonUtils.isFromConversion()) {
+
+
+             if (CommonUtils.isFromConversion()) {
                 saveLandLordDetails(context, oncomplete);
             } else if(CommonUtils.isPlotSplitFarmerPlots()) {
                 savePlotData(context,oncomplete);
-            }else{
-                saveWaterResourceData(context, oncomplete);
+            }else {
+                saveConversionPotential(context,oncomplete);
             }
         }else {
-
-            if (CommonUtils.isNewRegistration() || CommonUtils.isNewPlotRegistration() ||
-                    (CommonUtils.isFromFollowUp() && (followUp.getIsfarmerreadytoconvert() == 1))) {
+           // Log.d("PotentialScore", followUp.getIsfarmerreadytoconvert() + "");
+            if (CommonUtils.isNewRegistration() || CommonUtils.isNewPlotRegistration()) {
 
                 if (null != followUp) {
                     if (null != followUp.getIsfarmerreadytoconvert()) {
                         if (followUp.getIsfarmerreadytoconvert() == 1) {
-                            farmerHistory.setStatustypeid(Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getPlotStatuesId(CommonConstants.STATUS_TYPE_ID_READY_TO_CONVERT))));
+                            farmerHistory.setStatustypeid(Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getPlotStatuesId(CommonConstants.STATUS_TYPE_ID_Initiated))));
                         } else if (followUp.getIsfarmerreadytoconvert() == 0) {
-                            farmerHistory.setStatustypeid(Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getPlotStatuesId(CommonConstants.STATUS_TYPE_ID_PROSPECTIVE))));
+                            farmerHistory.setStatustypeid(Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getPlotStatuesId(CommonConstants.STATUS_TYPE_ID_Initiated))));
                         }
                     }
                 } else {
                     oncomplete.execute(true, "no data to save", "");
                     return;
                 }
-            } else if (CommonUtils.isFromConversion()) {
+            }
+            else if (CommonUtils.isFromConversion()) {
                 farmerHistory.setStatustypeid(Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getPlotStatuesId(CommonConstants.STATUS_TYPE_ID_CONVERTED))));
             } else if (CommonUtils.isFromCropMaintenance() || CommonUtils.isVisitRequests()) {
                 farmerHistory.setStatustypeid(Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getPlotStatuesId(CommonConstants.STATUS_TYPE_ID_UPROOTED))));
             }else  if(CommonUtils.isPlotSplitFarmerPlots()){
                 farmerHistory.setStatustypeid(Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getPlotStatuesId(CommonConstants.STATUS_TYPE_GEO_BOUNDARIES_TAKEN))));
+            }else{
+                farmerHistory.setStatustypeid(Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getPlotStatuesId(CommonConstants.STATUS_TYPE_ID_READY_TO_CONVERT))));
             }
 
             farmerHistory.setCreatedbyuserid(Integer.parseInt(CommonConstants.USER_ID));
@@ -2005,7 +2058,7 @@ public class DataSavingHelper {
     //to get geo boundaries data
     public static List<GeoBoundaries> getGeoBoundriesData() {
         List geoBoundaries = new ArrayList<>();
-        List<GeoBoundaries> savedGeoBoundaries = (List<GeoBoundaries>) DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_TAG);
+        List<GeoBoundaries> savedGeoBoundaries = (List<GeoBoundaries>) DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_BOUNDARIES);
         if (null != savedGeoBoundaries && !savedGeoBoundaries.isEmpty()) {
             for (GeoBoundaries gpsCoordinate : savedGeoBoundaries) {
                 gpsCoordinate.setCreatedbyuserid(Integer.parseInt(CommonConstants.USER_ID));

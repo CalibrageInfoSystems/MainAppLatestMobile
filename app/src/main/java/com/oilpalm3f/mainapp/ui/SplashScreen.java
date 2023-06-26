@@ -125,7 +125,8 @@ public class SplashScreen extends AppCompatActivity {
 
     public void startMasterSync() {
 
-        if (CommonUtils.isNetworkAvailable(this) && !sharedPreferences.getBoolean(CommonConstants.IS_MASTER_SYNC_SUCCESS,false)) {
+        //if (CommonUtils.isNetworkAvailable(this) && !sharedPreferences.getBoolean(CommonConstants.IS_MASTER_SYNC_SUCCESS,false)) {
+        if (CommonUtils.isNetworkAvailable(this) && !PrefUtil.getBool(this, CommonConstants.IS_MASTER_SYNC_SUCCESS)){
             DataSyncHelper.performMasterSync(this, PrefUtil.getBool(this, CommonConstants.IS_MASTER_SYNC_SUCCESS), new ApplicationThread.OnComplete() {
                 @Override
                 public void execute(boolean success, Object result, String msg) {

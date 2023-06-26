@@ -387,6 +387,7 @@
                         android:text="@string/total_area_under_palm_hctr" />
 
                     <EditText
+                        android:focusable="false"
                         android:id="@+id/plot_area_edt"
                         style="@style/editTxt_normal"
                         android:layout_width="0dp"

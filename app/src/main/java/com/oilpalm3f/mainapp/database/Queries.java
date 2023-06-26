@@ -60,15 +60,36 @@ public class Queries {
 
 
     public static String getAlertsPlotFollowUpQuery(int limit, int offset) {
+//        return "select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,f.ContactNumber,\n" +
+//                "  m.Name as MandalName,\n" +
+//                "  v.Name as VillageName,\n" +
+//                "  p.TotalPlotArea, fu.PotentialScore,\n" +
+//                " (select GROUP_CONCAT(lkp.Name) from PlotCurrentCrop pcc\n" +
+//                "  inner join LookUp lkp on pcc.CropId =lkp.Id  where PlotCode = p.Code and lkp.LookUpTypeId = '22')  as Crops,\n" +
+//                "  fu.CreatedDate as lastVisitDate, fu.HarvestingMonth as HarvestDate,\n" +
+//                " (select tcd.desc from SoilResource sr inner join TypeCdDmt tcd on sr.PrioritizationTypeId = tcd.TypeCdId where PlotCode = p.Code) as plotPrioritization,\n" +
+//                "  ui.FirstName || ' ' || (CASE WHEN ifnull(ui.MiddleName, '') = 'null' THEN '' ELSE ui.MiddleName || ' ' END) || ui.LastName AS 'UserName'\n"+
+//                "  from Plot p\n" +
+//                "  inner join UserInfo ui on ui.id =p.CreatedByUserId\n"+
+//                "  inner join Farmer f on f.code=p.FarmerCode\n" +
+//                "  inner join FollowUp fu on fu.PlotCode = p.Code\n" +
+//                "  inner join Address addr on p.AddressCode = addr.Code\n" +
+//                "  inner join Village v on addr.VillageId = v.Id\n" +
+//                "  inner join Mandal m on addr.MandalId = m.Id\n" +
+//                "  inner join District d on addr.DistrictId = d.Id\n" +
+//                "  inner join State s on addr.StateId = s.Id\n" +
+//                "  inner join FarmerHistory fh on fh.PlotCode = p.Code AND p.FarmerCode = fh.FarmerCode AND fh.IsActive = 1\n" +
+//                "  where  fu.PotentialScore>=7 order by lastVisitDate limit " + limit + " offset " + offset + ";";
+
         return "select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,f.ContactNumber,\n" +
                 "  m.Name as MandalName,\n" +
                 "  v.Name as VillageName,\n" +
                 "  p.TotalPlotArea, fu.PotentialScore,\n" +
                 " (select GROUP_CONCAT(lkp.Name) from PlotCurrentCrop pcc\n" +
                 "  inner join LookUp lkp on pcc.CropId =lkp.Id  where PlotCode = p.Code and lkp.LookUpTypeId = '22')  as Crops,\n" +
-                "  fu.CreatedDate as lastVisitDate, fu.HarvestingMonth as HarvestDate,\n" +
+                "  fh.CreatedDate as lastVisitDate, fu.HarvestingMonth as HarvestDate,\n" +
                 " (select tcd.desc from SoilResource sr inner join TypeCdDmt tcd on sr.PrioritizationTypeId = tcd.TypeCdId where PlotCode = p.Code) as plotPrioritization,\n" +
-                "  ui.FirstName || ' ' || (CASE WHEN ifnull(ui.MiddleName, '') = 'null' THEN '' ELSE ui.MiddleName || ' ' END) || ui.LastName AS 'UserName'\n"+
+                "  ui.FirstName || ' ' || (CASE WHEN ui.MiddleName = 'null' THEN '' ELSE ui.MiddleName || ' ' END) || ui.LastName AS 'UserName'\n"+
                 "  from Plot p\n" +
                 "  inner join UserInfo ui on ui.id =p.CreatedByUserId\n"+
                 "  inner join Farmer f on f.code=p.FarmerCode\n" +
@@ -89,6 +110,22 @@ public class Queries {
 
 
     public static String getAlertsMissingTreesInfoQuery(int limit, int offset) {
+//        return "  select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,\n" +
+//                " m.Name as MandalName,\n" +
+//                " v.Name as VillageName, plt.TreesCount as saplingsplanted, up.PlamsCount as currentTrees, up.MissingTreesCount as missingTrees,\n" +
+//                " (select ROUND(MissingTreesCount * 100.0 / SeedsPlanted, 0) from Uprootment where PlotCode =p.Code ORDER BY CreatedDate DESC LIMIT 1) as percent\n" +
+//                "  from Plot p\n" +
+//                "  inner join Farmer f on f.code=p.FarmerCode\n" +
+//                "  inner join Uprootment up on up.PlotCode = p.Code\n" +
+//                "  inner join Plantation plt on plt.PlotCode = p.Code\n" +
+//                "  inner join Address addr on p.AddressCode = addr.Code\n" +
+//                "  inner join Village v on addr.VillageId = v.Id\n" +
+//                "  inner join Mandal m on addr.MandalId = m.Id\n" +
+//                "  inner join District d on addr.DistrictId = d.Id\n" +
+//                "  inner join State s on addr.StateId = s.Id\n" +
+//                "  inner join FarmerHistory fh on fh.PlotCode = p.Code\n" +
+//                "  where   fh.IsActive = 1 and up.MissingTreesCount >= 1 group by p.Code order by percent desc limit " + limit + " offset " + offset + ";";
+
         return "  select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,\n" +
                 " m.Name as MandalName,\n" +
                 " v.Name as VillageName, plt.TreesCount as saplingsplanted, up.PlamsCount as currentTrees, up.MissingTreesCount as missingTrees,\n" +
@@ -102,13 +139,30 @@ public class Queries {
                 "  inner join Mandal m on addr.MandalId = m.Id\n" +
                 "  inner join District d on addr.DistrictId = d.Id\n" +
                 "  inner join State s on addr.StateId = s.Id\n" +
-                "  inner join FarmerHistory fh on fh.PlotCode = p.Code\n" +
+                "  inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = f.Code  \n" +
                 "  where   fh.IsActive = 1 and up.MissingTreesCount >= 1 group by p.Code order by percent desc limit " + limit + " offset " + offset + ";";
+
     }
 
 
 
     public static String getAlertsVisitsInfoQuery(int limit, int offset) {
+
+//        return "select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,f.ContactNumber,\n" +
+//                " m.Name as MandalName,\n" +
+//                " v.Name as VillageName,\n" +
+//                " p.TotalPlotArea, p.DateofPlanting, cmh.CreatedDate as plotvisiteddate, fh.CreatedDate as converteddate\n" +
+//                " from Plot p\n" +
+//                " inner join Farmer f on f.code=p.FarmerCode\n" +
+//                " inner join Address addr on p.AddressCode = addr.Code\n" +
+//                " inner join Village v on addr.VillageId = v.Id\n" +
+//                " inner join Mandal m on addr.MandalId = m.Id\n" +
+//                " inner join District d on addr.DistrictId = d.Id\n" +
+//                " inner join State s on addr.StateId = s.Id\n" +
+//                " inner join FarmerHistory fh on fh.PlotCode = p.Code \n" +
+//                " inner join CropMaintenanceHistory cmh on cmh.PlotCode = p.Code\n" +
+//                " where  fh.IsActive = 1 and fh.StatusTypeId in(85,88,89) order by converteddate limit " + limit + " offset " + offset + ";";
+
 
         return "select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,f.ContactNumber,\n" +
                 " m.Name as MandalName,\n" +
@@ -121,12 +175,29 @@ public class Queries {
                 " inner join Mandal m on addr.MandalId = m.Id\n" +
                 " inner join District d on addr.DistrictId = d.Id\n" +
                 " inner join State s on addr.StateId = s.Id\n" +
-                " inner join FarmerHistory fh on fh.PlotCode = p.Code \n" +
+                " inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = f.Code \n" +
                 " inner join CropMaintenanceHistory cmh on cmh.PlotCode = p.Code\n" +
                 " where  fh.IsActive = 1 and fh.StatusTypeId in(85,88,89) order by converteddate limit " + limit + " offset " + offset + ";";
+
     }
 
     public static String getAlertsNotVisitsInfoQuery(int limit, int offset,String fromDate,String toDate) {
+
+//        return "select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,f.ContactNumber,\n" +
+//                "     m.Name as MandalName,\n" +
+//                "     v.Name as VillageName,\n" +
+//                "     p.TotalPlotArea, p.DateofPlanting, cm.UpdatedDate as plotvisiteddate, fh.CreatedDate as converteddate\n" +
+//                "     from Plot p\n" +
+//                "     inner join Farmer f on f.code=p.FarmerCode\n" +
+//                "     inner join Address addr on p.AddressCode = addr.Code\n" +
+//                "     inner join Village v on addr.VillageId = v.Id\n" +
+//                "     inner join Mandal m on addr.MandalId = m.Id\n" +
+//                "     inner join District d on addr.DistrictId = d.Id\n" +
+//                "     inner join State s on addr.StateId = s.Id\n" +
+//                "     inner join FarmerHistory fh on fh.PlotCode = p.Code\n" +
+//                "     LEFT JOIN (SELECT PlotCode,MAX(UpdatedDate)UpdatedDate from CropMaintenanceHistory GROUP BY PlotCode)cm ON cm.PlotCode=p.Code\n" +
+//                "     where  fh.IsActive = 1 and fh.StatusTypeId in(88,89)  and not exists (select 1 from CropMaintenanceHistory  where DATE(UpdatedDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and PlotCode=p.code )   order by converteddate limit 30 offset 0";
+
 
         return "select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,f.ContactNumber,\n" +
                 "     m.Name as MandalName,\n" +
@@ -139,7 +210,7 @@ public class Queries {
                 "     inner join Mandal m on addr.MandalId = m.Id\n" +
                 "     inner join District d on addr.DistrictId = d.Id\n" +
                 "     inner join State s on addr.StateId = s.Id\n" +
-                "     inner join FarmerHistory fh on fh.PlotCode = p.Code\n" +
+                "     inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = f.Code \n" +
                 "     LEFT JOIN (SELECT PlotCode,MAX(UpdatedDate)UpdatedDate from CropMaintenanceHistory GROUP BY PlotCode)cm ON cm.PlotCode=p.Code\n" +
                 "     where  fh.IsActive = 1 and fh.StatusTypeId in(88,89)  and not exists (select 1 from CropMaintenanceHistory  where DATE(UpdatedDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and PlotCode=p.code )   order by converteddate limit 30 offset 0";
     }
@@ -431,6 +502,23 @@ public class Queries {
 
     public String getPlotDetailsForConversion(final String farmercode, final int plotStatus) {
 
+//        return "select p.Code, p.TotalPalmArea, p.TotalPlotArea, p.GPSPlotArea, p.SurveyNumber, addr.Landmark,\n" +
+//                "v.Code AS VillageCode, v.Name as VillageName, v.Id as VillageId,\n" +
+//                "m.Code as MandalCode, m.Name as MandalName, m.Id as MandalId,\n" +
+//                "d.Code as DistrictCode, d.Name as DistrictName, d.Id as DistrictId,\n" +
+//                "s.Code as StateCode, s.Name as StateName, s.Id as StateId,\n" +
+//                "  ASD.NoOfSaplingsAdvancePaidFor as advanced , ND.NoOfSaplingsDispatched  as nursery \n" +
+//                " from Plot p\n" +
+//                "inner join Address addr on p.AddressCode = addr.Code\n" +
+//                "inner join Village v on addr.VillageId = v.Id\n" +
+//                "inner join Mandal m on addr.MandalId = m.Id\n" +
+//                "inner join District d on addr.DistrictId = d.Id\n" +
+//                "inner join State s on addr.StateId = s.Id\n" +
+//                "inner join FarmerHistory fh on fh.PlotCode = p.Code \n" +
+//                " INNER JOIN AdvanceSummary ASD on ASD.PlotCode = P.Code\n" +
+//                " INNER JOIN NurserySummary ND on ND.PlotCode = P.Code\n" +
+//                "where p.IsActive = 1 and  p.FarmerCode='" + farmercode + "'" +"and fh.StatusTypeId = '" + plotStatus + "'" + " and fh.IsActive = 1  group by p.Code HAVING advanced = nursery ";
+
         return "select p.Code, p.TotalPalmArea, p.TotalPlotArea, p.GPSPlotArea, p.SurveyNumber, addr.Landmark,\n" +
                 "v.Code AS VillageCode, v.Name as VillageName, v.Id as VillageId,\n" +
                 "m.Code as MandalCode, m.Name as MandalName, m.Id as MandalId,\n" +
@@ -438,33 +526,54 @@ public class Queries {
                 "s.Code as StateCode, s.Name as StateName, s.Id as StateId,\n" +
                 "  ASD.NoOfSaplingsAdvancePaidFor as advanced , ND.NoOfSaplingsDispatched  as nursery \n" +
                 " from Plot p\n" +
+                "inner join Farmer f on f.code = p.FarmerCode\n" +
                 "inner join Address addr on p.AddressCode = addr.Code\n" +
                 "inner join Village v on addr.VillageId = v.Id\n" +
                 "inner join Mandal m on addr.MandalId = m.Id\n" +
                 "inner join District d on addr.DistrictId = d.Id\n" +
                 "inner join State s on addr.StateId = s.Id\n" +
-                "inner join FarmerHistory fh on fh.PlotCode = p.Code \n" +
+                "inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
                 " INNER JOIN AdvanceSummary ASD on ASD.PlotCode = P.Code\n" +
                 " INNER JOIN NurserySummary ND on ND.PlotCode = P.Code\n" +
-                "where p.IsActive = 1 and  p.FarmerCode='" + farmercode + "'" +"and fh.StatusTypeId = '" + plotStatus + "'" + " and fh.IsActive = 1  group by p.Code HAVING advanced = nursery ";
+                "where p.IsActive = 1 and f.IsActive = 1 and p.FarmerCode='" + farmercode + "'" +"and fh.StatusTypeId = '" + plotStatus + "'" + " and fh.IsActive = 1  group by p.Code HAVING advanced = nursery ";
+
+
     }
 
     public String getPlotDetailsForVisit(final String farmercode) {
+
+//        return "select p.Code, p.TotalPalmArea, p.TotalPlotArea, p.GPSPlotArea, p.SurveyNumber, addr.Landmark,\n" +
+//                "v.Code AS VillageCode, v.Name as VillageName, v.Id as VillageId,\n" +
+//                "m.Code as MandalCode, m.Name as MandalName, m.Id as MandalId,\n" +
+//                "d.Code as DistrictCode, d.Name as DistrictName, d.Id as DistrictId,\n" +
+//                "s.Code as StateCode, s.Name as StateName, s.Id as StateId , p.DateofPlanting from Plot p\n" +
+//                "inner join Address addr on p.AddressCode = addr.Code\n" +
+//                "inner join Village v on addr.VillageId = v.Id\n" +
+//                "inner join Mandal m on addr.MandalId = m.Id\n" +
+//                "inner join District d on addr.DistrictId = d.Id\n" +
+//                "inner join State s on addr.StateId = s.Id\n" +
+//                "inner join FarmerHistory fh on fh.PlotCode = p.Code\n" +
+//                "inner join VisitRequests vr on vr.PlotCode = p.Code\n" +
+//                "left join (select plotcode,max(CreatedDate)CreatedDate from CropMaintenanceHistory group by plotcode) cm on vr.PlotCode = cm.PlotCode "+
+//                "where p.IsActive = 1  and (cm.PlotCode is null or (cm.PlotCode is not null and  DATE(vr.CreatedDate)>DATE(cm.CreatedDate ))) and p.FarmerCode='" + farmercode + "' and fh.StatusTypeId IN ('88','89','308') and fh.IsActive = 1  group by p.Code";
+
 
         return "select p.Code, p.TotalPalmArea, p.TotalPlotArea, p.GPSPlotArea, p.SurveyNumber, addr.Landmark,\n" +
                 "v.Code AS VillageCode, v.Name as VillageName, v.Id as VillageId,\n" +
                 "m.Code as MandalCode, m.Name as MandalName, m.Id as MandalId,\n" +
                 "d.Code as DistrictCode, d.Name as DistrictName, d.Id as DistrictId,\n" +
                 "s.Code as StateCode, s.Name as StateName, s.Id as StateId , p.DateofPlanting from Plot p\n" +
+                "inner join Farmer f on f.code = p.FarmerCode\n" +
                 "inner join Address addr on p.AddressCode = addr.Code\n" +
                 "inner join Village v on addr.VillageId = v.Id\n" +
                 "inner join Mandal m on addr.MandalId = m.Id\n" +
                 "inner join District d on addr.DistrictId = d.Id\n" +
                 "inner join State s on addr.StateId = s.Id\n" +
-                "inner join FarmerHistory fh on fh.PlotCode = p.Code\n" +
+                "inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
                 "inner join VisitRequests vr on vr.PlotCode = p.Code\n" +
                 "left join (select plotcode,max(CreatedDate)CreatedDate from CropMaintenanceHistory group by plotcode) cm on vr.PlotCode = cm.PlotCode "+
-                "where p.IsActive = 1  and (cm.PlotCode is null or (cm.PlotCode is not null and  DATE(vr.CreatedDate)>DATE(cm.CreatedDate ))) and p.FarmerCode='" + farmercode + "' and fh.StatusTypeId IN ('88','89','308') and fh.IsActive = 1  group by p.Code";
+                "where p.IsActive = 1 and f.IsActive = 1 and (cm.PlotCode is null or (cm.PlotCode is not null and  DATE(vr.CreatedDate)>DATE(cm.CreatedDate ))) and p.FarmerCode='" + farmercode + "' and fh.StatusTypeId IN ('88','89','308') and fh.IsActive = 1  group by p.Code";
+
     }
 
     public String getPlotDetailsForCC(final String farmercode, final int plotStatus, final int multiStatus, boolean fromCm) {
@@ -474,18 +583,32 @@ public class Queries {
         } else {
             statusType = "and fh.StatusTypeId = '" + plotStatus + "'";
         }
+//        return "select p.Code, p.TotalPalmArea, p.TotalPlotArea, p.GPSPlotArea, p.SurveyNumber, addr.Landmark,\n" +
+//                "v.Code AS VillageCode, v.Name as VillageName, v.Id as VillageId,\n" +
+//                "m.Code as MandalCode, m.Name as MandalName, m.Id as MandalId,\n" +
+//                "d.Code as DistrictCode, d.Name as DistrictName, d.Id as DistrictId,\n" +
+//                "s.Code as StateCode, s.Name as StateName, s.Id as StateId , p.DateofPlanting from Plot p\n" +
+//                "inner join Address addr on p.AddressCode = addr.Code\n" +
+//                "inner join Village v on addr.VillageId = v.Id\n" +
+//                "inner join Mandal m on addr.MandalId = m.Id\n" +
+//                "inner join District d on addr.DistrictId = d.Id\n" +
+//                "inner join State s on addr.StateId = s.Id\n" +
+//                "inner join FarmerHistory fh on fh.PlotCode = p.Code\n" +
+//                "where p.IsActive = 1 and p.FarmerCode='" + farmercode + "'" + statusType + " and fh.IsActive = 1  group by p.Code";
+
         return "select p.Code, p.TotalPalmArea, p.TotalPlotArea, p.GPSPlotArea, p.SurveyNumber, addr.Landmark,\n" +
                 "v.Code AS VillageCode, v.Name as VillageName, v.Id as VillageId,\n" +
                 "m.Code as MandalCode, m.Name as MandalName, m.Id as MandalId,\n" +
                 "d.Code as DistrictCode, d.Name as DistrictName, d.Id as DistrictId,\n" +
                 "s.Code as StateCode, s.Name as StateName, s.Id as StateId , p.DateofPlanting from Plot p\n" +
+                "inner join Farmer f on f.code = p.FarmerCode\n" +
                 "inner join Address addr on p.AddressCode = addr.Code\n" +
                 "inner join Village v on addr.VillageId = v.Id\n" +
                 "inner join Mandal m on addr.MandalId = m.Id\n" +
                 "inner join District d on addr.DistrictId = d.Id\n" +
                 "inner join State s on addr.StateId = s.Id\n" +
-                "inner join FarmerHistory fh on fh.PlotCode = p.Code\n" +
-                "where p.IsActive = 1 and p.FarmerCode='" + farmercode + "'" + statusType + " and fh.IsActive = 1  group by p.Code";
+                "inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
+                "where p.IsActive = 1 and f.IsActive = 1 and p.FarmerCode='" + farmercode + "'" + statusType + " and fh.IsActive = 1  group by p.Code";
     }
 
     public String getPlotDetailsForCC(final String farmercode, final int plotStatus) {
@@ -971,15 +1094,27 @@ public class Queries {
     }
 
     public String getPlotDetails(final String farmercode, final int plotStatus) {
+//        return "select p.Code, p.TotalPlotArea, v.Name as VillageName, m.Name as MandalName, t.Desc, f.PotentialScore , (select GROUP_CONCAT(lkp.Name) from PlotCurrentCrop pcc \n" +
+//                        "inner join LookUp lkp on pcc.CropId =lkp.Id  where PlotCode = p.Code and lkp.LookUpTypeId = '22')  as Crops, f.UpdatedDate from Plot p\n" +
+//                        "inner join Address addr on p.AddressCode = addr.Code\n" +
+//                        "inner join Village v on addr.VillageId = v.Id\n" +
+//                        "inner join Mandal m on addr.MandalId = m.Id\n" +
+//                        "inner join TypeCdDmt t on t.TypecdId = p.CropIncomeTypeId\n" +
+//                        "inner join FarmerHistory fh on fh.PlotCode = p.Code\n" +
+//                        "inner join FollowUp f on f.PlotCode = p.Code\n" +
+//                        "where p.FarmerCode='" + farmercode + "'" + " and fh.StatusTypeId = " + plotStatus + " and fh.IsActive = '1' group by p.Code";
+
+
         return "select p.Code, p.TotalPlotArea, v.Name as VillageName, m.Name as MandalName, t.Desc, f.PotentialScore , (select GROUP_CONCAT(lkp.Name) from PlotCurrentCrop pcc \n" +
-                        "inner join LookUp lkp on pcc.CropId =lkp.Id  where PlotCode = p.Code and lkp.LookUpTypeId = '22')  as Crops, f.UpdatedDate from Plot p\n" +
-                        "inner join Address addr on p.AddressCode = addr.Code\n" +
-                        "inner join Village v on addr.VillageId = v.Id\n" +
-                        "inner join Mandal m on addr.MandalId = m.Id\n" +
-                        "inner join TypeCdDmt t on t.TypecdId = p.CropIncomeTypeId\n" +
-                        "inner join FarmerHistory fh on fh.PlotCode = p.Code\n" +
-                        "inner join FollowUp f on f.PlotCode = p.Code\n" +
-                        "where p.FarmerCode='" + farmercode + "'" + " and fh.StatusTypeId = " + plotStatus + " and fh.IsActive = '1' group by p.Code";
+                "inner join LookUp lkp on pcc.CropId =lkp.Id  where PlotCode = p.Code and lkp.LookUpTypeId = '22')  as Crops, f.UpdatedDate from Plot p\n" +
+                "inner join Farmer fa on fa.code = p.FarmerCode\n" +
+                "inner join Address addr on p.AddressCode = addr.Code\n" +
+                "inner join Village v on addr.VillageId = v.Id\n" +
+                "inner join Mandal m on addr.MandalId = m.Id\n" +
+                "inner join TypeCdDmt t on t.TypecdId = p.CropIncomeTypeId\n" +
+                "inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode\n" +
+                "inner join FollowUp f on f.PlotCode = p.Code\n" +
+                "where p.FarmerCode='" + farmercode + "'" + " and fh.StatusTypeId = " + plotStatus + " and fh.IsActive = '1' and fa.IsActive = 1 and p.isActive = 1 group by p.Code";
     }
 
 
@@ -1076,6 +1211,21 @@ public class Queries {
     }
 
     public String getFilterBasedProspectiveFarmers(final int statusTypeId, String seachKey, int offset, int limit) {
+//        return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
+//                "s.Name as StateName,\n" +
+//                "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
+//                "from Farmer f \n" +
+//                "left join Village v on f.VillageId = v.Id\n" +
+//                "left join State s on f.StateId = s.Id\n" +
+//                "left join FileRepository fileRep on f.Code = fileRep.FarmerCode " + "and fileRep.ModuleTypeId = 193" + "\n" +
+//                "inner join Plot p on p.FarmerCode = f.Code \n"+
+//                "inner join FarmerHistory fh on fh.FarmerCode = f.Code\n" +
+//                "  and fh.StatusTypeId = '" + statusTypeId + "'" + "\n" +
+//                "and fh.IsActive = '1'" + "\n" +
+//                "where  f.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+//                "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%') group by f.Code limit " + limit + " offset " + offset + ";";
+
+
         return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
                 "s.Name as StateName,\n" +
                 "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
@@ -1084,27 +1234,47 @@ public class Queries {
                 "left join State s on f.StateId = s.Id\n" +
                 "left join FileRepository fileRep on f.Code = fileRep.FarmerCode " + "and fileRep.ModuleTypeId = 193" + "\n" +
                 "inner join Plot p on p.FarmerCode = f.Code \n"+
-                "inner join FarmerHistory fh on fh.FarmerCode = f.Code\n" +
+                "inner join FarmerHistory fh on fh.FarmerCode = f.Code and fh.PlotCode = p.Code \n" +
                 "  and fh.StatusTypeId = '" + statusTypeId + "'" + "\n" +
-                "and fh.IsActive = '1'" + "\n" +
-                "where  f.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+                "and fh.IsActive = '1'"+ "\n" +
+                "where  f.IsActive = 1 AND p.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
                 "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%') group by f.Code limit " + limit + " offset " + offset + ";";
     }
 
     public String getFilterBasedFarmers(final int statusTypeId, String seachKey, int offset, int limit) {
+//        return "SELECT  DISTINCT F.Code, F.FirstName, F.MiddleName, F.LastName, F.GuardianName, S.Name AS StateName,\n"+
+//                " F.ContactNumber, F.ContactNumber, V.Name, FR.FileLocation, FR.FileName, FR.FileExtension,\n"+
+//                " ASD.NoOfSaplingsAdvancePaidFor, ND.NoOfSaplingsDispatched, max(FR.UpdatedDate) as maxdate FROM  Farmer F\n"+
+//                " INNER JOIN Plot P ON P.FarmerCode = F.Code\n"+
+//                " INNER JOIN AdvanceSummary ASD on ASD.PlotCode = P.Code\n"+
+//                " INNER JOIN NurserySummary ND on ND.PlotCode = P.Code\n"+
+//                " INNER JOIN FarmerHistory FH ON FH.PlotCode=P.Code\n"+
+//                " and FH.StatusTypeId = '" + statusTypeId + "'" + "\n" +
+//                "and FH.IsActive = '1'" + "\n" +
+//                "LEFT JOIN Village V ON F.VillageId = V.Id \n"+
+//                "LEFT JOIN State S ON F.StateId = S.Id \n"+
+//                "LEFT JOIN FileRepository FR ON F.Code = FR.FarmerCode and FR.ModuleTypeId = 193\n"+
+//                "where  f.IsActive = 1 AND ( F.FirstName like'%" + seachKey + "%' or F.MiddleName like '%" + seachKey + "%' or" +
+//                " F.LastName like '%" + seachKey + "%'  or F.Code like '%" + seachKey + "%' \n"+
+//                " or F.ContactNumber like '%" + seachKey + "%' or F.GuardianName like '%" + seachKey + "%')  \n"+
+//                " AND ND.NoOfSaplingsDispatched  =  ASD.NoOfSaplingsAdvancePaidFor\n" +
+//                "GROUP BY F.Code, F.FirstName, F.MiddleName, F.LastName, F.GuardianName,S.Name ,\n" +
+//                "F.ContactNumber, F.ContactNumber, V.Name\n" +
+//                "limit " + limit + " offset " + offset + "; " ;
+
         return "SELECT  DISTINCT F.Code, F.FirstName, F.MiddleName, F.LastName, F.GuardianName, S.Name AS StateName,\n"+
                 " F.ContactNumber, F.ContactNumber, V.Name, FR.FileLocation, FR.FileName, FR.FileExtension,\n"+
                 " ASD.NoOfSaplingsAdvancePaidFor, ND.NoOfSaplingsDispatched, max(FR.UpdatedDate) as maxdate FROM  Farmer F\n"+
                 " INNER JOIN Plot P ON P.FarmerCode = F.Code\n"+
                 " INNER JOIN AdvanceSummary ASD on ASD.PlotCode = P.Code\n"+
                 " INNER JOIN NurserySummary ND on ND.PlotCode = P.Code\n"+
-                " INNER JOIN FarmerHistory FH ON FH.PlotCode=P.Code\n"+
+                " INNER JOIN FarmerHistory FH ON FH.PlotCode=P.Code and FH.FarmerCode=F.Code \n"+
                 " and FH.StatusTypeId = '" + statusTypeId + "'" + "\n" +
                 "and FH.IsActive = '1'" + "\n" +
                 "LEFT JOIN Village V ON F.VillageId = V.Id \n"+
                 "LEFT JOIN State S ON F.StateId = S.Id \n"+
                 "LEFT JOIN FileRepository FR ON F.Code = FR.FarmerCode and FR.ModuleTypeId = 193\n"+
-                "where  f.IsActive = 1 AND ( F.FirstName like'%" + seachKey + "%' or F.MiddleName like '%" + seachKey + "%' or" +
+                "where  f.IsActive = 1 AND P.IsActive = 1 AND ( F.FirstName like'%" + seachKey + "%' or F.MiddleName like '%" + seachKey + "%' or" +
                 " F.LastName like '%" + seachKey + "%'  or F.Code like '%" + seachKey + "%' \n"+
                 " or F.ContactNumber like '%" + seachKey + "%' or F.GuardianName like '%" + seachKey + "%')  \n"+
                 " AND ND.NoOfSaplingsDispatched  =  ASD.NoOfSaplingsAdvancePaidFor\n" +
@@ -1121,6 +1291,21 @@ public class Queries {
     }
 
     public String getFilterBasedFarmersCrop(String seachKey, int offset, int limit) {
+//        return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
+//                "s.Name as StateName,\n" +
+//                "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
+//                "from Farmer f \n" +
+//                "left join Village v on f.VillageId = v.Id\n" +
+//                "left join State s on f.StateId = s.Id\n" +
+//                "left join FileRepository fileRep on f.Code = fileRep.FarmerCode" + " and fileRep.ModuleTypeId = 193" + "\n" +
+//                "inner join Plot p on p.FarmerCode = f.Code \n"+
+//                "inner join FarmerHistory fh on fh.FarmerCode = f.Code\n" +
+//                " and fh.StatusTypeId in ('88','89','308')" + "\n" +
+//                "and fh.IsActive = '1'" + "\n" +
+//                "where  f.IsActive = 1 AND (f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+//                "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%' ) group by f.Code limit " + limit + " offset " + offset + ";";
+
+
         return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
                 "s.Name as StateName,\n" +
                 "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
@@ -1129,10 +1314,10 @@ public class Queries {
                 "left join State s on f.StateId = s.Id\n" +
                 "left join FileRepository fileRep on f.Code = fileRep.FarmerCode" + " and fileRep.ModuleTypeId = 193" + "\n" +
                 "inner join Plot p on p.FarmerCode = f.Code \n"+
-                "inner join FarmerHistory fh on fh.FarmerCode = f.Code\n" +
+                "inner join FarmerHistory fh on fh.FarmerCode = f.Code and fh.PlotCode=p.Code \n" +
                 " and fh.StatusTypeId in ('88','89','308')" + "\n" +
                 "and fh.IsActive = '1'" + "\n" +
-                "where  f.IsActive = 1 AND (f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+                "where  f.IsActive = 1 AND p.IsActive = 1 AND (f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
                 "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%' ) group by f.Code limit " + limit + " offset " + offset + ";";
     }
     public String getFilterBasedFarmersCropM(String seachKey) {
@@ -1151,9 +1336,6 @@ public class Queries {
                 "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%' ) group by f.Code;";
     }
 
-
-
-
     public String getFilterFarmersWeedFly() {
         return "select f.Code, f.FirstName, f.MiddleName, f.LastName,  f.ContactNumber, f.ContactNumber from Farmer f ";
 
@@ -1162,6 +1344,21 @@ public class Queries {
 
 
     public String getFilterBasedFarmersCropRetake(String seachKey, int offset, int limit) {
+//        return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
+//                "s.Name as StateName,\n" +
+//                "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
+//                "from Farmer f \n" +
+//                "left join Village v on f.VillageId = v.Id \n" +
+//                "left join State s on f.StateId = s.Id \n" +
+//                "left join FileRepository fileRep on f.Code = fileRep.FarmerCode" + " and fileRep.ModuleTypeId = 193" + "\n" +
+//                "inner join Plot p on p.FarmerCode = f.Code \n"+
+//                "inner join FarmerHistory fh on fh.FarmerCode = f.Code\n" +
+//                " and fh.StatusTypeId in ('258')" + "\n" +
+//                "and fh.IsActive = '1'" + "\n" +
+//                "where  f.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+//                "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%' )group by f.Code limit " + limit + " offset " + offset + ";";
+
+
         return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
                 "s.Name as StateName,\n" +
                 "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
@@ -1169,15 +1366,32 @@ public class Queries {
                 "left join Village v on f.VillageId = v.Id \n" +
                 "left join State s on f.StateId = s.Id \n" +
                 "left join FileRepository fileRep on f.Code = fileRep.FarmerCode" + " and fileRep.ModuleTypeId = 193" + "\n" +
-                "inner join Plot p on p.FarmerCode = f.Code \n"+
-                "inner join FarmerHistory fh on fh.FarmerCode = f.Code\n" +
+                "inner join Plot p on p.FarmerCode = f.Code  \n"+
+                "inner join FarmerHistory fh on fh.FarmerCode = f.Code and fh.PlotCode=p.Code \n" +
                 " and fh.StatusTypeId in ('258')" + "\n" +
                 "and fh.IsActive = '1'" + "\n" +
-                "where  f.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+                "where  f.IsActive = 1 AND p.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
                 "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%' )group by f.Code limit " + limit + " offset " + offset + ";";
     }
 
     public String getVisitRequestFarmers(String seachKey, int offset, int limit) {
+//        return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
+//                "s.Name as StateName,\n" +
+//                "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
+//                "from Farmer f \n" +
+//                "left join Village v on f.VillageId = v.Id \n" +
+//                "left join State s on f.StateId = s.Id \n" +
+//                "left join FileRepository fileRep on f.Code = fileRep.FarmerCode" + " and fileRep.ModuleTypeId = 193" + "\n" +
+//                "inner join Plot p on p.FarmerCode = f.Code \n"+
+//                "inner join FarmerHistory fh on fh.FarmerCode = f.Code\n" +
+//                " and fh.StatusTypeId in ('88','89','308')" + "\n" +
+//                "and fh.IsActive = '1'" + "\n" +
+//                " inner join VisitRequests vr on vr.FarmerCode = f.Code \n" +
+//                "  left join (select plotcode,max(CreatedDate)CreatedDate from CropMaintenanceHistory group by plotcode) cm on vr.PlotCode = cm.PlotCode \n" +
+//                "  where  f.IsActive = 1  and (cm.PlotCode is null or (cm.PlotCode is not null and DATE(vr.CreatedDate)>DATE(cm.CreatedDate ))) AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+//                "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%' )group by f.Code limit " + limit + " offset " + offset + ";";
+
+
         return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
                 "s.Name as StateName,\n" +
                 "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
@@ -1186,16 +1400,31 @@ public class Queries {
                 "left join State s on f.StateId = s.Id \n" +
                 "left join FileRepository fileRep on f.Code = fileRep.FarmerCode" + " and fileRep.ModuleTypeId = 193" + "\n" +
                 "inner join Plot p on p.FarmerCode = f.Code \n"+
-                "inner join FarmerHistory fh on fh.FarmerCode = f.Code\n" +
+                "inner join FarmerHistory fh on fh.FarmerCode = f.Code and fh.PlotCode=p.Code \n" +
                 " and fh.StatusTypeId in ('88','89','308')" + "\n" +
                 "and fh.IsActive = '1'" + "\n" +
                 " inner join VisitRequests vr on vr.FarmerCode = f.Code \n" +
                 "  left join (select plotcode,max(CreatedDate)CreatedDate from CropMaintenanceHistory group by plotcode) cm on vr.PlotCode = cm.PlotCode \n" +
-                "  where  f.IsActive = 1  and (cm.PlotCode is null or (cm.PlotCode is not null and DATE(vr.CreatedDate)>DATE(cm.CreatedDate ))) AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+                "  where  f.IsActive = 1 AND p.IsActive = 1 and (cm.PlotCode is null or (cm.PlotCode is not null and DATE(vr.CreatedDate)>DATE(cm.CreatedDate ))) AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
                 "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%' )group by f.Code limit " + limit + " offset " + offset + ";";
     }
 
     public String getFilterBasedFarmersFollowUp(String seachKey, int offset, int limit)  {
+//        return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
+//                "s.Name as StateName,\n" +
+//                "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
+//                "from Farmer f \n" +
+//                "left join Village v on f.VillageId = v.Id\n" +
+//                "left join State s on f.StateId = s.Id\n" +
+//                "left join FileRepository fileRep on f.Code = fileRep.FarmerCode\n" +
+//                "and fileRep.ModuleTypeId = 193\n" +
+//                "inner join Plot p on p.FarmerCode = f.Code \n"+
+//                "inner join FarmerHistory fh on fh.FarmerCode = f.Code\n" +
+//                "and fh.StatusTypeId in ('81')" + "\n" +
+//                "and fh.IsActive = '1'" + "\n" +
+//                "where  f.IsActive = 1 AND (f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+//                "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%') group by f.Code limit " + limit + " offset " + offset + ";";
+
         return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
                 "s.Name as StateName,\n" +
                 "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
@@ -1205,11 +1434,12 @@ public class Queries {
                 "left join FileRepository fileRep on f.Code = fileRep.FarmerCode\n" +
                 "and fileRep.ModuleTypeId = 193\n" +
                 "inner join Plot p on p.FarmerCode = f.Code \n"+
-                "inner join FarmerHistory fh on fh.FarmerCode = f.Code\n" +
+                "inner join FarmerHistory fh on fh.FarmerCode = f.Code  and fh.PlotCode=p.Code \n" +
                 "and fh.StatusTypeId in ('81')" + "\n" +
                 "and fh.IsActive = '1'" + "\n" +
-                "where  f.IsActive = 1 AND (f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+                "where  f.IsActive = 1 AND p.IsActive = 1 AND (f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
                 "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%') group by f.Code limit " + limit + " offset " + offset + ";";
+
     }
 
     public String queryCropLastVisitDate() {
@@ -1633,6 +1863,41 @@ public class Queries {
     public String isFarmerFileRepoExists(String farmercode) {
         return "SELECT COUNT(*) FROM FileRepository WHERE FarmerCode = '" + farmercode + "'";
     }
+
+    public String getPlotDetailsforAudit(String plotCode) {
+        return "select DISTINCT p.TotalPalmArea, group_concat(l.Name, ',') as CropVareity, date(p.DateofPlanting)as DateofPlanting, c.Name as ClusterName, v.Name as VillageName, m.Name as MandalName,\n" +
+        "d.Name as DistrictName\n" +
+        "from Plot p\n" +
+        "Left Join NurserySaplingDetails ns on ns.PlotCode = p.Code\n" +
+        "Left Join LookUp l on l.Id = ns.CropVarietyId\n" +
+        "Inner Join Address ass on ass.Code = p.AddressCode\n" +
+        "Inner Join VillageClusterxref vc on vc.VillageId = ass.VillageId\n" +
+        "Inner Join Cluster c on c.Id = vc.ClusterId\n" +
+        "Inner Join Village v on v.Id = ass.VillageId\n" +
+        "Inner Join Mandal m on m.Id = v.MandalId\n" +
+        "Inner Join District d on d.Id = m.DistrictId\n" +
+        "where p.Code = '" + plotCode + "'";
+    }
+
+    public String getPlantationAuditQuestions() {
+        return "select * from PlantationAuditQuestions";
+    }
+
+    public String getPlantationAuditOptions(int questionId) {
+        return "select * from PlantationAuditOptions where QuestionId = '" + questionId + "'";
+    }
+
+    public String getPlantationAuditAnswersRefresh() {
+        return "select * from PlotPlantationAuditDetails where ServerUpdatedStatus = 0";
+    }
+
+    public String getFollowupStatusTypeId(String plotCode) {
+        return "select t.Desc from Followup fu\n" +
+        "Inner Join FarmerHistory fh on fh.PlotCode = fu.PlotCode\n" +
+        "INNER JOIN TypeCdDmt t on t.TypeCdId = fh.StatusTypeId\n" +
+        "where fu.PlotCode = '" + plotCode + "' AND fh.IsActive = 1 Order By fu.UpdatedDate DESC Limit 1";
+    }
+
 }
 
 

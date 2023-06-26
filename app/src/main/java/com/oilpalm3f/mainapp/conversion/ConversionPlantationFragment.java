@@ -377,12 +377,15 @@ public class ConversionPlantationFragment extends BaseFragment implements View.O
 //        Log.d("area is", area + "");
 //        Log.d("allocatedTreeCount is", allocatedTreeCount + "");
 
+        double totaltresscount = 0.0;
+
         if (!nurserySaplingDetails.isEmpty()){
 
             if(nurserySaplingDetails.get(0).getNurseryId()!=0)
             {
                 for(int i=0;i<nurserySaplingDetails.size();i++)
                 { double tresscount = Double.parseDouble(df.format(nurserySaplingDetails.get(i).getNoOfSaplingsDispatched()));
+                    totaltresscount = tresscount + totaltresscount;
                   double  area = tresscount/143;
                   area  = Double.parseDouble(String.format("%.2f", area));
                   Log.d("CIS", "TRESS COUNT VALIDATE ======> tressCount :"+tresscount +"      area :"+area);
@@ -418,17 +421,19 @@ public class ConversionPlantationFragment extends BaseFragment implements View.O
 //                    }
                     plantationList.add(plantation);
                     itemListDataAdapter.updateData(plantationList);
-
-
-
                 }
 
+                Log.d("totaltresscount", totaltresscount  +"");
+
+                Log.d("TotalPalmAreaCalculation", totaltresscount/143 + "");
+                Double value = Double.valueOf(String.format("%.2f", totaltresscount/143));
+                Log.d("TotalPalmAreaCalculationValue", value + "");
+                plotArea.setText(""+value);
 
 
 
 //                plantationList.addAll(imported);
 //                plantationList.addAll(indegenous);
-
 
                 itemListDataAdapter.updateData(plantationList);
             }

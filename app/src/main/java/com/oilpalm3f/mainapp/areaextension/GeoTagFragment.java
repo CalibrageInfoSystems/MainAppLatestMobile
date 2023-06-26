@@ -128,6 +128,7 @@ public class GeoTagFragment extends Fragment {
 
         farmerSaveBtn.setOnClickListener(v -> {
             if (farmerSaveBtn.getText().toString().equalsIgnoreCase("Save") && currentLatitude != 0 && currentLongitude != 0) {
+                CommonConstants.isGeoTagTaken = true;
                 setGeoTagData();
             } else {
 
@@ -167,19 +168,20 @@ public class GeoTagFragment extends Fragment {
                 }
             }
         });
+            geoBoundaries = (GeoBoundaries) DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_TAG);
 
-        geoBoundaries = (GeoBoundaries) DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_TAG);
-        if (geoBoundaries != null) {
+            if (geoBoundaries != null) {
 
-            currentLatitude = geoBoundaries.getLatitude();
-            currentLongitude = geoBoundaries.getLongitude();
-            lattitudeTxt.setText("" + currentLatitude);
-            longitudeTxt.setText("" + currentLongitude);
-            addressTxt.setText(CommonConstants.GEO_TAG_ADDRESS);
-            farmerSaveBtn.setText("Save");
-            retakeGeoTagBtn.setVisibility(View.VISIBLE);
-
+                currentLatitude = geoBoundaries.getLatitude();
+                currentLongitude = geoBoundaries.getLongitude();
+                lattitudeTxt.setText("" + currentLatitude);
+                longitudeTxt.setText("" + currentLongitude);
+                addressTxt.setText(CommonConstants.GEO_TAG_ADDRESS);
+                farmerSaveBtn.setText("Save");
+                retakeGeoTagBtn.setVisibility(View.VISIBLE);
         }
+
+
 
         return rootView;
     }
@@ -227,6 +229,7 @@ public class GeoTagFragment extends Fragment {
             geoBoundaries = new GeoBoundaries();
             geoBoundaries.setLatitude(currentLatitude);
             geoBoundaries.setLongitude(currentLongitude);
+
             if (CommonUtils.isFromCropMaintenance()) {
                 geoBoundaries.setGeocategorytypeid(256);
             } else {

@@ -254,7 +254,6 @@ public class CloudDataHandler {
                     public void execute(boolean success, String result, String msg) {
                         if (success) {
                             try {
-
                                 JSONObject parentMasterDataObject = new JSONObject(result);
 
                                 Iterator keysToCopyIterator = parentMasterDataObject.keys();
