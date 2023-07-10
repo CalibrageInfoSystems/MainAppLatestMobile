@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -35,8 +34,7 @@ import com.oilpalm3f.mainapp.database.Queries;
 import com.oilpalm3f.mainapp.datasync.helpers.DataManager;
 import com.oilpalm3f.mainapp.datasync.ui.RefreshSyncActivity;
 import com.oilpalm3f.mainapp.farmersearch.SearchFarmerScreen;
-import com.oilpalm3f.mainapp.transportservice.TransportActivity;
-import com.oilpalm3f.mainapp.transportservice.TransportServiceQuestionerActivity;
+import com.oilpalm3f.mainapp.palmcare.palmcareScreen;
 import com.oilpalm3f.mainapp.utils.UiUtils;
 
 import java.util.List;
@@ -66,7 +64,7 @@ public class HomeScreen extends AppCompatActivity {
 
         this.refreshRel = (LinearLayout) findViewById(R.id.refreshRel1);
         this.cropMaintenanceRel = (RelativeLayout) findViewById(R.id.cropMaintenanceRel);
-        this.harvestingRel = (RelativeLayout) findViewById(R.id.harvestingRel);
+       // this.harvestingRel = (RelativeLayout) findViewById(R.id.harvestingRel);
         imagesRel = (RelativeLayout) findViewById(R.id.imagesRel);
         this.conversionRel = (RelativeLayout) findViewById(R.id.conversionRel);
         this.prospectiveFarmersRel = (RelativeLayout) findViewById(R.id.prospectiveFarmersRel);
@@ -117,18 +115,25 @@ public class HomeScreen extends AppCompatActivity {
             Intent intent = new Intent(HomeScreen.this, SearchFarmerScreen.class);
             startActivity(intent);
         });
+//
+//        cropMaintenanceRel.setOnClickListener(view -> {
+//            resetPrevRegData();
+//            CommonConstants.REGISTRATION_SCREEN_FROM = CommonConstants.REGISTRATION_SCREEN_FROM_CP_MAINTENANCE;
+//            startActivity(new Intent(HomeScreen.this, SearchFarmerScreen.class));
+//        });
+
+
 
         cropMaintenanceRel.setOnClickListener(view -> {
             resetPrevRegData();
-            CommonConstants.REGISTRATION_SCREEN_FROM = CommonConstants.REGISTRATION_SCREEN_FROM_CP_MAINTENANCE;
-            startActivity(new Intent(HomeScreen.this, SearchFarmerScreen.class));
+            startActivity(new Intent(HomeScreen.this, palmcareScreen.class));
         });
 
-        harvestingRel.setOnClickListener(view -> {
-            resetPrevRegData();
-            CommonConstants.REGISTRATION_SCREEN_FROM = CommonConstants.REGISTRATION_SCREEN_FROM_HARVESTING;
-            startActivity(new Intent(HomeScreen.this, SearchFarmerScreen.class));
-        });
+//        harvestingRel.setOnClickListener(view -> {
+//            resetPrevRegData();
+//            CommonConstants.REGISTRATION_SCREEN_FROM = CommonConstants.REGISTRATION_SCREEN_FROM_HARVESTING;
+//            startActivity(new Intent(HomeScreen.this, SearchFarmerScreen.class));
+//        });
 
         planationAuditRel.setOnClickListener(view -> {
             resetPrevRegData();

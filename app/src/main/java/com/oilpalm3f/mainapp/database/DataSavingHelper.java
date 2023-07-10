@@ -2534,6 +2534,8 @@ public class DataSavingHelper {
         cropMaintenanceHistory.setUpdatedByUserId(Integer.parseInt(CommonConstants.USER_ID));
         cropMaintenanceHistory.setUpdatedDate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         cropMaintenanceHistory.setCode(CommonConstants.CROP_MAINTENANCE_HISTORY_CODE);
+        cropMaintenanceHistory.setIsVerified(false);
+        cropMaintenanceHistory.setOTP(null);
 
         JSONObject ccData = null;
         List dataToInsert = new ArrayList();

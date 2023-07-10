@@ -148,20 +148,6 @@ public class Queries {
 
     public static String getAlertsVisitsInfoQuery(int limit, int offset) {
 
-//        return "select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,f.ContactNumber,\n" +
-//                " m.Name as MandalName,\n" +
-//                " v.Name as VillageName,\n" +
-//                " p.TotalPlotArea, p.DateofPlanting, cmh.CreatedDate as plotvisiteddate, fh.CreatedDate as converteddate\n" +
-//                " from Plot p\n" +
-//                " inner join Farmer f on f.code=p.FarmerCode\n" +
-//                " inner join Address addr on p.AddressCode = addr.Code\n" +
-//                " inner join Village v on addr.VillageId = v.Id\n" +
-//                " inner join Mandal m on addr.MandalId = m.Id\n" +
-//                " inner join District d on addr.DistrictId = d.Id\n" +
-//                " inner join State s on addr.StateId = s.Id\n" +
-//                " inner join FarmerHistory fh on fh.PlotCode = p.Code \n" +
-//                " inner join CropMaintenanceHistory cmh on cmh.PlotCode = p.Code\n" +
-//                " where  fh.IsActive = 1 and fh.StatusTypeId in(85,88,89) order by converteddate limit " + limit + " offset " + offset + ";";
 
 
         return "select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,f.ContactNumber,\n" +
@@ -1897,7 +1883,138 @@ public class Queries {
         "INNER JOIN TypeCdDmt t on t.TypeCdId = fh.StatusTypeId\n" +
         "where fu.PlotCode = '" + plotCode + "' AND fh.IsActive = 1 Order By fu.UpdatedDate DESC Limit 1";
     }
+    public String getDigitalContract() {
+        return "Select * from DigitalContract where IsActive = 'true' ";
+    }
+    public String getDigitalContractbystatecode(int stateid) {
+        return "Select * from DigitalContract where IsActive = 'true' AND StateId = '" + stateid + "'";
+    }
+//    public static String getnotvisitedpoltlist(int limit, int offset,String fromDate,String toDate) {
+//        return "SELECT P.Code, F.Code as FarmerCode, f.FirstName || ' ' || (CASE WHEN f.MiddleName = 'null' THEN '' ELSE f.MiddleName || ' ' END) || f.LastName  AS FarmerName, V.Name as VillageName, C.Name as ClusterName,P.TotalPalmArea,\n" +
+//                " CASE WHEN CHR.CreatedDate IS NULL AND HVR.CreatedDate IS NULL THEN NULL \n" +
+//                "\t\t\tWHEN CHR.CreatedDate > HVR.CreatedDate THEN CHR.CreatedDate ELSE HVR.CreatedDate END as lastvisiteddate,\n" +
+//                "CASE WHEN CHR.CreatedDate IS NULL AND HVR.CreatedDate IS NULL THEN NULL \n" +
+//                "\t\t\tWHEN CHR.CreatedDate > HVR.CreatedDate THEN CHR.UserName ELSE HVR.UserName END as VisitedBy\n" +
+//                "FROM Plot P\n" +
+//                "INNER JOIN FarmerHistory FH ON P.code = FH.PlotCode AND P.FarmerCode = FH.FarmerCode AND FH.IsActive = 1\n" +
+//                "INNER JOIN Farmer F ON F.Code = P.FarmerCode\n" +
+//                "INNER JOIN Address ADDR on P.AddressCode = ADDR.Code\n" +
+//                "INNER JOIN Village V on ADDR.VillageId = V.Id\n" +
+//                "INNER JOIN VillageClusterxref VC on VC.VillageId = ADDR.VillageId\n" +
+//                "INNER JOIN Cluster C on C.Id = VC.ClusterId\n" +
+//                "LEFT JOIN (\n" +
+//                "    SELECT CH.PlotCode, COUNT(CH.Code) AS CMCount\n" +
+//                "    FROM CropMaintenanceHistory CH\n" +
+//                "    WHERE CH.CreatedDate BETWEEN "+fromDate+" and "+toDate+"\n" +
+//                "    GROUP BY CH.PlotCode\n" +
+//                ") CH ON CH.PlotCode = P.Code\n" +
+//                "LEFT JOIN (\n" +
+//                "    SELECT HV.PlotCode, COUNT(HV.Code) AS HVCount\n" +
+//                "    FROM HarvestorVisitHistory HV\n" +
+//                "    WHERE HV.CreatedDate BETWEEN  "+fromDate+" and "+toDate+ "\n" +
+//                "    GROUP BY HV.PlotCode\n" +
+//                ") HV ON HV.PlotCode = P.Code\n" +
+//                "LEFT JOIN (SELECT CH.PlotCode, CH.CreatedDate , CH.CreatedByUserId, UI.UserName\n" +
+//                "\n" +
+//                "FROM CropMaintenanceHistory CH\n" +
+//                "INNER JOIN (SELECT PlotCode, Code , RANK() OVER (\n" +
+//                "\tPARTITION BY PlotCode\n" +
+//                "\tORDER BY CreatedDate Desc\n" +
+//                ") as RNO\n" +
+//                "FROM CropMaintenanceHistory CH) CHR on CHR.Code = CH.Code\n" +
+//                "INNER JOIN UserInfo UI ON CH.CreatedByUserId = UI.ID\n" +
+//                "WHERE CHR.RNO =  1\n" +
+//                " ) CHR ON CHR.PlotCode =  P.Code\n" +
+//                " \n" +
+//                " LEFT JOIN (SELECT HV.PlotCode, HV.CreatedDate , HV.CreatedByUserId, UI.UserName\n" +
+//                "FROM HarvestorVisitHistory HV\n" +
+//                "INNER JOIN (SELECT PlotCode, Code , RANK() OVER (\n" +
+//                "\tPARTITION BY PlotCode\n" +
+//                "\tORDER BY CreatedDate Desc\n" +
+//                ") as RNO\n" +
+//                "FROM HarvestorVisitHistory HV) HVR on HVR.Code = HV.Code\n" +
+//                "INNER JOIN UserInfo UI ON HV.CreatedByUserId = UI.ID\n" +
+//                "WHERE HVR.RNO =  1\n" +
+//                " ) HVR ON HVR.PlotCode =  P.Code  \n" +
+//                "\n" +
+//                "WHERE (CH.CMCount IS NULL OR CH.CMCount = 0) AND (HV.HVCount IS NULL OR HV.HVCount = 0) AND F.IsActive = 1 AND P.IsActive = 1 and FH.StatusTypeId in(88,89,308)";
+//
+//    }
 
+    public static String getnotvisitedpoltlist(int limit, int offset, String fromDate, String toDate) {
+        return "SELECT P.Code, F.Code as FarmerCode, f.FirstName || ' ' || (CASE WHEN f.MiddleName = 'null' THEN '' ELSE f.MiddleName || ' ' END) || f.LastName  AS FarmerName, V.Name as VillageName, C.Name as ClusterName, P.TotalPalmArea,\n" +
+                " CASE WHEN CHR.CreatedDate IS NULL AND HVR.CreatedDate IS NULL THEN NULL \n" +
+                "\t\t\tWHEN CHR.CreatedDate > HVR.CreatedDate THEN CHR.CreatedDate ELSE HVR.CreatedDate END as lastvisiteddate,\n" +
+                "CASE WHEN CHR.CreatedDate IS NULL AND HVR.CreatedDate IS NULL THEN NULL \n" +
+                "\t\t\tWHEN CHR.CreatedDate > HVR.CreatedDate THEN CHR.UserName ELSE HVR.UserName END as VisitedBy\n" +
+                "FROM Plot P\n" +
+                "INNER JOIN FarmerHistory FH ON P.code = FH.PlotCode AND P.FarmerCode = FH.FarmerCode AND FH.IsActive = 1\n" +
+                "INNER JOIN Farmer F ON F.Code = P.FarmerCode\n" +
+                "INNER JOIN Address ADDR on P.AddressCode = ADDR.Code\n" +
+                "INNER JOIN Village V on ADDR.VillageId = V.Id\n" +
+                "INNER JOIN VillageClusterxref VC on VC.VillageId = ADDR.VillageId\n" +
+                "INNER JOIN Cluster C on C.Id = VC.ClusterId\n" +
+                "LEFT JOIN (\n" +
+                "    SELECT CH.PlotCode, COUNT(CH.Code) AS CMCount\n" +
+                "    FROM CropMaintenanceHistory CH\n" +
+                "    WHERE CH.CreatedDate BETWEEN '" + fromDate + "' and '" + toDate + "'\n" +
+                "    GROUP BY CH.PlotCode\n" +
+                ") CH ON CH.PlotCode = P.Code\n" +
+                "LEFT JOIN (\n" +
+                "    SELECT HV.PlotCode, COUNT(HV.Code) AS HVCount\n" +
+                "    FROM HarvestorVisitHistory HV\n" +
+                "    WHERE HV.CreatedDate BETWEEN '" + fromDate + "' and '" + toDate + "'\n" +
+                "    GROUP BY HV.PlotCode\n" +
+                ") HV ON HV.PlotCode = P.Code\n" +
+                "LEFT JOIN (\n" +
+                "    SELECT CH.PlotCode, CH.CreatedDate, CH.CreatedByUserId, UI.UserName\n" +
+                "    FROM CropMaintenanceHistory CH\n" +
+                "    INNER JOIN (\n" +
+                "        SELECT PlotCode, MAX(CreatedDate) AS MaxDate\n" +
+                "        FROM CropMaintenanceHistory\n" +
+                "        GROUP BY PlotCode\n" +
+                "    ) MaxCM ON CH.PlotCode = MaxCM.PlotCode AND CH.CreatedDate = MaxCM.MaxDate\n" +
+                "    INNER JOIN UserInfo UI ON CH.CreatedByUserId = UI.ID\n" +
+                ") CHR ON CHR.PlotCode = P.Code\n" +
+                "LEFT JOIN (\n" +
+                "    SELECT HV.PlotCode, HV.CreatedDate, HV.CreatedByUserId, UI.UserName\n" +
+                "    FROM HarvestorVisitHistory HV\n" +
+                "    INNER JOIN (\n" +
+                "        SELECT PlotCode, MAX(CreatedDate) AS MaxDate\n" +
+                "        FROM HarvestorVisitHistory\n" +
+                "        GROUP BY PlotCode\n" +
+                "    ) MaxHV ON HV.PlotCode = MaxHV.PlotCode AND HV.CreatedDate = MaxHV.MaxDate\n" +
+                "    INNER JOIN UserInfo UI ON HV.CreatedByUserId = UI.ID\n" +
+                ") HVR ON HVR.PlotCode = P.Code\n" +
+                "WHERE (CH.CMCount IS NULL OR CH.CMCount = 0) AND (HV.HVCount IS NULL OR HV.HVCount = 0) AND F.IsActive = 1 AND P.IsActive = 1 and FH.StatusTypeId in(88,89,308)";
+    }
+
+
+    public String getclosedcropinfo() {
+        return " select cm.PlotCode, p.FarmerCode, f.FirstName || ' ' || (CASE WHEN f.MiddleName = 'null' THEN '' ELSE f.MiddleName || ' ' END) || f.LastName  AS FarmerName, \n" +
+                "     v.Name as VillageName, c.Name as ClusterName, p.TotalPalmArea, ui.UserName, cm.Code as CropCode,cm.CreatedDate from CropMaintenanceHistory cm\n" +
+                "    Inner Join Plot p on p.Code = cm.PlotCode\n" +
+                "    Inner Join Farmer f on f.Code = p.FarmerCode\n" +
+                "    Inner Join Address ad on ad.Code = p.AddressCode\n" +
+                "    inner join Village v on ad.VillageId = v.Id\n" +
+                "    Inner Join VillageClusterxref vc on vc.VillageId = ad.VillageId\n" +
+                "    Inner Join Cluster c on c.Id = vc.ClusterId\n" +
+                "    Inner Join UserInfo ui on ui.id = cm.CreatedByUserId\n" +
+                "    where IsVerified = 'false' AND f.IsActive = 1 and p.IsActive = 1 and cm.ServerUpdatedStatus = 1 ";
+    }
+
+    public String getclosedharvestinfo() {
+        return "select hv.PlotCode, p.FarmerCode, f.FirstName || ' ' || (CASE WHEN f.MiddleName = 'null' THEN '' ELSE f.MiddleName || ' ' END) || f.LastName  AS FarmerName," +
+                " v.Name as VillageName, c.Name as ClusterName, p.TotalPalmArea, ui.UserName, hv.Code as CropCode,hv.CreatedDate from HarvestorVisitHistory hv\n" +
+                "Inner Join Plot p on p.Code = hv.PlotCode\n" +
+                "Inner Join Farmer f on f.Code = p.FarmerCode\n" +
+                "Inner Join Address ad on ad.Code = p.AddressCode\n" +
+                "inner join Village v on ad.VillageId = v.Id\n" +
+                "Inner Join VillageClusterxref vc on vc.VillageId = ad.VillageId\n" +
+                "Inner Join Cluster c on c.Id = vc.ClusterId\n" +
+                "Inner Join UserInfo ui on ui.id = hv.CreatedByUserId\n" +
+                "where hv.IsVerified = 'false' AND f.IsActive = 1 and p.IsActive = 1 and hv.ServerUpdatedStatus = 1";
+    }
 }
 
 

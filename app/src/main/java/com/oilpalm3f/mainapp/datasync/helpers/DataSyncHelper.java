@@ -1003,7 +1003,17 @@ public class DataSyncHelper {
                 //recrecordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInRecoveryFarmerTable(tableName,"FarmerCode", recdata.getFarmerCode(),String.valueOf(recdata.getRecoveryFarmercode())));
                 Log.d("RecordExists", recrecordExisted + "");
             }
-
+            else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_HarvestorVisitHistory)) {
+                HarvestorVisitHistory data = (HarvestorVisitHistory) dataList.get(innerCountCheck);
+                whereCondition = " where Code = '" + data.getCode() + "'";
+                try {
+                    ccData = new JSONObject(gson.toJson(data));
+                    dataToInsert.add(CommonUtils.toMap(ccData));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+                }
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "Code", data.getCode()));
+            }
             if (dataList.size() != innerCountCheck) {
                 updateOrInsertData(tableName, dataToInsert, whereCondition, recordExisted, dataAccessHandler, new ApplicationThread.OnComplete() {
                     @Override
@@ -1479,6 +1489,15 @@ public class DataSyncHelper {
                             List<RecoveryFarmerGroup> recoveryFarmerGroups = gson.fromJson(dataArray.toString(), type);
                             if (null != recoveryFarmerGroups && recoveryFarmerGroups.size() > 0)
                                 dataToUpdate.put(tableName, recoveryFarmerGroups);
+
+                        }
+                        else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_HarvestorVisitHistory)) {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<List<HarvestorVisitHistory>>() {
+                            }.getType();
+                            List<HarvestorVisitHistory> HarvestinghistoryDtails = gson.fromJson(dataArray.toString(), type);
+                            if (null != HarvestinghistoryDtails && HarvestinghistoryDtails.size() > 0)
+                                dataToUpdate.put(tableName, HarvestinghistoryDtails);
 
                         }
                     }

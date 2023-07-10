@@ -60,6 +60,7 @@ public class CommonConstants {
     public static String PREVIOUS_PRINTER_ADDRESS = "previous_printer_address";
     public static String IS_ANY_PALM_DETAIL_Fill = "is_any_palm_detail_fill";
     public static String USER_ID = "12345";
+    public static String USER_RoleID = "12345";
     public static String TAB_ID = "0000";
     public static String USER_CODE = "SA001";
     public static String L_Contact = "";

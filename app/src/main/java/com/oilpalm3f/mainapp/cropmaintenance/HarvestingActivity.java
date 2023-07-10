@@ -437,9 +437,14 @@ public class HarvestingActivity extends OilPalmBaseActivity {
                     map.put("PlotCode", CommonConstants.PLOT_CODE);
                     map.put("CreatedByUserId", CommonConstants.USER_ID);
                     map.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                    map.put("IsVerified", false);
+                    map.put("OTP", "");
+                    map.put("UpdatedByUserId", CommonConstants.USER_ID);
+                    map.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                     map.put("ServerUpdatedStatus", 0);
 
                     histoty.add(map);
+                    Log.e("======histoty",histoty+"");
 
 
                     dataAccessHandler.saveData(DatabaseKeys.TABLE_HarvestorVisitHistory, histoty, new ApplicationThread.OnComplete<String>() {

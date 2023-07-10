@@ -3,32 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.oilpalm3f.mainapp">
 
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.media.action.IMAGE_CAPTURE" />
-    <uses-permission
-        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <application
         android:name=".Oil3FPalmMainApplication"
         android:allowBackup="true"
@@ -39,6 +13,22 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".palmcare.ClosecropMaintenanceList"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".palmcare.CloseHarvestingList"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".palmcare.NoVisitPlotslistScreen"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".palmcare.palmcareScreen"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".PlantationAudit"
             android:exported="false" />
@@ -63,26 +53,10 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity android:name=".cropmaintenance.HarvestingActivity" />
         <activity android:name=".cropmaintenance.PlantationAudit" />
         <activity android:name=".transportservice.TransportActivity" />
         <activity android:name=".transportservice.TransportServiceQuestionerActivity" />
-
-        <uses-library
-            android:name="org.apache.http.legacy"
-            android:required="false" />
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
-
         <activity
             android:name=".ui.SplashScreen"
             android:theme="@style/AppTheme.NoActionBar">
@@ -120,14 +94,6 @@
             android:name=".areaextension.location.LocationSelectionScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
-        <receiver android:name=".helper.NetworkReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".cropmaintenance.CropMaintenanceHomeScreen"
             android:screenOrientation="portrait"
@@ -158,14 +124,6 @@
             android:label="@string/log_book"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
-        <service android:name=".areacalculator.LocationService" />
-        <service
-            android:name=".FaLogTracking.FalogService"
-            android:enabled="true"
-            android:exported="true"
-            android:stopWithTask="false" />
-
         <activity
             android:name=".ui.MainLoginScreen"
             android:label="@string/title_activity_main_login_screen"
@@ -181,15 +139,6 @@
             android:label="@string/title_activity_pre_view_area_cal_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="b74338756d04c8e32dc9d352bd2ecaf33835f06f" />
-
-        <service
-            android:name=".cropmaintenance.RecordingService"
-            android:enabled="true" />
-
         <activity
             android:name=".ui.KrasDisplayScreen"
             android:label="@string/title_activity_kras_display_screen"
@@ -202,6 +151,66 @@
             android:name=".ui.NotificationsScreen"
             android:label="@string/title_activity_notifications_screen"
             android:theme="@style/AppTheme" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="b74338756d04c8e32dc9d352bd2ecaf33835f06f" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <receiver android:name=".helper.NetworkReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".areacalculator.LocationService" />
+        <service
+            android:name=".FaLogTracking.FalogService"
+            android:enabled="true"
+            android:exported="true"
+            android:stopWithTask="false" />
+        <service
+            android:name=".cropmaintenance.RecordingService"
+            android:enabled="true" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.media.action.IMAGE_CAPTURE" />
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 </manifest>

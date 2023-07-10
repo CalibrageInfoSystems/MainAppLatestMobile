@@ -103,8 +103,8 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
     private DataAccessHandler dataAccessHandler;
     private UpdateUiListener updateUiListener;
     private DigitalContract digitalContract;
-    private File fileToDownLoad = null;
-    private File rootDirectory;
+    //    private File fileToDownLoad = null;
+    private File fileToDownLoad;
     String plotcode;
     Button dialogButton;
     SignatureView signatureView;
@@ -112,6 +112,7 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
     private Farmer savedFarmerData = null;
 
     private File newrootDirectory;
+    private File rootDirectory;
     private File newfileToLoadd = null;
     private PDFView newpdfview;
     String base64String = "";
@@ -206,43 +207,20 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
         }
 
 
-//        saveBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                //signature_popup();
-//                if (null != digitalContract) {
-//                    signature_popup();
-//                    Log.d("digitalContracttt", "isnotnull");
-//                }else{
-//                    isContractAgreed = true;
-//                    updateUiListener.updateUserInterface(0);
-//                    getFragmentManager().popBackStack();
-//                }
-//
-//            }
-//        });
-
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-//                isContractAgreed = true;
-//                savedFarmerData.setFileName(CommonConstants.FARMER_CODE + ".pdf");
-//                savedFarmerData.setFileLocation(fileToDownLoad + "");
-//                savedFarmerData.setFileExtension(".pdf");
-//
-//                DataManager.getInstance().addData(DataManager.FARMER_PERSONAL_DETAILS, savedFarmerData);
-//
-//                if (isUpdateData) {
-//                    DataManager.getInstance().addData(DataManager.IS_FARMER_DATA_UPDATED, true);
-//                } else {
-//                    DataManager.getInstance().addData(DataManager.IS_FARMER_DATA_UPDATED, false);
-//                }
-//                CommonConstants.Flags.isFarmersDataUpdated = true;
+                //signature_popup();
+                if (null != digitalContract) {
+                    signature_popup();
+                    Log.d("digitalContracttt", "isnotnull");
+                }else{
+                    isContractAgreed = true;
+                    updateUiListener.updateUserInterface(0);
+                    getFragmentManager().popBackStack();
+                }
 
-                updateUiListener.updateUserInterface(0);
-                getFragmentManager().popBackStack();
             }
         });
 
@@ -254,7 +232,7 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
                 } else {
                     saveBtn.setAlpha(0.5f);
                 }
-                isContractAgreed = isChecked;//added 16th June by Arun
+
                 saveBtn.setEnabled(isChecked);
                 saveBtn.setFocusable(isChecked);
                 saveBtn.setClickable(isChecked);
@@ -271,16 +249,23 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
 
 
         rootDirectory = new File(CommonUtils.get3FFileRootPath() + "3F_DigitalContract/");
-        if (null != digitalContract) {
-            fileToDownLoad = new File(rootDirectory + digitalContract.getFILENAME() + digitalContract.getFileExtension());
-            if (null != fileToDownLoad && fileToDownLoad.exists()) {
-                dataView.fromFile(fileToDownLoad)
-                        .defaultPage(0)
-                        .enableAnnotationRendering(true)
-                        .onPageChange(this)
-                        .onLoad(this)
-                        .scrollHandle(new DefaultScrollHandle(getActivity()))
-                        .load();
+        Log.d("rootDirectory", rootDirectory+"");
+        Log.d("filename", digitalContract.getFILENAME()+"");
+        Log.d("fileextension",  digitalContract.getFileExtension()+"");
+        fileToDownLoad = new File(CommonUtils.get3FFileRootPath() + "3F_DigitalContract/" + digitalContract.getFILENAME() + digitalContract.getFileExtension());
+
+        Log.d("fileToDownLoad", fileToDownLoad+"");
+        // String strFileName = file.getName();
+        // if (null != digitalContract) {
+        //   fileToDownLoad = new File(rootDirectory + digitalContract.getFILENAME() + digitalContract.getFileExtension());
+        if (null != fileToDownLoad && fileToDownLoad.exists()) {
+            dataView.fromFile(fileToDownLoad)
+                    .defaultPage(0)
+                    .enableAnnotationRendering(true)
+                    .onPageChange(this)
+                    .onLoad(this)
+                    .scrollHandle(new DefaultScrollHandle(getActivity()))
+                    .load();
 
 //                try {
 //                    PdfReader reader = new PdfReader(String.valueOf(fileToDownLoad));
@@ -294,11 +279,13 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
 //                } catch (Exception e) {
 //                    System.out.println(e);
 //                }
-            } else {
-                String url = Config.image_url + "/" + digitalContract.getFileLocation() + "/" + digitalContract.getFILENAME() + digitalContract.getFileExtension();
-                new DownloadFileFromURL().execute(url);
-            }
         }
+//            else {
+//               // String url = Config.image_url + "/" + digitalContract.getFileLocation() + "/" + digitalContract.getFILENAME() + digitalContract.getFileExtension();
+//                //new DownloadFileFromURL().execute(url);
+//                fileToDownLoad
+//            }
+        //    }
 
     }
 
@@ -621,64 +608,7 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
     }*/
 
 
-    public void createandDisplayPdf(String text, Bitmap bm) {
-
-        Document doc = new Document();
-
-        try {
-            String path = CommonUtils.get3FFileRootPath() + "DigitalContracttt/";
-
-            File dir = new File(path);
-            if(!dir.exists())
-                dir.mkdirs();
-
-            File file = new File(dir, CommonConstants.FARMER_CODE + ".pdf");
-            FileOutputStream fOut = new FileOutputStream(file);
-
-            PdfWriter.getInstance(doc, fOut);
-
-            //open the document
-            doc.open();
-
-            Paragraph p1 = new Paragraph(text);
-            p1.setAlignment(Paragraph.ALIGN_LEFT);
-            doc.add(p1);
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 100 , stream);
-            Image myImg = Image.getInstance(stream.toByteArray());
-            myImg.setAlignment(Image.ALIGN_RIGHT);
-            doc.add(myImg);
-
-        } catch (DocumentException de) {
-            Log.e("PDFCreator", "DocumentException:" + de);
-        } catch (IOException e) {
-            Log.e("PDFCreator", "ioException:" + e);
-        } finally {
-            doc.close();
-        }
-
-        //viewPdf(CommonConstants.FARMER_CODE + ".pdf");
-    }
-
-    // Method for opening a pdf file
-    private void viewPdf(String file) {
-
-        File pdfFile = new File(CommonUtils.get3FFileRootPath() + "DigitalContracttt" + "/" + file);
-        Uri path = Uri.fromFile(pdfFile);
-
-        // Setting the intent for pdf reader
-        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
-        pdfIntent.setDataAndType(path, "application/pdf");
-        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        try {
-            startActivity(pdfIntent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(getContext(), "Can't read pdf file", Toast.LENGTH_SHORT).show();
-        }
-    }
-
+    //
     public void showDialog(Context activity, String msg) {
         final Dialog dialog = new Dialog(activity, R.style.DialogSlideAnim);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -723,62 +653,62 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
         this.updateUiListener = updateUiListener;
     }
 
-    class DownloadFileFromURL extends AsyncTask<String, String, String> {
-
-        public boolean downloadSuccess = false;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... f_url) {
-            int count;
-            try {
-                URL url = new URL(f_url[0]);
-                URLConnection conection = url.openConnection();
-                conection.connect();
-
-                InputStream input = new BufferedInputStream(url.openStream(),
-                        8192);
-
-                OutputStream output = new FileOutputStream(rootDirectory + digitalContract.getFILENAME() + digitalContract.getFileExtension());
-
-                byte data[] = new byte[1024];
-
-                while ((count = input.read(data)) != -1) {
-                    output.write(data, 0, count);
-                }
-                output.flush();
-                output.close();
-                input.close();
-                downloadSuccess = true;
-            } catch (Exception e) {
-                Log.e("Error: ", e.getMessage());
-                downloadSuccess = false;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String file_url) {
-            if (downloadSuccess && !getActivity().isFinishing()) {
-                fileToDownLoad = new File(rootDirectory + digitalContract.getFILENAME() + digitalContract.getFileExtension());
-                if (null != fileToDownLoad && fileToDownLoad.exists()) {
-                    dataView.fromFile(fileToDownLoad)
-                            .defaultPage(0)
-                            .enableAnnotationRendering(true)
-                            .onPageChange(ConversionDigitalContractFragment.this)
-                            .onLoad(ConversionDigitalContractFragment.this)
-                            .scrollHandle(new DefaultScrollHandle(getActivity()))
-                            .load();
-                } else {
-                    UiUtils.showCustomToastMessage("File not exist", getActivity(), 1);
-                }
-            }
-
-        }
-    }
+//    class DownloadFileFromURL extends AsyncTask<String, String, String> {
+//
+//        public boolean downloadSuccess = false;
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... f_url) {
+//            int count;
+//            try {
+//                URL url = new URL(f_url[0]);
+//                URLConnection conection = url.openConnection();
+//                conection.connect();
+//
+//                InputStream input = new BufferedInputStream(url.openStream(),
+//                        8192);
+//
+//                OutputStream output = new FileOutputStream(rootDirectory + digitalContract.getFILENAME() + digitalContract.getFileExtension());
+//
+//                byte data[] = new byte[1024];
+//
+//                while ((count = input.read(data)) != -1) {
+//                    output.write(data, 0, count);
+//                }
+//                output.flush();
+//                output.close();
+//                input.close();
+//                downloadSuccess = true;
+//            } catch (Exception e) {
+//                Log.e("Error: ", e.getMessage());
+//                downloadSuccess = false;
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String file_url) {
+//            if (downloadSuccess && !getActivity().isFinishing()) {
+//                fileToDownLoad = new File(rootDirectory + digitalContract.getFILENAME() + digitalContract.getFileExtension());
+//                if (null != fileToDownLoad && fileToDownLoad.exists()) {
+//                    dataView.fromFile(fileToDownLoad)
+//                            .defaultPage(0)
+//                            .enableAnnotationRendering(true)
+//                            .onPageChange(ConversionDigitalContractFragment.this)
+//                            .onLoad(ConversionDigitalContractFragment.this)
+//                            .scrollHandle(new DefaultScrollHandle(getActivity()))
+//                            .load();
+//                } else {
+//                    UiUtils.showCustomToastMessage("File not exist", getActivity(), 1);
+//                }
+//            }
+//
+//        }
+//    }
 
 }

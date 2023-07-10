@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+
+    android:layout_height="fill_parent" >
+
+
+    <LinearLayout
+        android:id="@+id/sign"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/lin_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="3sp"
+            android:orientation="vertical">
+
+
+
+
+            <TextView
+                android:id="@+id/farmer_Code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="1sp"
+                android:text="Enter Otp"
+                android:textColor="@color/green"
+                android:layout_gravity="center"
+                android:fontFamily="@font/hind_semibold"
+                android:textSize="@dimen/activity_horizontal_margin"
+                android:textStyle="bold" />
+            <com.oilpalm3f.mainapp.common.PinEntryEditText
+
+                android:id="@+id/txt_pin_entry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:background="@color/white"
+                android:cursorVisible="true"
+                android:digits="1234567890"
+                android:textIsSelectable="false"
+                android:inputType="number"
+                android:maxLength="6"
+
+                android:textSize="20sp"
+                android:textColor="@color/black"
+
+                />
+            <!--            <EditText-->
+            <!--                android:id="@+id/comments_text"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+
+            <!--                android:layout_marginTop="1sp"-->
+            <!--                android:text="@string/comments"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:fontFamily="@font/hind_semibold"-->
+            <!--                android:textSize="14dp"-->
+            <!--                />-->
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/dialogButtonOK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sign"
+        android:fontFamily="@font/hind_semibold"
+        android:layout_marginTop="6dp"
+        android:layout_centerInParent="true"
+        android:text="@string/ok" />
+
+</RelativeLayout>

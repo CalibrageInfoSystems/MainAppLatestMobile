@@ -39,7 +39,7 @@
 
     <color name="half_black2">#8D000000</color>
     <color name="white_new">#ffffff</color>
-
+    <color name="pin_normal">#FFFFFF</color>
 
 
 </resources>

@@ -22,7 +22,8 @@ public class CropMaintenanceHistory {
     private int UpdatedByUserId;
     private String UpdatedDate;
     private int ServerUpdatedStatus;
-
+    private boolean IsVerified;
+    private String OTP;
 
     public String getCode() {
         return Code;
@@ -88,4 +89,19 @@ public class CropMaintenanceHistory {
         ServerUpdatedStatus = serverUpdatedStatus;
     }
 
+    public boolean getIsVerified() {
+        return IsVerified;
+    }
+
+    public void setIsVerified(boolean isVerified) {
+        IsVerified = isVerified;
+    }
+
+    public String getOTP() {
+        return OTP;
+    }
+
+    public void setOTP(String OTP) {
+        this.OTP = OTP;
+    }
 }

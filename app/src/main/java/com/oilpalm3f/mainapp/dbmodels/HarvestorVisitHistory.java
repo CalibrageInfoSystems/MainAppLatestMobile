@@ -9,7 +9,10 @@ public class HarvestorVisitHistory {
     private int CreatedByUserId;
     private String CreatedDate;
     private int ServerUpdatedStatus;
-
+    private boolean IsVerified;
+    private String OTP;
+    private int UpdatedByUserId;
+    private String UpdatedDate;
     public int getId() {
         return Id;
     }
@@ -64,5 +67,37 @@ public class HarvestorVisitHistory {
 
     public void setServerUpdatedStatus(int serverUpdatedStatus) {
         ServerUpdatedStatus = serverUpdatedStatus;
+    }
+
+    public boolean getIsVerified() {
+        return IsVerified;
+    }
+
+    public void setIsVerified(boolean isVerified) {
+        IsVerified = isVerified;
+    }
+
+    public String getOTP() {
+        return OTP;
+    }
+
+    public void setOTP(String OTP) {
+        this.OTP = OTP;
+    }
+
+    public int getUpdatedByUserId() {
+        return UpdatedByUserId;
+    }
+
+    public void setUpdatedByUserId(int updatedByUserId) {
+        UpdatedByUserId = updatedByUserId;
+    }
+
+    public String getUpdatedDate() {
+        return UpdatedDate;
+    }
+
+    public void setUpdatedDate(String updatedDate) {
+        UpdatedDate = updatedDate;
     }
 }

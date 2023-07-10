@@ -96,6 +96,8 @@ import com.oilpalm3f.mainapp.helper.PrefUtil;
 import com.oilpalm3f.mainapp.dbmodels.BasicFarmerDetails;
 import com.oilpalm3f.mainapp.dbmodels.ComplaintsDetails;
 import com.oilpalm3f.mainapp.dbmodels.PlotDetailsObj;
+import com.oilpalm3f.mainapp.palmcare.ClosedDataDetails;
+import com.oilpalm3f.mainapp.palmcare.NotVisitedPlotsInfo;
 import com.oilpalm3f.mainapp.prospectiveFarmers.ProspectivePlotsModel;
 import com.oilpalm3f.mainapp.transportservice.Village;
 import com.oilpalm3f.mainapp.utils.ImageUtility;
@@ -1733,7 +1735,10 @@ f
                     mharvestorhistory.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
                     mharvestorhistory.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
                     mharvestorhistory.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
-
+                    mharvestorhistory.setIsVerified(Boolean.valueOf(cursor.getString(cursor.getColumnIndex("IsVerified"))));
+                    mharvestorhistory.setOTP(null);
+                    mharvestorhistory.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
+                    mharvestorhistory.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
 
                     if (type == 1) {
                         harvestorhistoryRefresh.add(mharvestorhistory);
@@ -2815,6 +2820,8 @@ f
                     cropMaintenanceHistory.setUpdatedDate(cursor.getString(7));
                     cropMaintenanceHistory.setServerUpdatedStatus(cursor.getInt(8));
                     cropMaintenanceHistory.setName(cursor.getString(9));
+                    cropMaintenanceHistory.setIsVerified(Boolean.valueOf(cursor.getString(cursor.getColumnIndex("IsVerified"))));
+                    cropMaintenanceHistory.setOTP(cursor.getString(11));
                     if (type == 1) {
                         maintenanceHistoryList.add(cropMaintenanceHistory);
                     }
@@ -4916,6 +4923,77 @@ f
             Log.e(LOG_TAG, "@@@ getting user details " + e.getMessage());
         }
         return (T) ((type == 0) ? mPlantationAuditAnswersRefresh : plantationAuditAnswersRefresh);
+    }
+    //get Not visited plot Info
+    public T getNotvisitedplotInfo(String query, int type) {
+        List<NotVisitedPlotsInfo> PlotInfoList = new ArrayList<>();
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "Query for getNotvisitedplotInfo " + query);
+        NotVisitedPlotsInfo notPlotvisitedInfoObj = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    notPlotvisitedInfoObj = new NotVisitedPlotsInfo();
+                    notPlotvisitedInfoObj.setPlotCode(cursor.getString(0));
+                    notPlotvisitedInfoObj.setFarmerCode(cursor.getString(1));
+                    notPlotvisitedInfoObj.setFarmerName(cursor.getString(2));
+                    notPlotvisitedInfoObj.setVillageName(cursor.getString(3));
+                    notPlotvisitedInfoObj.setClusterName(cursor.getString(4));
+                    notPlotvisitedInfoObj.setTotalPalmArea(cursor.getString(5));
+                    notPlotvisitedInfoObj.setLastvisiteddate(cursor.getString(6));
+                    notPlotvisitedInfoObj.setVisitedBy(cursor.getString(7));
+                    PlotInfoList.add(notPlotvisitedInfoObj);
+                } while (cursor.moveToNext());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return (T) ((type == 0) ? notPlotvisitedInfoObj : PlotInfoList);
+
+    }
+
+    //get Closed Cropmaintance
+    public T getClosedcropInfo(String query, int type) {
+        List<ClosedDataDetails> closedcropList = new ArrayList<>();
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "Query for getNotvisitedplotInfo " + query);
+        ClosedDataDetails closedcropInfoObj = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    closedcropInfoObj = new ClosedDataDetails();
+                    closedcropInfoObj.setPlotCode(cursor.getString(0));
+                    closedcropInfoObj.setFarmerCode(cursor.getString(1));
+                    closedcropInfoObj.setFarmerName(cursor.getString(2));
+                    closedcropInfoObj.setVillageName(cursor.getString(3));
+                    closedcropInfoObj.setClusterName(cursor.getString(4));
+                    closedcropInfoObj.setTotalPalmArea(cursor.getString(5));
+                    closedcropInfoObj.setUserName(cursor.getString(6));
+                    closedcropInfoObj.setCropCode(cursor.getString(7));
+                    closedcropInfoObj.setCreatedDate(cursor.getString(8));
+
+                    closedcropList.add(closedcropInfoObj);
+                } while (cursor.moveToNext());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return (T) ((type == 0) ? closedcropInfoObj : closedcropList);
+
     }
 
 }

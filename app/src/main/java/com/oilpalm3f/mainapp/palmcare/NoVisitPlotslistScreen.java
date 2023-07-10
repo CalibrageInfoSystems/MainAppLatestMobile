@@ -1,0 +1,234 @@
+package com.oilpalm3f.mainapp.palmcare;
+
+import android.app.DatePickerDialog;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.oilpalm3f.mainapp.R;
+import com.oilpalm3f.mainapp.alerts.AlertsVisitsInfo;
+import com.oilpalm3f.mainapp.cloudhelper.ApplicationThread;
+import com.oilpalm3f.mainapp.database.DataAccessHandler;
+import com.oilpalm3f.mainapp.database.Queries;
+import com.oilpalm3f.mainapp.uihelper.ProgressBar;
+import com.oilpalm3f.mainapp.utils.UiUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+public class NoVisitPlotslistScreen extends AppCompatActivity {
+    public static final int LIMIT = 30;
+    private int offset;
+    private EditText fromDate,toDate;
+    private Button searchBtn;
+    private String fromDateStr = "";
+    private String toDateStr = "";
+    private boolean isLoading = false;
+    private Calendar myCalendar = Calendar.getInstance();
+    private boolean hasMoreItems = true;
+    private List<NotVisitedPlotsInfo> notVisitedplotsInfoList = new ArrayList<>();
+    private NoVisitsInfoAdapter noVisitsDetailsRecyclerAdapter;
+    private LinearLayoutManager layoutManager;
+    private RecyclerView novisitplot_list;
+    private DataAccessHandler dataAccessHandler;
+
+    TextView no_text;
+    private ActionBar actionBar;
+    private Toolbar toolbar;
+    private static final String LOG_TAG = NoVisitPlotslistScreen.class.getName();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_no_visit_plotslist_screen);
+        intviews();
+        setviews();
+    }
+
+    private void intviews() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("Not Visited Plots");
+        }
+        fromDate = findViewById(R.id.fromDate);
+        toDate = findViewById(R.id.toDate);
+        searchBtn = findViewById(R.id.searchBtnT);
+        novisitplot_list =  findViewById(R.id.novisitplot_list);
+        no_text = findViewById(R.id.no_text);
+        dataAccessHandler = new DataAccessHandler(this);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        fromDate.setText(sdf.format(new Date()));
+        toDate.setText(sdf.format(new Date()));
+    }
+    private void setviews() {
+        offset = offset + LIMIT;
+        searchBtn.setOnClickListener(v ->{
+
+
+            ProgressBar.showProgressBar(this, "Please wait...");
+            notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,fromDateStr,toDateStr), 1);
+            Collections.reverse(notVisitedplotsInfoList);
+
+            ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
+                @Override
+                public void run() {
+                    ProgressBar.hideProgressBar();
+                    noVisitsDetailsRecyclerAdapter = new NoVisitsInfoAdapter(NoVisitPlotslistScreen.this, notVisitedplotsInfoList);
+                    if (notVisitedplotsInfoList != null && !notVisitedplotsInfoList.isEmpty() && notVisitedplotsInfoList.size()!= 0) {
+                        novisitplot_list.setVisibility(View.VISIBLE);
+                        no_text.setVisibility(View.GONE);
+                        layoutManager = new LinearLayoutManager(NoVisitPlotslistScreen.this, LinearLayoutManager.VERTICAL, false);
+                        novisitplot_list.setLayoutManager(layoutManager);
+
+                        novisitplot_list.setAdapter(noVisitsDetailsRecyclerAdapter);
+                     //   setTitle(alert_type, offset == 0 ? alertsVisitsInfoList.size() : offset);
+                    }
+                    else{
+                        novisitplot_list.setVisibility(View.GONE);
+                        no_text.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+        });
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel(0);
+            }
+        };
+
+        final DatePickerDialog.OnDateSetListener toDateD = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel(1);
+            }
+        };
+        String dateFormatter = "yyyy-MM-dd";
+        SimpleDateFormat sdf2 = new SimpleDateFormat(dateFormatter, Locale.US);
+        fromDateStr = sdf2.format(myCalendar.getTime());
+        toDateStr = sdf2.format(myCalendar.getTime());
+        fromDate.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(NoVisitPlotslistScreen.this, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH));  //date is dateSetListener as per your code in question
+            datePickerDialog.show();
+        });
+
+
+        toDate.setOnClickListener(view -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(NoVisitPlotslistScreen.this, toDateD, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH));  //date is dateSetListener as per your code in question
+            datePickerDialog.show();
+        });
+
+        notvisitedplotslist(offset);
+    }
+
+
+    private void notvisitedplotslist(final int offset) {
+        ProgressBar.showProgressBar(this, "Please wait...");
+        ApplicationThread.bgndPost(LOG_TAG, "notvisitedplots", new Runnable() {
+            @Override
+            public void run() {
+
+                notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,fromDateStr,toDateStr), 1);
+                Collections.reverse(notVisitedplotsInfoList);
+
+                ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
+                    @Override
+                    public void run() {
+                        ProgressBar.hideProgressBar();
+                        noVisitsDetailsRecyclerAdapter = new NoVisitsInfoAdapter(NoVisitPlotslistScreen.this, notVisitedplotsInfoList);
+                        if (notVisitedplotsInfoList != null && !notVisitedplotsInfoList.isEmpty()) {
+                            novisitplot_list.setVisibility(View.VISIBLE);
+                            no_text.setVisibility(View.GONE);
+                            layoutManager = new LinearLayoutManager(NoVisitPlotslistScreen.this, LinearLayoutManager.VERTICAL, false);
+                            novisitplot_list.setLayoutManager(layoutManager);
+
+                            novisitplot_list.setAdapter(noVisitsDetailsRecyclerAdapter);
+                            //   setTitle(alert_type, offset == 0 ? alertsVisitsInfoList.size() : offset);
+                        }
+                        else{
+                            novisitplot_list.setVisibility(View.GONE);
+                            no_text.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+
+            }
+        });
+    }
+    private void updateLabel(int type) {
+        String myFormat = "dd-MM-yyyy";
+        String dateFormatter = "yyyy-MM-dd";
+
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        SimpleDateFormat sdf2 = new SimpleDateFormat(dateFormatter, Locale.US);
+
+        if (type == 0) {
+            String selectedFromDateStr = sdf2.format(myCalendar.getTime());
+            String selectedToDateStr = toDateStr != null ? toDateStr : ""; // Get the current value of toDateStr
+
+            if (toDateStr != null && selectedFromDateStr.compareTo(selectedToDateStr) > 0) {
+                // fromDateStr is greater than toDateStr, show an error or handle accordingly
+                UiUtils.showCustomToastMessage("From Date cannot be greater than To Date", NoVisitPlotslistScreen.this, 1);
+
+
+                return; // Abort further execution
+            }
+
+            fromDateStr = selectedFromDateStr;
+            fromDate.setText(sdf.format(myCalendar.getTime()));
+        } else {
+            String selectedToDateStr = sdf2.format(myCalendar.getTime());
+            String selectedFromDateStr = fromDateStr != null ? fromDateStr : ""; // Get the current value of fromDateStr
+
+            if (fromDateStr != null && selectedToDateStr.compareTo(selectedFromDateStr) < 0) {
+                // toDateStr is smaller than fromDateStr, show an error or handle accordingly
+                UiUtils.showCustomToastMessage("To Date cannot be smaller than From Date", NoVisitPlotslistScreen.this, 1);
+
+               // Toast.makeText(this, "To date cannot be smaller than from date", Toast.LENGTH_SHORT).show();
+                return; // Abort further execution
+            }
+
+            toDateStr = selectedToDateStr;
+            toDate.setText(sdf.format(myCalendar.getTime()));
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}

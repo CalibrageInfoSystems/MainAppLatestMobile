@@ -56,6 +56,7 @@ class DataBaseUpgrade {
                 upgradeDb29(db);
                 upgradeDb30(db);
                 upgradeDb31(db);
+                upgradeDb32(db);
 
             } else {
                 boolean isDbUpgradeFinished = sharedPreferences.getBoolean(String.valueOf(Palm3FoilDatabase.DATA_VERSION), false);
@@ -183,6 +184,10 @@ class DataBaseUpgrade {
                             break;
                         case 31:
                             upgradeDb31(db);
+                            UiUtils.showCustomToastMessage("Updating database 31 -->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
+                            break;
+                        case 32:
+                            upgradeDb32(db);
                             UiUtils.showCustomToastMessage("Updating database 31 -->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
                             break;
 
@@ -1566,6 +1571,36 @@ class DataBaseUpgrade {
             e.printStackTrace();
         }
     }
+    //Added  on 28th june 2023
+    private static void upgradeDb32( final SQLiteDatabase db) {
+        Log.d(LOG_TAG, "******* upgradeDataBase 32 ******" + Palm3FoilDatabase.DATA_VERSION);
+
+        String fingerprintcolumn = "ALTER TABLE CollectionCenter Add IsFingerPrintReq BIT";
+
+        String column1 = "Alter Table CropMaintenanceHistory Add IsVerified BIT DEFAULT 1";
+        String column2 = "Alter Table CropMaintenanceHistory Add OTP  VARCHAR(10)";
+        String column3 = "Alter Table HarvestorVisitHistory Add IsVerified BIT DEFAULT 1";
+        String column4 = "Alter Table HarvestorVisitHistory Add OTP  VARCHAR(10)";
+        String column5 = "Alter Table HarvestorVisitHistory Add UpdatedByUserId INT ";
+        String column6 = "Alter Table HarvestorVisitHistory Add UpdatedDate datetime ";
+
+
+        try {
+
+            db.execSQL(fingerprintcolumn);
+            db.execSQL(column1);
+            db.execSQL(column2);
+            db.execSQL(column3);
+            db.execSQL(column4);
+            db.execSQL(column5);
+            db.execSQL(column6);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private static void checkTheColumnIsThere(String tableName, String columnName, String dataType, final SQLiteDatabase db) {
 

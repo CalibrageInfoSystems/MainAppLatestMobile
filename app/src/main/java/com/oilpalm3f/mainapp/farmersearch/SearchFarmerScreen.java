@@ -279,6 +279,7 @@ public class  SearchFarmerScreen extends OilPalmBaseActivity implements Recycler
 
         else if (CommonUtils.isFromFollowUp() || CommonUtils.isFromConversion() || CommonUtils.isFromCropMaintenance()||
                 CommonUtils.isPlotSplitFarmerPlots() || CommonUtils.isVisitRequests() || CommonUtils.isFromHarvesting() || CommonUtils.isFromPlantationAudit())  {
+            Log.e("========>282","Re Take Geo");
             FragmentManager fm = getSupportFragmentManager();
             DisplayPlotsFragment displayPlotsFragment = DisplayPlotsFragment.newInstance(mFarmersList.get(position));
             displayPlotsFragment.show(fm, "displayPlotsFragment");

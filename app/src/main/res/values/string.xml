@@ -132,6 +132,7 @@
     <string name="ffbHarvestDetails">FFB Harvest Details</string>
     <string name="uprootmentDetails">Uprootment Details</string>
     <string name="cropMaintenance">Crop Maintenance</string>
+    <string name="palmcare">Palm Care</string>
     <string name="fertilizerApplication">Fertilizer Details</string>
     <string name="weedingDetails">Weeding Details</string>
     <string name="plantProtectionDetails">Plant Protection Details</string>
@@ -794,7 +795,11 @@
     <string name="log_details" tools:ignore="ExtraTranslation">Log Details</string>
     <string name="expected_tree_count_in_this_visit">Expected Tree Count in This Visit</string>
     <string name="vist_logs">Visit Logs</string>
-
+    <string name="docropmaintenance">Do Crop Maintenance</string>
+    <string name="closecropmaintenance">Close Crop Maintenance</string>
+    <string name="doharvesting">Do Harvesting Visit</string>
+    <string name="closeharvesting">Close Harvesting Visit</string>
+    <string name="notvisitedplots">Not Visited Plots</string>
     <string-array name="Month">
         <item>None</item>
         <item>January</item>
