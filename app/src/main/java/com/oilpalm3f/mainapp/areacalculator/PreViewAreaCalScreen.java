@@ -167,6 +167,7 @@ public class PreViewAreaCalScreen extends OilPalmBaseActivity {
 
                         DataManager.getInstance().addData(DataManager.PLOT_DETAILS, plot);
                         DataManager.getInstance().addData(DataManager.PLOT_GEO_BOUNDARIES, getGeoBoundriesData());
+
                         if (CommonUtils.isPlotSplitFarmerPlots()) {
                             updateFarmerHistory();
                         }

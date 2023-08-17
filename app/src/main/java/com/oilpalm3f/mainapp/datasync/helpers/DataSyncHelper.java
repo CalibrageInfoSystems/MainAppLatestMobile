@@ -433,7 +433,7 @@ public class DataSyncHelper {
         List<FileRepository> fileRepoList = (List<FileRepository>) dataAccessHandler.getFileRepositoryData(Queries.getInstance().getFileRepositoryRefresh(), 1);
         List<VisitLog> visitLogList = (List<VisitLog>) dataAccessHandler.getVisitLogData(Queries.getInstance().getVistLogs());
         List<UserSync> userSyncList = (List<UserSync>) dataAccessHandler.getUserSyncData(Queries.getInstance().getUserSyncDetails());
-        List<Alerts> alertsList = (List<Alerts>) dataAccessHandler.getAlertsDetails(Queries.getInstance().getAlertsDetailsQueryToSendCloud(), 1, true);
+      //  List<Alerts> alertsList = (List<Alerts>) dataAccessHandler.getAlertsDetails(Queries.getInstance().getAlertsDetailsQueryToSendCloud(), 1, true);
         List<HarvestorVisitHistory> harvestorVisithistoryList = (List<HarvestorVisitHistory>) dataAccessHandler.getSelectedHarvestorHistoryData(Queries.getInstance().getSelectedHarvestorHistoryRefresh(), 1);
         List<HarvestorVisitDetails> harvestorVisitList = (List<HarvestorVisitDetails>) dataAccessHandler.getSelectedHarvestorData(Queries.getInstance().getSelectedHarvestorRefresh(), 1);
         List<RecoveryFarmerGroup> recoveryFarmerGroupList = (List<RecoveryFarmerGroup>) dataAccessHandler.getSelectedRecoveryFarmerData(Queries.getInstance().getSelectedRecoveryFarmersRefresh(), 1);
@@ -488,7 +488,7 @@ public class DataSyncHelper {
         allRefreshDataMap.put(DatabaseKeys.TABLE_COMPLAINTSTATUSHISTORY, complaintStatusHistoryList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_VisitLog, visitLogList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_UserSync, userSyncList);
-        allRefreshDataMap.put(DatabaseKeys.TABLE_ALERTS, alertsList);
+        //allRefreshDataMap.put(DatabaseKeys.TABLE_ALERTS, alertsList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_HarvestorVisitHistory, harvestorVisithistoryList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_HarvestorVisitDetails, harvestorVisitList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_Recovery_Farmer_Group, recoveryFarmerGroupList);
@@ -1109,40 +1109,40 @@ public class DataSyncHelper {
     }
 
     //to get alerts data
-    public static void getAlertsData(final Context context, final ApplicationThread.OnComplete<String> onComplete) {
-        CloudDataHandler.getGenericData(Config.live_url + Config.GET_ALERTS + CommonConstants.USER_ID, new ApplicationThread.OnComplete<String>() {
-            @Override
-            public void execute(boolean success, String result, String msg) {
-                if (success) {
-                    final DataAccessHandler dataAccessHandler = new DataAccessHandler(context);
-                    dataAccessHandler.executeRawQuery("delete from Alerts");
-                    LinkedHashMap<String, List> dataMap = new LinkedHashMap<>();
-                    JSONArray resultArray = null;
-                    try {
-                        resultArray = new JSONArray(result);
-//                        dataMap.put("Alerts", CommonUtils.toList(resultArray));
-                        List dataList = new ArrayList();
-                        dataList.add(CommonUtils.toList(resultArray));
-                        dataAccessHandler.insertData(DatabaseKeys.TABLE_ALERTS, CommonUtils.toList(resultArray), new ApplicationThread.OnComplete<String>() {
-                            @Override
-                            public void execute(boolean success, String result, String msg) {
-                                if (success) {
-                                    onComplete.execute(true, "", "");
-                                } else {
-                                    onComplete.execute(false, "", "");
-                                }
-                            }
-                        });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        onComplete.execute(false, "", "");
-                    }
-                } else {
-                    onComplete.execute(false, "", "");
-                }
-            }
-        });
-    }
+//    public static void getAlertsData(final Context context, final ApplicationThread.OnComplete<String> onComplete) {
+//        CloudDataHandler.getGenericData(Config.live_url + Config.GET_ALERTS + CommonConstants.USER_ID, new ApplicationThread.OnComplete<String>() {
+//            @Override
+//            public void execute(boolean success, String result, String msg) {
+//                if (success) {
+//                    final DataAccessHandler dataAccessHandler = new DataAccessHandler(context);
+//                    dataAccessHandler.executeRawQuery("delete from Alerts");
+//                    LinkedHashMap<String, List> dataMap = new LinkedHashMap<>();
+//                    JSONArray resultArray = null;
+//                    try {
+//                        resultArray = new JSONArray(result);
+////                        dataMap.put("Alerts", CommonUtils.toList(resultArray));
+//                        List dataList = new ArrayList();
+//                        dataList.add(CommonUtils.toList(resultArray));
+//                        dataAccessHandler.insertData(DatabaseKeys.TABLE_ALERTS, CommonUtils.toList(resultArray), new ApplicationThread.OnComplete<String>() {
+//                            @Override
+//                            public void execute(boolean success, String result, String msg) {
+//                                if (success) {
+//                                    onComplete.execute(true, "", "");
+//                                } else {
+//                                    onComplete.execute(false, "", "");
+//                                }
+//                            }
+//                        });
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                        onComplete.execute(false, "", "");
+//                    }
+//                } else {
+//                    onComplete.execute(false, "", "");
+//                }
+//            }
+//        });
+//    }
 
     //Download data from the server
     public static class DownLoadData extends AsyncTask<String, String, String> {
@@ -1179,8 +1179,11 @@ public class DataSyncHelper {
             if (currentIndex == 0) {
                 if (tableName.equalsIgnoreCase("Farmer")) {
                     FarmerDataCount = totalData.get(totalDataCount).getCount();
+                    Log.d("FarmerDataCount", FarmerDataCount + "");
                 } else if (tableName.equalsIgnoreCase("Plot")) {
                     PlotDataCount = totalData.get(totalDataCount).getCount();
+                    Log.d("PlotDataCount", PlotDataCount + "");
+
                 }
             }
             try {
@@ -1528,6 +1531,11 @@ public class DataSyncHelper {
                         }
                         Integer resetFarmerCount = Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getFarmerCount()));
                         Integer resetPlotCount = Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getPlotCount()));
+
+                        Log.d("FarmerResetCount", FarmerResetCount + "");
+                        Log.d("PlotResetCount", PlotResetCount + "");
+                        Log.d("FarmerDataCount", FarmerDataCount + "");
+                        Log.d("PlotDataCount", PlotDataCount + "");
 
                         if ((FarmerDataCount == FarmerResetCount) && (PlotDataCount ==  PlotResetCount)) {
                             if (resetFarmerCount != null && resetPlotCount != null) {

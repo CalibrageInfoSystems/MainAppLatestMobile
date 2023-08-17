@@ -118,9 +118,16 @@ public class CommonUiUtils {
         DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_REPOSITORY);
         DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_STATUS_HISTORY);
         DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_TYPE);
+        DataManager.getInstance().deleteData(DataManager.LANDLORD_BANK_DATA);
+        DataManager.getInstance().deleteData(DataManager.LANDLORD_LEASED_DATA);
+        DataManager.getInstance().deleteData(DataManager.LANDLORD_IDPROOFS_DATA);
+        DataManager.getInstance().deleteData(DataManager.PEST_DETAILS);
+        DataManager.getInstance().deleteData(DataManager.CHEMICAL_DETAILS);
         ConversionDigitalContractFragment.isContractAgreed = false;
         CommonConstants.isGeoTagTaken = false;
         CommonConstants.isFromPlotDetails = false;
+        CommonConstants.leased = false;
+        CommonConstants.isplotupdated = false;
         CommonConstants.PLOT_CODE = "";
         CommonConstants.FARMER_CODE = "";
     }

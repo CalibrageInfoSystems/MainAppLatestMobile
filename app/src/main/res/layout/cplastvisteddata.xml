@@ -278,6 +278,85 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/cpdatagapfillrequiredlinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/cpgapfillrequired"
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="0.6"
+                android:gravity="center_vertical"
+                android:text="Is Gap Filling Required?" />
+
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/cpdatagapfillrequired"
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.3" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cpdatasaplingforgapfillingLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:weightSum="1"
+            android:visibility="gone"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/cpdatano_of_saplingforgapfilling"
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="0.6"
+                android:text="No of saplings for gap filling"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/cpdatasaplingforgapfilling_tv"
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.3" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/cpdatacommentsLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

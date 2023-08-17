@@ -1,5 +1,7 @@
 package com.oilpalm3f.mainapp.dbmodels;
 
+import android.content.Intent;
+
 /**
  * Created by siva on 25/05/17.
  */
@@ -24,7 +26,7 @@ public class Nutrient {
     private Integer RecommendedFertilizerId;
     private Integer UOMId  ;
     private double Dosage;
-    int PercTreesId;
+    Integer PercTreesId;
     private Integer RecommendedUOMId;
 
     public Integer getRecommendedUOMId() {
@@ -35,11 +37,11 @@ public class Nutrient {
         RecommendedUOMId = recommendedUOMId;
     }
 
-    public int getPercTreesId() {
+    public Integer getPercTreesId() {
         return PercTreesId;
     }
 
-    public void setPercTreesId(int percTreesId) {
+    public void setPercTreesId(Integer percTreesId) {
         PercTreesId = percTreesId;
     }
 

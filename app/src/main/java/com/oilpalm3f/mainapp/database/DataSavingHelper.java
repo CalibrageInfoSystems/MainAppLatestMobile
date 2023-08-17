@@ -676,6 +676,7 @@ public class DataSavingHelper {
                     if (success) {
                         Log.v(LOG_TAG, "@@@ saveFERTLIZERData data saved successfully");
                         DataManager.getInstance().deleteData(DataManager.FERTILIZER);
+                        CommonConstants.fertilizerapplydate = "";
                         saveRecommndFertilizerData(context, oncomplete);
                     } else {
                         Log.e(LOG_TAG, "@@@ saveFERTLIZER data saving failed due to " + msg);
@@ -729,6 +730,7 @@ public class DataSavingHelper {
                 public void execute(boolean success, String result, String msg) {
                     if (success) {
                         Log.v(LOG_TAG, "@@@ PEST data saved successfully");
+                        //DataManager.getInstance().deleteData(DataManager.PEST_DETAILS);
                         savePestChemicalXrefData(context, oncomplete);
                     } else {
                         Log.e(LOG_TAG, "@@@ savePEST data saving failed due to " + msg);
@@ -1547,7 +1549,7 @@ public class DataSavingHelper {
             }
         }
         }else {
-           // saveConversionPotential(context, oncomplete);
+            //saveConversionPotential(context, oncomplete);
         }
     }
 
@@ -1732,7 +1734,9 @@ public class DataSavingHelper {
 
 
              if (CommonUtils.isFromConversion()) {
-                saveLandLordDetails(context, oncomplete);
+                 if (CommonConstants.leased) {
+                     saveLandLordDetails(context, oncomplete);
+                 }
             } else if(CommonUtils.isPlotSplitFarmerPlots()) {
                 savePlotData(context,oncomplete);
             }else {
@@ -1794,9 +1798,11 @@ public class DataSavingHelper {
                 public void execute(boolean success, String result, String msg) {
                     if (success) {
                         Log.v(LOG_TAG, "@@@ saveRecordIntoFarmerHistory data saved successfully");
-//                    oncomplete.execute(true, "data saved successfully", "");
+                         //oncomplete.execute(true, "data saved successfully", "");
                         if (CommonUtils.isFromConversion()) {
-                            saveLandLordDetails(context, oncomplete);
+                            if (CommonConstants.leased) {
+                                saveLandLordDetails(context, oncomplete);
+                            }
                         } else if(CommonUtils.isPlotSplitFarmerPlots()) {
                             savePlotData(context,oncomplete);
                         }else{
@@ -2246,6 +2252,7 @@ public class DataSavingHelper {
                             Log.v(LOG_TAG, "@@@ saveLandLordBankDetails data saved successfully");
                             DataManager.getInstance().deleteData(DataManager.LANDLORD_BANK_DATA);
                             saveLandLordIdProofs(context, onComplete);
+
                         } else {
                             Log.e(LOG_TAG, "@@@ saveLandLordBankDetails data saving failed due to " + msg);
                             onComplete.execute(false, "data saving failed for saveLandLordBankDetails", "");
@@ -2260,6 +2267,7 @@ public class DataSavingHelper {
                             Log.v(LOG_TAG, "@@@ saveLandLordBankDetails data saved successfully");
                             DataManager.getInstance().deleteData(DataManager.LANDLORD_BANK_DATA);
                             saveLandLordIdProofs(context, onComplete);
+
                         } else {
                             Log.e(LOG_TAG, "@@@ saveLandLordBankDetails data saving failed due to " + msg);
                             onComplete.execute(false, "data saving failed for saveLandLordBankDetails", "");

@@ -29,7 +29,7 @@
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -41,8 +41,8 @@
 
                     <ImageView
                         android:id="@+id/extension_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/crop_maintenance_homelogo_new"
@@ -71,8 +71,8 @@
 
                     <ImageView
                         android:id="@+id/pf_farmers_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/crop_maintenance_homelogo_new"
@@ -127,8 +127,8 @@
 
                     <ImageView
                         android:id="@+id/alerts_logo1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/harvestingvisitlogoresized"
@@ -151,8 +151,8 @@
 
                     <ImageView
                         android:id="@+id/complaints_logo1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/harvestingvisitlogoresized"
@@ -170,7 +170,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -182,8 +182,8 @@
 
                     <ImageView
                         android:id="@+id/notvisitedplots"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:src="@drawable/harvestingvisitlogoresized"
                         android:visibility="visible" />

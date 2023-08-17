@@ -618,13 +618,36 @@ public class PersonalDetailsFragment extends Fragment implements RecyclerItemCli
         CommonConstants.FARMER_CODE = savedFarmerData.getCode();
         farmerCode.setText(CommonConstants.FARMER_CODE);
         farmer_f_name.setText("" + savedFarmerData.getFirstname());
-        farmer_m_name.setText("" + savedFarmerData.getMiddlename());
+        //farmer_m_name.setText("" + savedFarmerData.getMiddlename());
+        Log.d("farmer_m_name", savedFarmerData.getMiddlename() + "");
+
+
+//
+        if (savedFarmerData.getMiddlename().equalsIgnoreCase("null")) {
+            farmer_m_name.setText("");
+        } else {
+            farmer_m_name.setText("" + savedFarmerData.getMiddlename());
+        }
+        //farmer_m_name.setText("");
+
+
+        //farmer_m_name.setText("" + CommonConstants.farmerMiddleName);
         farmer_last_name.setText("" + savedFarmerData.getLastname());
         husbandName.setText("" + savedFarmerData.getGuardianname());
-        motherName.setText("" + savedFarmerData.getMothername());
 
-        if(savedFarmerData.getContactnumber()!=null)
-        primary_contactno.setText("" + savedFarmerData.getContactnumber());
+        if (savedFarmerData.getMothername().equalsIgnoreCase("null")) {
+
+            motherName.setText("");
+        } else {
+            motherName.setText("" + savedFarmerData.getMothername());
+
+        }
+        Log.d("motherName", savedFarmerData.getMothername() + "");
+
+         //motherName.setText("" + savedFarmerData.getMothername());
+        if(savedFarmerData.getContactnumber()!=null) {
+            primary_contactno.setText("" + savedFarmerData.getContactnumber());
+        }
         if(savedFarmerData.getMobilenumber().equalsIgnoreCase("null") && savedFarmerData.getMobilenumber().length()!= 10 ){
             secondary_contactno.setText("" );
         }else {
@@ -916,16 +939,174 @@ public class PersonalDetailsFragment extends Fragment implements RecyclerItemCli
 
 
     //Validations of the Fields
+//    public boolean validate() {
+//
+//        f_f_nameString = farmer_f_name.getText().toString();
+//        CommonConstants.farmerFirstName = f_f_nameString;
+//        f_m_nameString = farmer_m_name.getText().toString();
+//        CommonConstants.farmerMiddleName = f_m_nameString;
+//        f_l_nameString = farmer_last_name.getText().toString();
+//        CommonConstants.farmerLastName = f_l_nameString;
+//        husbandString = husbandName.getText().toString();
+//        motherString = motherName.getText().toString();
+//        ageString = age.getText().toString();
+//        emailStr = emailAddress.getText().toString();
+//
+//        p_contactString = primary_contactno.getText().toString();
+//        CommonConstants.farmerMobileNumber = p_contactString;
+//        s_contactString = secondary_contactno.getText().toString();
+//        address1String = address1.getText().toString();
+//        address2String = address2.getText().toString();
+//        landmarkString = landmark.getText().toString();
+//        pincodeString = pincode.getText().toString();
+//
+//        if (CommonUtils.isEmptySpinner(source_of_contact_spinner)) {
+//            UiUtils.showCustomToastMessage(getResources().getString(R.string.error_sourceofContract), getActivity(), 0);
+//            return false;
+//        }
+//
+//        if (CommonUtils.isEmptySpinner(titleSpinner)) {
+//            //Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.error_title), Toast.LENGTH_SHORT).show();
+//            UiUtils.showCustomToastMessage(getResources().getString(R.string.error_title), getActivity(), 0);
+//            return false;
+//        }
+//
+//        if (TextUtils.isEmpty(f_f_nameString)) {
+//            // farmer_f_name.setError(getResources().getString(R.string.error_farmer_first_name));
+//            UiUtils.showCustomToastMessage(getResources().getString(R.string.error_farmer_first_name), getActivity(), 0);
+//            farmer_f_name.requestFocus();
+//            return false;
+//        }
+//
+//        if (TextUtils.isEmpty(f_l_nameString)) {
+//            // farmer_last_name.setError(getResources().getString(R.string.error_farmer_last_name));
+//            UiUtils.showCustomToastMessage(getResources().getString(R.string.error_farmer_last_name), getActivity(), 0);
+//            farmer_last_name.requestFocus();
+//            return false;
+//        }
+////
+////        if (TextUtils.isEmpty(fatherString)) {
+////            // fatherName.setError(getResources().getString(R.string.error_husband_name));
+////            UiUtils.showCustomToastMessage("Please enter father name", getActivity(), 0);
+////            fatherName.requestFocus();
+////            return false;
+////        }
+//
+//        if (TextUtils.isEmpty(husbandName.getText().toString())) {
+//            UiUtils.showCustomToastMessage(getResources().getString(R.string.error_husband_name), getActivity(), 0);
+//            husbandName.requestFocus();
+//            return false;
+//        }
+//
+//
+//        if (CommonUtils.isEmptySpinner(genderSpin)) {
+//            UiUtils.showCustomToastMessage("Please Select Gender", getActivity(), 0);
+//            return false;
+//        }
+//
+//        if (TextUtils.isEmpty(p_contactString) || p_contactString.length() < 10) {
+//            //   primary_contactno.setError(getResources().getString(R.string.error_contact_number));
+//            UiUtils.showCustomToastMessage(getResources().getString(R.string.error_contact_number), getActivity(), 0);
+//            primary_contactno.requestFocus();
+//            return false;
+//        }
+//        if (!TextUtils.isEmpty(s_contactString) ){
+//            if (s_contactString.length() < 10) {
+//                UiUtils.showCustomToastMessage(getResources().getString(R.string.is_valid_number), getActivity(), 0);
+//                secondary_contactno.requestFocus();
+//                return false;
+//
+//            }
+//        }
+//
+//        if (TextUtils.isEmpty(ageString)) {
+//            //    age.setError(getResources().getString(R.string.error_age));
+//            UiUtils.showCustomToastMessage(getResources().getString(R.string.error_age), getActivity(), 0);
+//            age.requestFocus();
+//            return false;
+//        }
+//
+//        if (!TextUtils.isEmpty(emailStr) && isValidEmail(emailStr) == false) {
+//            UiUtils.showCustomToastMessage("Please Enter Valid Email", getActivity(), 0);
+//            return false;
+//        }
+//
+//        if (CommonUtils.isEmptySpinner(caste_spinner)) {
+//            UiUtils.showCustomToastMessage("Please Select Category", getActivity(), 0);
+//            caste_spinner.requestFocus();
+//            return false;
+//        }
+//
+//        if (CommonUtils.isEmptySpinner(anualIncomeSpin)) {
+//            UiUtils.showCustomToastMessage("Please Select Annual Income", getActivity(), 0);
+//            return false;
+//        }
+//
+//        /*if (CommonUtils.isEmptySpinner(educationdetailsSpin)) {
+//            UiUtils.showCustomToastMessage("Please Select education", getActivity(), 0);
+//            return false;
+//        }*/
+//
+//        if (TextUtils.isEmpty(address1String)) {
+//            // address1.setError(getResources().getString(R.string.error_address));
+//            UiUtils.showCustomToastMessage("Please Enter Door No", getActivity(), 0);
+//            address1.requestFocus();
+//            return false;
+//        }
+//
+//
+//        if (TextUtils.isEmpty(address2String)) {
+//            //   address2.setError(getResources().getString(R.string.error_address));
+//            //Toast.makeText(getActivity(), "Please enter Street No", Toast.LENGTH_SHORT).show();
+//            UiUtils.showCustomToastMessage("Please Enter Street No", getActivity(), 0);
+//            address2.requestFocus();
+//            return false;
+//        }
+//
+//        if (TextUtils.isEmpty(landmarkString)) {
+//            //  landmark.setError(getResources().getString(R.string.error_landmark));
+//            UiUtils.showCustomToastMessage(getResources().getString(R.string.error_landmark), getActivity(), 0);
+//            landmark.requestFocus();
+//            return false;
+//        }
+//
+//        if (CommonUtils.isFromConversion()) {
+//        if (TextUtils.isEmpty(mCurrentPhotoPath)) {
+//            UiUtils.showCustomToastMessage("Please Capture Photo", getActivity(), 1);
+//            return false;
+//        }
+//    }
+//
+//        return true;
+//
+//    }
+
+    //Validations of the Fields
     public boolean validate() {
 
         f_f_nameString = farmer_f_name.getText().toString();
         CommonConstants.farmerFirstName = f_f_nameString;
+
         f_m_nameString = farmer_m_name.getText().toString();
-        CommonConstants.farmerMiddleName = f_m_nameString;
+        if (f_m_nameString == null || f_m_nameString.trim().isEmpty()) {
+
+            CommonConstants.farmerMiddleName = "";
+        } else {
+
+            CommonConstants.farmerMiddleName = f_m_nameString;
+        }
+
         f_l_nameString = farmer_last_name.getText().toString();
         CommonConstants.farmerLastName = f_l_nameString;
         husbandString = husbandName.getText().toString();
-        motherString = motherName.getText().toString();
+        // motherString = motherName.getText().toString();
+        if (motherName.getText().toString() == null || motherName.getText().toString().trim().isEmpty()) {
+
+            motherString = "";
+        } else {
+
+            motherString = motherString;
+        }
         ageString = age.getText().toString();
         emailStr = emailAddress.getText().toString();
 
@@ -1048,11 +1229,11 @@ public class PersonalDetailsFragment extends Fragment implements RecyclerItemCli
         }
 
         if (CommonUtils.isFromConversion()) {
-        if (TextUtils.isEmpty(mCurrentPhotoPath)) {
-            UiUtils.showCustomToastMessage("Please Capture Photo", getActivity(), 1);
-            return false;
+            if (TextUtils.isEmpty(mCurrentPhotoPath)) {
+                UiUtils.showCustomToastMessage("Please Capture Photo", getActivity(), 1);
+                return false;
+            }
         }
-    }
 
         return true;
 

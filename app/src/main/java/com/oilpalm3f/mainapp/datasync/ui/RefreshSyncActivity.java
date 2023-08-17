@@ -2,6 +2,9 @@ package com.oilpalm3f.mainapp.datasync.ui;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentManager;
@@ -28,18 +31,26 @@ import com.oilpalm3f.mainapp.database.DataAccessHandler;
 import com.oilpalm3f.mainapp.database.DatabaseKeys;
 import com.oilpalm3f.mainapp.database.Queries;
 import com.oilpalm3f.mainapp.datasync.helpers.DataSyncHelper;
+import com.oilpalm3f.mainapp.dbmodels.CropMaintenanceDocs;
+import com.oilpalm3f.mainapp.dbmodels.DigitalContract;
 import com.oilpalm3f.mainapp.dbmodels.UserSync;
 import com.oilpalm3f.mainapp.helper.PrefUtil;
+import com.oilpalm3f.mainapp.ui.MainLoginScreen;
+import com.oilpalm3f.mainapp.ui.SplashScreen;
 import com.oilpalm3f.mainapp.uihelper.ProgressBar;
 import com.oilpalm3f.mainapp.uihelper.ProgressDialogFragment;
 import com.oilpalm3f.mainapp.utils.UiUtils;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.sql.Ref;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,6 +91,11 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
     private boolean isDataUpdated = false;
     UserSync userSync;
 
+    private DigitalContract digitalContract;
+    private CropMaintenanceDocs cropMaintenanceDocs;
+
+    private ArrayList<DigitalContract> digitalList = new ArrayList<>();
+    private ArrayList<CropMaintenanceDocs> cmdocsList = new ArrayList<>(); ;
 
     //Initialing the Class and adding the tables to the arraylist
     @Override
@@ -408,6 +424,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
                             if (success) {
                                 if (!msg.equalsIgnoreCase("Sync is up-to-date")) {
                                     Toast.makeText(RefreshSyncActivity.this, "Data synced successfully", Toast.LENGTH_SHORT).show();
+                                    digitalpdfsave();
                                     // List<UserSync> userSyncList = (List<UserSync>)dataAccessHandler.getUserSyncData(Queries.getInstance().countOfMasterSync());
                                     List<UserSync> userSyncList = (List<UserSync>) dataAccessHandler.getUserSyncData(Queries.getInstance().countOfSync(CommonConstants.USER_ID));
 
@@ -817,6 +834,171 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             });
         } else {
             updateConsignmentData();
+        }
+    }
+
+    private void digitalpdfsave() {
+        dataAccessHandler = new DataAccessHandler(RefreshSyncActivity.this);
+        digitalList = (ArrayList<DigitalContract>) dataAccessHandler.getDigitalContractData(Queries.getInstance().getDigitalContract(),1);
+        Log.e("========>datasize", digitalList.size() + "");
+        for (int i = 0; i < digitalList.size(); i++) {
+            int stateid = digitalList.get(i).getStateId();
+            Log.e("========>156", stateid + "");
+            // fileExtention =digitalContract.getFileExtension();
+            // rootDirectory = new File(CommonUtils.get3FFileRootPath() + "3F_DigitalContract/");
+            digitalContract = (DigitalContract) dataAccessHandler.getDigitalContractData(Queries.getInstance().getDigitalContractbystatecode(stateid), 0);
+            String url = Config.image_url + "/" + digitalContract.getFileLocation() + "/" + digitalContract.getFILENAME() + digitalContract.getFileExtension();
+            Log.e("========>171url", url + "");
+
+            new DownloadpdfFileFromURL(digitalContract.getFILENAME(), digitalContract.getFileExtension()).execute(url);}
+        cmdocssave();
+
+//                                new DownloadpdfFileFromURL().execute(url);
+    }
+    private void cmdocssave() {
+        dataAccessHandler = new DataAccessHandler(RefreshSyncActivity.this);
+        cmdocsList = (ArrayList<CropMaintenanceDocs>) dataAccessHandler.getCMDocsData(Queries.getInstance().getAllCMDocs(),1);
+        Log.e("cmdocsListsize", cmdocsList.size() + "");
+        for (int i = 0; i < cmdocsList.size(); i++) {
+            int sectionId = cmdocsList.get(i).getCMSectionId();
+            Log.e("sectionId", sectionId + "");
+            // fileExtention =digitalContract.getFileExtension();
+            // rootDirectory = new File(CommonUtils.get3FFileRootPath() + "3F_DigitalContract/");
+            cropMaintenanceDocs = (CropMaintenanceDocs) dataAccessHandler.getCMDocsData(Queries.getInstance().getCMDocsbysectionId(sectionId), 0);
+            String cmdocurl = Config.image_url + "/" + cropMaintenanceDocs.getFileLocation() + "/" + cropMaintenanceDocs.getFileName() + cropMaintenanceDocs.getFileExtension();
+            Log.e("cmdocurlurl", cmdocurl + "");
+
+            new DownloadCMDocsFromURL(cropMaintenanceDocs.getFileName(), cropMaintenanceDocs.getFileExtension()).execute(cmdocurl);}
+    }
+
+    public class DownloadpdfFileFromURL extends AsyncTask<String, Void, String> {
+
+        private boolean downloadSuccess = false;
+        private String filename;
+        private String fileExtension;
+
+        public DownloadpdfFileFromURL(String filename, String fileExtension) {
+            this.filename = filename;
+            this.fileExtension = fileExtension;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+
+                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+
+                String rootDirectory = CommonUtils.get3FFileRootPath() + "3F_DigitalContract/";
+                File directory = new File(rootDirectory);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                OutputStream output = new FileOutputStream(rootDirectory + filename + fileExtension);
+
+                byte data[] = new byte[1024];
+
+                while ((count = input.read(data)) != -1) {
+                    output.write(data, 0, count);
+                }
+
+                output.flush();
+                output.close();
+                input.close();
+                downloadSuccess = true;
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+                downloadSuccess = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+            if (downloadSuccess) {
+                File fileToDownload = new File(CommonUtils.get3FFileRootPath() + "3F_DigitalContract/" + filename + fileExtension);
+                Log.d("File Path:", fileToDownload.getAbsolutePath());
+                if (fileToDownload.exists()) {
+                    Log.d("File Path:", fileToDownload.getAbsolutePath());
+                } else {
+                    UiUtils.showCustomToastMessage("File does not exist", RefreshSyncActivity.this, 1);
+                }
+            }
+        }
+    }
+
+
+    public class DownloadCMDocsFromURL extends AsyncTask<String, Void, String> {
+
+        private boolean downloadSuccess = false;
+        private String filename;
+        private String fileExtension;
+
+        public DownloadCMDocsFromURL(String filename, String fileExtension) {
+            this.filename = filename;
+            this.fileExtension = fileExtension;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+
+                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+
+                String rootDirectory = CommonUtils.get3FFileRootPath() + "3F_CMDocs/";
+                File directory = new File(rootDirectory);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                OutputStream output = new FileOutputStream(rootDirectory + filename + fileExtension);
+
+                byte data[] = new byte[1024];
+
+                while ((count = input.read(data)) != -1) {
+                    output.write(data, 0, count);
+                }
+
+                output.flush();
+                output.close();
+                input.close();
+                downloadSuccess = true;
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+                downloadSuccess = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+            if (downloadSuccess) {
+                File fileToDownload = new File(CommonUtils.get3FFileRootPath() + "3F_CMDocs/" + filename + fileExtension);
+                Log.d("File Path:", fileToDownload.getAbsolutePath());
+                if (fileToDownload.exists()) {
+                    Log.d("File Path:", fileToDownload.getAbsolutePath());
+                } else {
+                    UiUtils.showCustomToastMessage("File does not exist", RefreshSyncActivity.this, 1);
+                }
+            }
         }
     }
 

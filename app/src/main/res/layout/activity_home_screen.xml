@@ -23,6 +23,7 @@
         android:orientation="horizontal">
 
 <ImageView
+    android:visibility="gone"
     android:layout_width="2dp"
     android:layout_height="60dp"
     android:background="@color/gray"
@@ -50,6 +51,7 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/notficationRel"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
@@ -89,7 +91,7 @@
     android:layout_marginTop="5dp"
     android:layout_height="2dp"
     android:background="@color/gray"
-    android:layout_below="@+id/notficationRel">
+    android:layout_below="@+id/refreshRel1">
 
 </View>
 
@@ -107,7 +109,7 @@
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -119,8 +121,8 @@
 
                     <ImageView
                         android:id="@+id/extension_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/area_extension_homelogo_new"
@@ -149,8 +151,8 @@
 
                     <ImageView
                         android:id="@+id/pf_farmers_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/view_prosepective_plots_homelogo_new"
@@ -170,7 +172,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -182,8 +184,8 @@
 
                     <ImageView
                         android:id="@+id/conversion_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/conversion_homelogo_new"
@@ -236,8 +238,8 @@
 
                     <ImageView
                         android:id="@+id/cm_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/crop_maintenance_homelogo_new"
@@ -420,8 +422,8 @@
 
                     <ImageView
                         android:id="@+id/alerts_logo1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/notifications"
@@ -444,8 +446,8 @@
 
                     <ImageView
                         android:id="@+id/complaints_logo1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/complaints"
@@ -478,8 +480,8 @@
 
                     <ImageView
                         android:id="@+id/plotSplit_logo1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/retake_boundaries"
@@ -505,8 +507,8 @@
 
                     <ImageView
                         android:id="@+id/kras_logo1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/kras"
@@ -540,8 +542,8 @@
 
                     <ImageView
                         android:id="@+id/visitDetailsImg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:src="@drawable/crop_maintenance_homelogo_new"
                         android:visibility="visible" />
@@ -568,8 +570,8 @@
 
                     <ImageView
                         android:id="@+id/extensionlogbook"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:src="@drawable/logbookeditresuized"
                         android:visibility="visible" />
@@ -605,8 +607,8 @@
 
                     <ImageView
                         android:id="@+id/transportServiceQuestioner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:src="@drawable/logbook"
                         android:visibility="visible" />
@@ -747,7 +749,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <RelativeLayout
@@ -759,8 +761,8 @@
 
                     <ImageView
                         android:id="@+id/images_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:src="@drawable/view_prosepective_plots_homelogo_new"
                         android:visibility="visible" />
@@ -809,8 +811,8 @@
 
                     <ImageView
                         android:id="@+id/planationAudit_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_centerInParent="true"
                         android:src="@drawable/harvestingvisitlogoresized"
                         android:visibility="visible" />

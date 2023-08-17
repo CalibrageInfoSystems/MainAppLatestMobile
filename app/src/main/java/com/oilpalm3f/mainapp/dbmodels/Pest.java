@@ -20,8 +20,8 @@ public class Pest {
     private Integer RecommendedChemicalId ;
     private Integer UOMId  ;
     private double Dosage  ;
-    int PercTreesId;
-    int IsControlMeasure;
+    Integer PercTreesId;
+    Integer IsControlMeasure;
     private Integer RecommendedUOMId;
 
     public Integer getRecommendedUOMId() {
@@ -32,19 +32,19 @@ public class Pest {
         RecommendedUOMId = recommendedUOMId;
     }
 
-    public int getPercTreesId() {
+    public Integer getPercTreesId() {
         return PercTreesId;
     }
 
-    public void setPercTreesId(int percTreesId) {
+    public void setPercTreesId(Integer percTreesId) {
         PercTreesId = percTreesId;
     }
 
-    public int getIsControlMeasure() {
+    public Integer getIsControlMeasure() {
         return IsControlMeasure;
     }
 
-    public void setIsControlMeasure(int isControlMeasure) {
+    public void setIsControlMeasure(Integer isControlMeasure) {
         IsControlMeasure = isControlMeasure;
     }
 

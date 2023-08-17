@@ -21,6 +21,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
+import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.oilpalm3f.mainapp.R;
 import com.oilpalm3f.mainapp.areaextension.UpdateUiListener;
 import com.oilpalm3f.mainapp.cloudhelper.Log;
@@ -30,11 +34,13 @@ import com.oilpalm3f.mainapp.database.DataAccessHandler;
 import com.oilpalm3f.mainapp.database.DatabaseKeys;
 import com.oilpalm3f.mainapp.database.Queries;
 import com.oilpalm3f.mainapp.datasync.helpers.DataManager;
+import com.oilpalm3f.mainapp.dbmodels.CropMaintenanceDocs;
 import com.oilpalm3f.mainapp.dbmodels.Fertilizer;
 import com.oilpalm3f.mainapp.dbmodels.Uprootment;
 import com.oilpalm3f.mainapp.dbmodels.Weed;
 import com.oilpalm3f.mainapp.ui.BaseFragment;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -43,7 +49,7 @@ import static com.oilpalm3f.mainapp.cropmaintenance.CommonUtilsNavigation.getKey
 
 
 //Used to enter Weed Management Details during crop maintenance
-public class WMODetailsFragment extends Fragment implements View.OnClickListener {
+public class WMODetailsFragment extends Fragment implements View.OnClickListener, OnPageChangeListener, OnLoadCompleteListener {
 
     private Context mContext;
     private View rootView;
@@ -51,7 +57,7 @@ public class WMODetailsFragment extends Fragment implements View.OnClickListener
             frequencyOfApplicationSpin,pruningSpin,
             frequencyOfPrunningSpin,mulchingSpin,
             nameOfChemicalUsedSpin,weedSpin,weevilsSpin,inflorescenceSpin,basinHealthSpin;
-    private Button saveBtn;
+    private Button saveBtn,weedpdfBtn;
     private LinkedHashMap<String, String> chemicalNameDataMap,frequencyOfApplicationDataMap,
             weedingMethodMap,weedMap,pruningMap,weevilsMap,inflorescenceMap,basinHealthMap;
     private DataAccessHandler dataAccessHandler;
@@ -64,6 +70,9 @@ public class WMODetailsFragment extends Fragment implements View.OnClickListener
     private Button historyBtn;
 
     private ArrayList<Weed> weedlastvisitdatamap;
+
+    File fileToDownLoad;
+    CropMaintenanceDocs cropMaintenanceDocs;
 
 
     @Nullable
@@ -127,12 +136,29 @@ public class WMODetailsFragment extends Fragment implements View.OnClickListener
 
         historyBtn = (Button) rootView.findViewById(R.id.weedlastvisitdataBtn);
 
+        weedpdfBtn = (Button) rootView.findViewById(R.id.weedpdfBtn);
+
+        cropMaintenanceDocs = (CropMaintenanceDocs) dataAccessHandler.getCMDocsData(Queries.getInstance().getWeedicidePDFfile(), 0);
+
+        if (cropMaintenanceDocs!= null) {
+
+            fileToDownLoad = new File(CommonUtils.get3FFileRootPath() + "3F_CMDocs/" + cropMaintenanceDocs.getFileName() + cropMaintenanceDocs.getFileExtension());
+
+            if (null != fileToDownLoad && fileToDownLoad.exists()) {
+
+                weedpdfBtn.setVisibility(View.VISIBLE);
+
+            } else {
+                weedpdfBtn.setVisibility(View.GONE);
+            }
+        }
+
         saveBtn.setOnClickListener(this);
 
     }
 
     public void setViews() {
-        chemicalNameDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("7"));
+        chemicalNameDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("648"));
         frequencyOfApplicationDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getTypeCdDmtData("30"));
         weedingMethodMap = dataAccessHandler.getGenericData(Queries.getInstance().getTypeCdDmtData("29"));
         weedMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("573"));
@@ -148,10 +174,10 @@ public class WMODetailsFragment extends Fragment implements View.OnClickListener
         inflorescenceSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Inflorescence", inflorescenceMap));
 
 
-        nameOfChemicalUsedSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Name of Chemical", chemicalNameDataMap));
-        frequencyOfApplicationSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Select Frequency of Application / Yr", frequencyOfApplicationDataMap));
-        frequencyOfPrunningSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Select Frequency of Pruning / Yr", frequencyOfApplicationDataMap));
-        weedingMethodSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Select Weed Method", weedingMethodMap));
+        nameOfChemicalUsedSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Name of Weedicide", chemicalNameDataMap));
+        frequencyOfApplicationSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Frequency of Application / Yr", frequencyOfApplicationDataMap));
+        frequencyOfPrunningSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Frequency of Pruning / Yr", frequencyOfApplicationDataMap));
+        weedingMethodSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Weed Method", weedingMethodMap));
 
         weedingMethodSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -182,8 +208,46 @@ public class WMODetailsFragment extends Fragment implements View.OnClickListener
             }
         });
 
+        weedpdfBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showWeedPDFDialog(getContext());
+            }
+        });
 
 
+
+    }
+
+    public void showWeedPDFDialog(Context activity) {
+        final Dialog dialog = new Dialog(activity);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.pdfdialog);
+
+        Toolbar titleToolbar;
+        titleToolbar = (Toolbar) dialog.findViewById(R.id.titleToolbar);
+        titleToolbar.setTitle("Weed PDF");
+        titleToolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+        PDFView fertpfdview;
+
+        fertpfdview = dialog.findViewById(R.id.fertpdfview);
+
+        fertpfdview.fromFile(fileToDownLoad)
+                .defaultPage(0)
+                .enableAnnotationRendering(true)
+                .onPageChange(this)
+                .onLoad(this)
+                .scrollHandle(new DefaultScrollHandle(getActivity()))
+                .load();
+
+        dialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }, 500);
     }
 
     public void showDialog(Context activity) {
@@ -312,6 +376,7 @@ public class WMODetailsFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.saveBtn:
+
                 if (validateFields()){
                     mWeed = new Weed();
 
@@ -374,7 +439,7 @@ public class WMODetailsFragment extends Fragment implements View.OnClickListener
 
         if (weedingMethodSpin.getSelectedItemPosition() == 1){
             if (nameOfChemicalUsedSpin.getSelectedItemPosition() == 0) {
-                Toast.makeText(mContext, "Please Select Name of the Chemical Used", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Please Select Name of the Weedicide Used", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
@@ -423,4 +488,13 @@ public class WMODetailsFragment extends Fragment implements View.OnClickListener
 
     }
 
+    @Override
+    public void loadComplete(int nbPages) {
+
+    }
+
+    @Override
+    public void onPageChanged(int page, int pageCount) {
+
+    }
 }

@@ -127,7 +127,7 @@ public class CropMaintenanceHomeScreen extends OilPalmBaseActivity implements Ty
     private void initView() {
         Log.d("CommonPlotCode", CommonConstants.PLOT_CODE);
         CommonConstants.CURRENT_TREE=1;
-        CommonConstants.Prev_Fertilizer_CMD="";
+        //CommonConstants.Prev_Fertilizer_CMD="";
         CommonConstants.perc_tree= ' ';
         CommonConstants.perc_tree_pest=' ';
         CommonConstants.perc_tree_disease=' ';
@@ -312,6 +312,9 @@ public class CropMaintenanceHomeScreen extends OilPalmBaseActivity implements Ty
                 else  if (DataManager.getInstance().getDataFromManager(DataManager.WEEDING_DETAILS) == null && CommonConstants.CURRENT_TREE>0) {
                     UiUtils.showCustomToastMessage("Please Add Weed Management Data", CropMaintenanceHomeScreen.this, 0);
                 }
+                else  if (DataManager.getInstance().getDataFromManager(DataManager.FERTILIZER) == null && CommonConstants.CURRENT_TREE>0) {
+                    UiUtils.showCustomToastMessage("Please Add Fertilizer Data", CropMaintenanceHomeScreen.this, 0);
+                }
                 else {
                     HealthOfPlantationDetailsFragment mHealthOfPlantationDetailsFragment = new HealthOfPlantationDetailsFragment();
                     mHealthOfPlantationDetailsFragment.setUpdateUiListener(this);
@@ -413,9 +416,9 @@ public class CropMaintenanceHomeScreen extends OilPalmBaseActivity implements Ty
                     }else  if (!isInterCrop() && CommonConstants.CURRENT_TREE>0) {
                         UiUtils.showCustomToastMessage("Please Enter Inter Crop Data", CropMaintenanceHomeScreen.this, 0);
                     }
-                else  if (!isFertilizer() && CommonConstants.CURRENT_TREE>0) {
-                    UiUtils.showCustomToastMessage("Please Enter Fertilizer Data", CropMaintenanceHomeScreen.this, 0);
-                }
+//                else  if (!isFertilizer() && CommonConstants.CURRENT_TREE>0) {
+//                    UiUtils.showCustomToastMessage("Please Enter Fertilizer Data", CropMaintenanceHomeScreen.this, 0);
+//                }
                     else {
                         ProgressBar.showProgressBar(CropMaintenanceHomeScreen.this,"Please wait data is Updating in DataBase.....");
 //                        DataSavingHelper.saveFarmerAddressData(this, new ApplicationThread.OnComplete<String>() {
@@ -516,19 +519,20 @@ public class CropMaintenanceHomeScreen extends OilPalmBaseActivity implements Ty
     }
 
     //gets fertilizer data
-    private boolean isFertilizer()
-    {
-        if(CommonConstants.Prev_Fertilizer_CMD.length()==0){
-            return false;
-        }
-        else if ((DataManager.getInstance().getDataFromManager(DataManager.FERTILIZER) != null) && (DataManager.getInstance().getDataFromManager(DataManager.FERTILIZER) != null)) {
+    private boolean isFertilizer() {
+//        if(CommonConstants.Prev_Fertilizer_CMD.length()==0){
+//            return false;
+//        }
+//        else
+        if ((DataManager.getInstance().getDataFromManager(DataManager.FERTILIZER) != null) && (DataManager.getInstance().getDataFromManager(DataManager.FERTILIZER) != null)) {
             return true;
-        }else{
-        if(!Qtrfertilizer.equals("0")) return false;
-            else return true;
         }
 
-
+//        else{
+//        if(!Qtrfertilizer.equals("0")) return false;
+//            else return true;
+//        }
+        return true;
     }
 
 
@@ -739,32 +743,32 @@ public class CropMaintenanceHomeScreen extends OilPalmBaseActivity implements Ty
         InterCropPlantationXref mCropModel = (InterCropPlantationXref) dataAccessHandler.getInterCropPlantationXrefData(Queries.getInstance().getInterCropPlantationXref(CommonConstants.PLOT_CODE), 0);
 
         if ((null != mCropModel || DataManager.getInstance().getDataFromManager(DataManager.PLOT_INTER_CROP_DATA) != null)||CommonConstants.CURRENT_TREE==0 || !cocaintercrop.equals("0")) {
-        interCropDetailsBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+        interCropDetailsBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
         }
         if (DataManager.getInstance().getDataFromManager(DataManager.FERTILIZER) != null ||CommonConstants.CURRENT_TREE==0) {
-            fertilizer_detailsBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            fertilizer_detailsBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
         }
 
-        if (DataManager.getInstance().getDataFromManager(DataManager.FERTILIZER) != null ||CommonConstants.CURRENT_TREE==0) {
-            fertilizer_detailsBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
-        }
+//        if (DataManager.getInstance().getDataFromManager(DataManager.FERTILIZER) != null ||CommonConstants.CURRENT_TREE==0) {
+//            fertilizer_detailsBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+//        }
         if (DataManager.getInstance().getDataFromManager(DataManager.RECMND_FERTILIZER) != null ||CommonConstants.CURRENT_TREE==0) {
-            Recom_fertilizerBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            Recom_fertilizerBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
         }
         if (DataManager.getInstance().getDataFromManager(DataManager.PEST_DETAILS) != null ||CommonConstants.CURRENT_TREE==0) {
-            pestBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            pestBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
         }
         if (DataManager.getInstance().getDataFromManager(DataManager.DISEASE_DETAILS) != null ||CommonConstants.CURRENT_TREE==0) {
-            diseaseBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            diseaseBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
         }
         if (DataManager.getInstance().getDataFromManager(DataManager.NUTRIENT_DETAILS) != null ||CommonConstants.CURRENT_TREE==0) {
-            fertilizerBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            fertilizerBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
         }
         if (CommonConstants.CURRENT_TREE==0) {
-            weedManagementBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
-            hopBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
-            yieldBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
-            whiteFlyBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            weedManagementBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
+            hopBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
+            yieldBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
+            whiteFlyBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
         }
 
         if (DataManager.getInstance().getDataFromManager(DataManager.WEEDING_DETAILS) != null ) {
@@ -776,7 +780,7 @@ public class CropMaintenanceHomeScreen extends OilPalmBaseActivity implements Ty
         Harvest mHarvest = (Harvest) dataAccessHandler.getHarvestData(Queries.getInstance().getHarvestBinding(CommonConstants.PLOT_CODE), 0);
 
         if (null != mHarvest ||(DataManager.getInstance().getDataFromManager(DataManager.FFB_HARVEST_DETAILS) != null) ||CommonConstants.CURRENT_TREE==0) {
-            harvestDetailsBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            harvestDetailsBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
         }
 
 
@@ -784,7 +788,7 @@ public class CropMaintenanceHomeScreen extends OilPalmBaseActivity implements Ty
 //            complaintsBtn.setBackgroundColor(ContextCompat.getColor(this,R.color.green_dark));
 //        }
         if (DataManager.getInstance().getDataFromManager(DataManager.REFERRALS_DATA) != null) {
-            referralsBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            referralsBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
         }
 //        interCropDetailsBtn.setBackgroundColor(ContextCompat.getColor(this,R.color.green_dark));
         if (null != DataManager.getInstance().getDataFromManager(DataManager.CURRENT_PLANTATION)) {
@@ -807,12 +811,12 @@ public class CropMaintenanceHomeScreen extends OilPalmBaseActivity implements Ty
         boolean waterResourcerecordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(DatabaseKeys.TABLE_WATERESOURCE, "PlotCode", CommonConstants.PLOT_CODE));
 
         if (waterResourcerecordExisted || sourceResourcerecordExisted) {
-            wspBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            wspBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
         }
 
         if(null != DataManager.getInstance().getDataFromManager(DataManager.SoilType))
         {
-            wspBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            wspBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark));
         }
     }
 
@@ -888,7 +892,7 @@ public class CropMaintenanceHomeScreen extends OilPalmBaseActivity implements Ty
                         DataManager.getInstance().deleteData(DataManager.WHITE_FLY_19);
                         DataManager.getInstance().deleteData(DataManager.WHITE_FLY);
                         DataManager.getInstance().deleteData(DataManager.YIELD_ASSESSMENT);
-
+                        CommonConstants.fertilizerapplydate = "";
 
                         finish();
 //                        Toast.makeText(getApplicationContext(),"Dismissed..!!",Toast.LENGTH_SHORT).show();

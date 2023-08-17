@@ -20,25 +20,32 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
+import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.oilpalm3f.mainapp.R;
 import com.oilpalm3f.mainapp.areaextension.UpdateUiListener;
 import com.oilpalm3f.mainapp.common.CommonConstants;
+import com.oilpalm3f.mainapp.common.CommonUtils;
 import com.oilpalm3f.mainapp.common.FiscalDate;
 import com.oilpalm3f.mainapp.conversion.PalmDetailsEditListener;
 import com.oilpalm3f.mainapp.database.DataAccessHandler;
 import com.oilpalm3f.mainapp.database.DatabaseKeys;
 import com.oilpalm3f.mainapp.database.Queries;
 import com.oilpalm3f.mainapp.datasync.helpers.DataManager;
+import com.oilpalm3f.mainapp.dbmodels.CropMaintenanceDocs;
 import com.oilpalm3f.mainapp.dbmodels.WhiteFlyAssessment;
 import com.oilpalm3f.mainapp.dbmodels.YieldAssessment;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
 
 //Used to display Whitefly years
-public class WhiteFlyFragment extends Fragment implements View.OnClickListener, WhiteFieldFragment.onDataSelectedListener, PalmDetailsEditListener, UpdateUiListener {
+public class WhiteFlyFragment extends Fragment implements View.OnClickListener, WhiteFieldFragment.onDataSelectedListener, PalmDetailsEditListener, UpdateUiListener, OnPageChangeListener, OnLoadCompleteListener {
     private UpdateUiListener updateUiListener;
     private ActionBar actionBar;
     Button secnodpreviousfyBtn, previousfyBtn, currentfyBtn, saveBtn;
@@ -51,9 +58,13 @@ public class WhiteFlyFragment extends Fragment implements View.OnClickListener, 
     public String currentFYStr, previousFYStr, secondpreviousFYStr;
     public String currentYearStr, previousYearStr, secondpreviousYearStr;
 
-    private Button historyBtn;
+    private Button historyBtn,whiteflypdfBtn;
     private ArrayList<WhiteFlyAssessment> whiteflylastvisitdatamap;
     DataAccessHandler dataAccessHandler;
+    File fileToDownLoad;
+    CropMaintenanceDocs cropMaintenanceDocs;
+
+
 
 
     public WhiteFlyFragment() {
@@ -105,13 +116,40 @@ public class WhiteFlyFragment extends Fragment implements View.OnClickListener, 
         currentfyBtn = (Button) view.findViewById(R.id.currentfy);
         saveBtn = (Button) view.findViewById(R.id.saveBtn);
 
+
         secnodpreviousfyBtn.setText(secondpreviousFYStr + "");
         previousfyBtn.setText(previousFYStr + "");
         currentfyBtn.setText(currentFYStr + "");
 
         historyBtn = view.findViewById(R.id.whiteflylastvisitdataBtn);
 
+        whiteflypdfBtn = view.findViewById(R.id.whiteflypdfBtn);
+
         DataAccessHandler dataAccessHandler = new DataAccessHandler(getActivity());
+
+        cropMaintenanceDocs = (CropMaintenanceDocs) dataAccessHandler.getCMDocsData(Queries.getInstance().getWhiteFlyPDFfile(), 0);
+
+        if (cropMaintenanceDocs != null) {
+
+            fileToDownLoad = new File(CommonUtils.get3FFileRootPath() + "3F_CMDocs/" + cropMaintenanceDocs.getFileName() + cropMaintenanceDocs.getFileExtension());
+
+            if (null != fileToDownLoad && fileToDownLoad.exists()) {
+
+                whiteflypdfBtn.setVisibility(View.VISIBLE);
+
+            } else {
+                whiteflypdfBtn.setVisibility(View.GONE);
+            }
+        }
+
+        whiteflypdfBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showWhiteFlyPDFDialog(getContext());
+            }
+        });
+
+
         String secondpreviousyeardata = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getsecondpreviousyearWhiteFlyCount(secondpreviousYearStr));
         String previousyeardata = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getpreviousyearWhiteFlyCount(previousYearStr));
         if(secondpreviousyeardata.length()>0){
@@ -133,7 +171,7 @@ public class WhiteFlyFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onClick(View view) {
                 year = Integer.parseInt(secondpreviousYearStr);
-               // secondPreviousFYWhiteFlyList.clear();
+                secondPreviousFYWhiteFlyList.clear();
                 WhiteFieldFragment multiEntryDialogFragment = new WhiteFieldFragment();
                 multiEntryDialogFragment.setOnDataSelectedListener(WhiteFlyFragment.this);
                 Bundle inpuptBundle = new Bundle();
@@ -148,7 +186,7 @@ public class WhiteFlyFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onClick(View view) {
                 year = Integer.parseInt(previousYearStr);
-              //  previousFYWhiteFlyList.clear();
+                previousFYWhiteFlyList.clear();
                 WhiteFieldFragment multiEntryDialogFragment = new WhiteFieldFragment();
                 multiEntryDialogFragment.setOnDataSelectedListener(WhiteFlyFragment.this);
                 Bundle inpuptBundle = new Bundle();
@@ -163,8 +201,8 @@ public class WhiteFlyFragment extends Fragment implements View.OnClickListener, 
         currentfyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                year = Integer.parseInt(currentYearStr);;
-              //  currentFYWhiteFlyList.clear();
+                year = Integer.parseInt(currentYearStr);
+                currentFYWhiteFlyList.clear();
                 WhiteFieldFragment multiEntryDialogFragment = new WhiteFieldFragment();
                 multiEntryDialogFragment.setOnDataSelectedListener(WhiteFlyFragment.this);
                 Bundle inpuptBundle = new Bundle();
@@ -179,6 +217,7 @@ public class WhiteFlyFragment extends Fragment implements View.OnClickListener, 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 //               secondPreviousFYWhiteFlyList = (List<WhiteFlyAssessment>) DataManager.getInstance().getDataFromManager(DataManager.WHITE_FLY);
 //                previousFYWhiteFlyList = (List<WhiteFlyAssessment>) DataManager.getInstance().getDataFromManager(DataManager.WHITE_FLY_18);
 //                 currentFYWhiteFlyList = (List<WhiteFlyAssessment>) DataManager.getInstance().getDataFromManager(DataManager.WHITE_FLY_19);
@@ -208,6 +247,37 @@ public class WhiteFlyFragment extends Fragment implements View.OnClickListener, 
         });
 
         return view;
+    }
+
+    public void showWhiteFlyPDFDialog(Context activity) {
+        final Dialog dialog = new Dialog(activity);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.pdfdialog);
+
+        Toolbar titleToolbar;
+        titleToolbar = (Toolbar) dialog.findViewById(R.id.titleToolbar);
+        titleToolbar.setTitle("WhiteFly PDF");
+        titleToolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+        PDFView fertpfdview;
+
+        fertpfdview = dialog.findViewById(R.id.fertpdfview);
+
+        fertpfdview.fromFile(fileToDownLoad)
+                .defaultPage(0)
+                .enableAnnotationRendering(true)
+                .onPageChange(this)
+                .onLoad(this)
+                .scrollHandle(new DefaultScrollHandle(getActivity()))
+                .load();
+
+        dialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }, 500);
     }
 
     public void showDialog(Context activity) {
@@ -309,5 +379,15 @@ public class WhiteFlyFragment extends Fragment implements View.OnClickListener, 
         }
 
         saveBtn.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void loadComplete(int nbPages) {
+
+    }
+
+    @Override
+    public void onPageChanged(int page, int pageCount) {
+
     }
 }

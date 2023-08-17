@@ -78,6 +78,17 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/pdfBtn"
+                    style="@style/dialogBasicBtnStyle"
+                    android:text="View PDF"
+                    android:padding="4dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="end"
+                    android:visibility="gone"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/historyBtn"
                     style="@style/dialogBasicBtnStyle"
                     android:text="@string/last_visit_data"

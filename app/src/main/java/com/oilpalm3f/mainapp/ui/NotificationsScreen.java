@@ -52,21 +52,21 @@ public class NotificationsScreen extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         notiRecyclerView.setLayoutManager(layoutManager);
 
-        refreshBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DataSyncHelper.getAlertsData(NotificationsScreen.this, new ApplicationThread.OnComplete<String>() {
-                    @Override
-                    public void execute(boolean success, String result, String msg) {
-                        if (success) {
-                            renderNotifications();
-                        } else {
-                            //UiUtils.showCustomToastMessage("Error while getting alerts Data", NotificationsScreen.this, 1);
-                        }
-                    }
-                });
-            }
-        });
+//        refreshBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                DataSyncHelper.getAlertsData(NotificationsScreen.this, new ApplicationThread.OnComplete<String>() {
+//                    @Override
+//                    public void execute(boolean success, String result, String msg) {
+//                        if (success) {
+//                            renderNotifications();
+//                        } else {
+//                            //UiUtils.showCustomToastMessage("Error while getting alerts Data", NotificationsScreen.this, 1);
+//                        }
+//                    }
+//                });
+//            }
+//        });
 
        dataAccessHandler = new DataAccessHandler(this);
 

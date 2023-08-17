@@ -331,7 +331,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.3"
-                    android:text="Name of Chemical Used"
+                    android:text="Name of Weedicide Used"
                     android:gravity="center_vertical"/>
 
                 <TextView

@@ -93,6 +93,15 @@ public class CommonUtilsNavigation {
         return 0;
     }
 
+    public static String getStValueFromHashMap(LinkedHashMap<String, String> dataMap, String value) {
+        for (String key : dataMap.keySet()) {
+            if (key.equalsIgnoreCase(value)) {
+                return dataMap.get(key);
+            }
+        }
+        return ""; // Return an empty string if the value is not found in the map
+    }
+
     public static Dialog dialogIntialize(Context mContext, int xml){
         Dialog dialog;
         dialog = new Dialog(mContext);

@@ -23,6 +23,10 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
+import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.oilpalm3f.mainapp.R;
 import com.oilpalm3f.mainapp.areaextension.UpdateUiListener;
 import com.oilpalm3f.mainapp.cloudhelper.ApplicationThread;
@@ -37,11 +41,13 @@ import com.oilpalm3f.mainapp.database.DatabaseKeys;
 import com.oilpalm3f.mainapp.database.Queries;
 import com.oilpalm3f.mainapp.datasync.helpers.DataManager;
 import com.oilpalm3f.mainapp.datasync.refreshsyncmodel.FarmerComplaintsData;
+import com.oilpalm3f.mainapp.dbmodels.CropMaintenanceDocs;
 import com.oilpalm3f.mainapp.dbmodels.Disease;
 import com.oilpalm3f.mainapp.dbmodels.Healthplantation;
 import com.oilpalm3f.mainapp.dbmodels.Nutrient;
 import com.oilpalm3f.mainapp.ui.BaseFragment;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -53,7 +59,7 @@ import static com.oilpalm3f.mainapp.cropmaintenance.CommonUtilsNavigation.getKey
 import static com.oilpalm3f.mainapp.cropmaintenance.CropMaintainanceHistoryFragment.NUTRIENT_DATA;
 
 //Used to enter nutrient deficiency details during crop maintenance
-public class NDScreen extends Fragment implements View.OnClickListener, PalmDetailsEditListener, UpdateUiListener {
+public class NDScreen extends Fragment implements View.OnClickListener, PalmDetailsEditListener, UpdateUiListener, OnPageChangeListener, OnLoadCompleteListener {
 
     private Context mContext;
     private View rootView;
@@ -66,7 +72,7 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
     private GenericTypeAdapter nutrientDataAdapter;
     private DataAccessHandler dataAccessHandler;
     private UpdateUiListener updateUiListener;
-    private Button complaintsBtn;
+    private Button complaintsBtn, nutrientpdfBtn;
     private Spinner rcmndfertilizerProductNameSpin, rcmnduomSpin,rcmnduomperSpin;
     private EditText rcmndosageEdt;
     private LinkedHashMap fertilizerTypeDataMap, uomDataMap, rcmnduomperDatamap;
@@ -76,6 +82,9 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
     private Toolbar toolbar;
 
     private ArrayList<Nutrient> nutrientlastvisitdatamap;
+
+    File fileToDownLoad;
+    CropMaintenanceDocs cropMaintenanceDocs;
 
 
     @Nullable
@@ -93,6 +102,7 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
 
         ratingList = new ArrayList<>();
         mContext = getActivity();
+
         initView();
         setViews();
         bindData();
@@ -103,21 +113,47 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
 
     private void initView() {
         dataAccessHandler = new DataAccessHandler(getActivity());
+
+
+
         nutritionSpin = (Spinner) rootView.findViewById(R.id.nutritionSpin);
         nameOfChemicalUsedSpin = (Spinner) rootView.findViewById(R.id.nameOfChemicalUsedSpin);
         commentsEdt = (EditText) rootView.findViewById(R.id.commentsEdt);
         nutrientList = (RecyclerView) rootView.findViewById(R.id.nutrientList);
         saveBtn = (Button) rootView.findViewById(R.id.saveBtn);
         historyBtn = (Button) rootView.findViewById(R.id.historyBtn);
+        nutrientpdfBtn = (Button) rootView.findViewById(R.id.nutrientpdfBtn);
         rcmndfertilizerProductNameSpin = (Spinner) rootView.findViewById(R.id.rcmndfertilizerProductNameSpin);
         rcmnduomSpin = (Spinner) rootView.findViewById(R.id.rcmnduomSpin);
         rcmndosageEdt = (EditText) rootView.findViewById(R.id.rcmndosageEdt);
         percentageOfTreesSpn = rootView.findViewById(R.id.percentageSpn);
         rcmnduomperSpin = (Spinner) rootView.findViewById(R.id.rcmnduomperSpin);
 
+        cropMaintenanceDocs = (CropMaintenanceDocs) dataAccessHandler.getCMDocsData(Queries.getInstance().getNutrientPDFfile(), 0);
+
+        if (cropMaintenanceDocs != null) {
+
+            fileToDownLoad = new File(CommonUtils.get3FFileRootPath() + "3F_CMDocs/" + cropMaintenanceDocs.getFileName() + cropMaintenanceDocs.getFileExtension());
+
+            if (null != fileToDownLoad && fileToDownLoad.exists()) {
+
+                nutrientpdfBtn.setVisibility(View.VISIBLE);
+
+            } else {
+                nutrientpdfBtn.setVisibility(View.GONE);
+            }
+        }
+
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            }
+        });
+
+        nutrientpdfBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showNutrientPDFDialog(getContext());
             }
         });
 
@@ -139,15 +175,68 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
         });
     }
 
+    public void showNutrientPDFDialog(Context activity) {
+        final Dialog dialog = new Dialog(activity);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.pdfdialog);
+
+        Toolbar titleToolbar;
+        titleToolbar = (Toolbar) dialog.findViewById(R.id.titleToolbar);
+        titleToolbar.setTitle("Nutrient PDF");
+        titleToolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+        PDFView fertpfdview;
+
+        fertpfdview = dialog.findViewById(R.id.fertpdfview);
+
+        fertpfdview.fromFile(fileToDownLoad)
+                .defaultPage(0)
+                .enableAnnotationRendering(true)
+                .onPageChange(this)
+                .onLoad(this)
+                .scrollHandle(new DefaultScrollHandle(getActivity()))
+                .load();
+
+        dialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }, 500);
+    }
+
     private void bindData() {
         mNutrientModelArray = (ArrayList<Nutrient>) DataManager.getInstance().getDataFromManager(DataManager.NUTRIENT_DETAILS);
-        if (null == mNutrientModelArray)
-            mNutrientModelArray = new ArrayList<Nutrient>();
+        if (mNutrientModelArray != null){
 
-        nutrientDataAdapter = new GenericTypeAdapter(getActivity(), mNutrientModelArray, nutritionDataMap, chemicalNameDataMap, percentageMap, uomDataMap, GenericTypeAdapter.TYPE_NUTRIENT);
-        nutrientList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        nutrientList.setAdapter(nutrientDataAdapter);
-        nutrientDataAdapter.setEditClickListener(this);
+            nutritionSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(nutritionDataMap,mNutrientModelArray.get(0).getNutrientid()));
+            nameOfChemicalUsedSpin.setSelection(mNutrientModelArray.get(0).getChemicalid() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(chemicalNameDataMap,mNutrientModelArray.get(0).getChemicalid()));
+            percentageOfTreesSpn.setSelection(mNutrientModelArray.get(0).getPercTreesId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(percentageMap,mNutrientModelArray.get(0).getPercTreesId()));
+            rcmndfertilizerProductNameSpin.setSelection(mNutrientModelArray.get(0).getRecommendFertilizerProviderId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(fertilizerTypeDataMap,mNutrientModelArray.get(0).getRecommendFertilizerProviderId()));
+            //rcmndosageEdt.setText(mNutrientModelArray.get(0).getRecommendDosage() == 0.0 ? "" :CommonUtilsNavigation.getvalueFromHashMap(chemicalNameDataMap,mNutrientModelArray.get(0).getRecommendDosage()));
+
+            double recommendDosage = mNutrientModelArray.get(0).getRecommendDosage();
+
+            if (recommendDosage == 0.0) {
+                rcmndosageEdt.setText("");
+            } else {
+                // Convert the double value to an integer for the map key
+                int intValue = (int) recommendDosage;
+                //valueFromMap = CommonUtilsNavigation.getStValueFromHashMap(chemicalNameDataMap, String.valueOf(intValue));
+                rcmndosageEdt.setText(String.valueOf(intValue));
+            }
+
+
+
+            rcmnduomSpin.setSelection(mNutrientModelArray.get(0).getRecommendUOMId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(uomDataMap,mNutrientModelArray.get(0).getRecommendUOMId()));
+            rcmnduomperSpin.setSelection(mNutrientModelArray.get(0).getRecommendedUOMId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(rcmnduomperDatamap,mNutrientModelArray.get(0).getRecommendedUOMId()));
+            commentsEdt.setText(mNutrientModelArray.get(0).getComments() == null ? "" :mNutrientModelArray.get(0).getComments());
+
+        }
+
+
+
     }
 
     private void setViews() {
@@ -155,17 +244,16 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
         saveBtn.setOnClickListener(this);
         //historyBtn.setOnClickListener(this);
         nutritionDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("21"));
-        chemicalNameDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("23"));
+        chemicalNameDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("645"));
         percentageMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("569"));
 
        nutritionSpin.setOnItemSelectedListener(spinListener);
         nutritionSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Nutrient Name", nutritionDataMap));
-        nameOfChemicalUsedSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Name of Chemical", chemicalNameDataMap));
+        nameOfChemicalUsedSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Name of Fertilizer", chemicalNameDataMap));
         percentageOfTreesSpn.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Percentage of Tree", percentageMap));
-        fertilizerTypeDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("23"));
+        fertilizerTypeDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("645"));
         uomDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getUOM());
         rcmnduomperDatamap = dataAccessHandler.getGenericData(Queries.getInstance().getUOMper());
-
 
         rcmndfertilizerProductNameSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Fertilizer Product Name", fertilizerTypeDataMap));
         rcmnduomSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "UOM", uomDataMap));
@@ -342,6 +430,9 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.saveBtn:
+
+
+                mNutrientModelArray = new ArrayList<>();
                 Nutrient mNutrientModel = new Nutrient();
 
                 if(nutritionSpin.getSelectedItem().toString().equals("No Nutrient Deficiency")){
@@ -349,12 +440,14 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
                         mNutrientModel.setNutrientid(nutritionSpin.getSelectedItemPosition() == 0 ? 0 : Integer.parseInt(getKey(nutritionDataMap, nutritionSpin.getSelectedItem().toString())));
                         mNutrientModel.setComments(commentsEdt.getText().toString());
                         mNutrientModel.setCreateddate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                        mNutrientModelArray.clear();
                         mNutrientModelArray.add(mNutrientModel);
                         ratingList.add('C');
                         nutritionSpin.setSelection(0);
                         DataManager.getInstance().addData(DataManager.NUTRIENT_DETAILS, mNutrientModelArray);
+                        getFragmentManager().popBackStack();
                         CommonUtilsNavigation.hideKeyBoard(getActivity());
-                        nutrientDataAdapter.notifyDataSetChanged();
+                        //nutrientDataAdapter.notifyDataSetChanged();
                         commentsEdt.setText("");
                         rcmndosageEdt.setText("");
                         updateUiListener.updateUserInterface(0);
@@ -370,9 +463,8 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
                         mNutrientModel.setRecommendFertilizerProviderId(rcmndfertilizerProductNameSpin.getSelectedItemPosition() == 0 ? 0 : (Integer.parseInt(getKey(fertilizerTypeDataMap, rcmndfertilizerProductNameSpin.getSelectedItem().toString()))));
                         mNutrientModel.setRecommendUOMId(rcmnduomSpin.getSelectedItemPosition() == 0 ? null : Integer.parseInt(getKey(uomDataMap, rcmnduomSpin.getSelectedItem().toString())));
                         mNutrientModel.setRecommendedUOMId(rcmnduomperSpin.getSelectedItemPosition() == 0 ? null : Integer.parseInt(getKey(rcmnduomperDatamap, rcmnduomperSpin.getSelectedItem().toString())));
-
                         mNutrientModel.setRecommendDosage(TextUtils.isEmpty(rcmndosageEdt.getText().toString()) == true ? 0.0 : Double.parseDouble(rcmndosageEdt.getText().toString()));
-
+                        mNutrientModelArray.clear();
                         mNutrientModelArray.add(mNutrientModel);
 
                         addingValues();
@@ -384,8 +476,9 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
                         rcmnduomperSpin.setSelection(0);
                         rcmndfertilizerProductNameSpin.setSelection(0);
                         DataManager.getInstance().addData(DataManager.NUTRIENT_DETAILS, mNutrientModelArray);
+                        getFragmentManager().popBackStack();
                         CommonUtilsNavigation.hideKeyBoard(getActivity());
-                        nutrientDataAdapter.notifyDataSetChanged();
+                        //nutrientDataAdapter.notifyDataSetChanged();
                         commentsEdt.setText("");
                         rcmndosageEdt.setText("");
                         updateUiListener.updateUserInterface(0);
@@ -409,7 +502,7 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
 
     public boolean validateFields() {
         return spinnerSelect(nutritionSpin, "Name of Nutrient", mContext)
-                && spinnerSelect(nameOfChemicalUsedSpin, "Name of Chemical", mContext)
+                && spinnerSelect(nameOfChemicalUsedSpin, "Name of Fertilizer Used", mContext)
                 && spinnerSelect(percentageOfTreesSpn, "Percentage of tree", mContext);
 
     }
@@ -422,8 +515,9 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
     AdapterView.OnItemSelectedListener spinListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            switch (parent.getId()) {
+            switch (parent.getId())
 
+            {
                 case R.id.nutritionSpin:
                     if (position == 0) {
                         nameOfChemicalUsedSpin.setSelection(0);
@@ -438,6 +532,8 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
                         rcmnduomperSpin.setSelection(0);
                         rcmnduomperSpin.setEnabled(false);
                         commentsEdt.setEnabled(false);
+                        commentsEdt.setText("");
+                        rcmndosageEdt.setText("");
                         saveBtn.setEnabled(false);
                         saveBtn.setAlpha(0.5f);
                     }else if (position == 9) {
@@ -454,6 +550,8 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
                         rcmnduomperSpin.setEnabled(false);
                         commentsEdt.setEnabled(true);
                         saveBtn.setEnabled(true);
+                        commentsEdt.setText("");
+                        rcmndosageEdt.setText("");
                         saveBtn.setAlpha(1.0f);
 
                     } else {
@@ -474,6 +572,58 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
 
                     break;
             }
+//            {
+//
+//                case R.id.nutritionSpin:
+//                    if (position == 0) {
+//                        nameOfChemicalUsedSpin.setSelection(0);
+//                        nameOfChemicalUsedSpin.setEnabled(false);
+//                        percentageOfTreesSpn.setSelection(0);
+//                        percentageOfTreesSpn.setEnabled(false);
+//                        rcmndfertilizerProductNameSpin.setSelection(0);
+//                        rcmndfertilizerProductNameSpin.setEnabled(false);
+//                        rcmndosageEdt.setEnabled(false);
+//                        rcmnduomSpin.setSelection(0);
+//                        rcmnduomSpin.setEnabled(false);
+//                        rcmnduomperSpin.setSelection(0);
+//                        rcmnduomperSpin.setEnabled(false);
+//                        commentsEdt.setEnabled(false);
+//                        saveBtn.setEnabled(false);
+//                        saveBtn.setAlpha(0.5f);
+//                    }else if (position == 9) {
+//                        nameOfChemicalUsedSpin.setSelection(0);
+//                        nameOfChemicalUsedSpin.setEnabled(false);
+//                        percentageOfTreesSpn.setSelection(0);
+//                        percentageOfTreesSpn.setEnabled(false);
+//                        rcmndfertilizerProductNameSpin.setSelection(0);
+//                        rcmndfertilizerProductNameSpin.setEnabled(false);
+//                        rcmndosageEdt.setEnabled(false);
+//                        rcmnduomSpin.setSelection(0);
+//                        rcmnduomSpin.setEnabled(false);
+//                        rcmnduomperSpin.setSelection(0);
+//                        rcmnduomperSpin.setEnabled(false);
+//                        commentsEdt.setEnabled(true);
+//                        saveBtn.setEnabled(true);
+//                        saveBtn.setAlpha(1.0f);
+//
+//                    } else {
+//                        nameOfChemicalUsedSpin.setEnabled(true);
+//                        percentageOfTreesSpn.setEnabled(true);
+//                        rcmndfertilizerProductNameSpin.setEnabled(true);
+//                        rcmndosageEdt.setEnabled(true);
+//                        rcmnduomSpin.setEnabled(true);
+//                        rcmnduomperSpin.setEnabled(true);
+//                        commentsEdt.setEnabled(true);
+//                        saveBtn.setEnabled(true);
+//                        saveBtn.setAlpha(1.0f);
+//                    }
+//
+//                    break;
+//                case R.id.percOfTreeSpin:
+//
+//
+//                    break;
+//            }
         }
 
         @Override
@@ -528,5 +678,14 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
         complaintsBtn.setVisibility(View.GONE);
     }
 
+    @Override
+    public void loadComplete(int nbPages) {
+
+    }
+
+    @Override
+    public void onPageChanged(int page, int pageCount) {
+
+    }
 }
 

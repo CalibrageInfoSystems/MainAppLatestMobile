@@ -73,7 +73,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:text="Chemical Used"
+                android:text="Fungicide Used"
                 android:gravity="center_vertical"/>
 
             <TextView
@@ -176,7 +176,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:gravity="center_vertical"
-                android:text="Recommended Chemical" />
+                android:text="Fungicide Recommended" />
 
             <TextView
                 style="@style/header_h1_text_title"

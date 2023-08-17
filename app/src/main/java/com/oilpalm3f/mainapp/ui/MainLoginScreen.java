@@ -118,15 +118,15 @@ public class MainLoginScreen extends AppCompatActivity {
             UiUtils.showCustomToastMessage("User not existed", MainLoginScreen.this, 1);
         }
 
-        DataSyncHelper.getAlertsData(MainLoginScreen.this, new ApplicationThread.OnComplete<String>() {
-            @Override
-            public void execute(boolean success, String result, String msg) {
-                if (success) {
-                } else {
-                   // UiUtils.showCustomToastMessage("Error while getting alerts Data", MainLoginScreen.this, 1);
-                }
-            }
-        });
+//        DataSyncHelper.getAlertsData(MainLoginScreen.this, new ApplicationThread.OnComplete<String>() {
+//            @Override
+//            public void execute(boolean success, String result, String msg) {
+//                if (success) {
+//                } else {
+//                   // UiUtils.showCustomToastMessage("Error while getting alerts Data", MainLoginScreen.this, 1);
+//                }
+//            }
+//        });
 
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override

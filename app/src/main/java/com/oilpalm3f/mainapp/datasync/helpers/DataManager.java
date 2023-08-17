@@ -44,7 +44,7 @@ public class DataManager<T> {
     public static final String PEST_DETAILS = "pest";
     public static final String MAIN_PEST_DETAIL = "main_pest_detail";
     public static final String DISEASE_DETAILS = "disease";
-    public static final String NUTRIENT_DETAILS = "nutrient";
+    public static String NUTRIENT_DETAILS = "nutrient";
     public static final String COMPLAINT_DETAILS = "complaint";
     public static final String WEEDING_DETAILS = "weeding";
     public static final String WEEDING_HEALTH_OF_PLANTATION_DETAILS = "healthOfPlantation";

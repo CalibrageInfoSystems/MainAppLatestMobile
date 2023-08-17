@@ -303,10 +303,12 @@ public class RegistrationFlowScreen extends OilPalmBaseActivity implements Updat
             personalDetailsBtn.setBackgroundColor(getResources().getColor(R.color.green_dark));
         }
 
-        if (null != DataManager.getInstance().getDataFromManager(DataManager.ID_PROOFS_DATA)) {
-            identityProofs = (List<IdentityProof>) DataManager.getInstance().getDataFromManager(DataManager.ID_PROOFS_DATA);
+        boolean BankrecordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(DatabaseKeys.TABLE_FARMERBANK, "FarmerCode", CommonConstants.FARMER_CODE));
+       boolean IDrecordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInIDTable(DatabaseKeys.TABLE_IDENTITYPROOF, "FarmerCode", CommonConstants.FARMER_CODE));
+        if (IDrecordExisted) {
+            idProofBtn.setBackgroundColor(getResources().getColor(R.color.green_dark));
         }
-        if (null != DataManager.getInstance().getDataFromManager(DataManager.ID_PROOFS_DATA) && !identityProofs.isEmpty()) {
+        else if (null != DataManager.getInstance().getDataFromManager(DataManager.ID_PROOFS_DATA ) ) {
             idProofBtn.setBackgroundColor(getResources().getColor(R.color.green_dark));
         } else {
             idProofBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn));
@@ -314,6 +316,21 @@ public class RegistrationFlowScreen extends OilPalmBaseActivity implements Updat
         if (null != DataManager.getInstance().getDataFromManager(DataManager.FARMER_BANK_DETAILS)) {
             bankDetailsBtn.setBackgroundColor(getResources().getColor(R.color.green_dark));
         }
+        if (BankrecordExisted) {
+            bankDetailsBtn.setBackgroundColor(getResources().getColor(R.color.green_dark));
+        }
+
+//        if (null != DataManager.getInstance().getDataFromManager(DataManager.ID_PROOFS_DATA)) {
+//            identityProofs = (List<IdentityProof>) DataManager.getInstance().getDataFromManager(DataManager.ID_PROOFS_DATA);
+//        }
+//        if (null != DataManager.getInstance().getDataFromManager(DataManager.ID_PROOFS_DATA) && !identityProofs.isEmpty()) {
+//            idProofBtn.setBackgroundColor(getResources().getColor(R.color.green_dark));
+//        } else {
+//            idProofBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn));
+//        }
+//        if (null != DataManager.getInstance().getDataFromManager(DataManager.FARMER_BANK_DETAILS)) {
+//            bankDetailsBtn.setBackgroundColor(getResources().getColor(R.color.green_dark));
+//        }
         if (null != DataManager.getInstance().getDataFromManager(DataManager.PLOT_DETAILS) || CommonUtils.isFromFollowUp()) {
             plotDetailsBtn.setBackgroundColor(getResources().getColor(R.color.green_dark));
         }

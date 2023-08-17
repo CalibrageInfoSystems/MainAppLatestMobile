@@ -57,6 +57,7 @@ class DataBaseUpgrade {
                 upgradeDb30(db);
                 upgradeDb31(db);
                 upgradeDb32(db);
+                upgradeDb33(db);
 
             } else {
                 boolean isDbUpgradeFinished = sharedPreferences.getBoolean(String.valueOf(Palm3FoilDatabase.DATA_VERSION), false);
@@ -188,7 +189,11 @@ class DataBaseUpgrade {
                             break;
                         case 32:
                             upgradeDb32(db);
-                            UiUtils.showCustomToastMessage("Updating database 31 -->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
+                            UiUtils.showCustomToastMessage("Updating database 32 -->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
+                            break;
+                        case 33:
+                            upgradeDb33(db);
+                            UiUtils.showCustomToastMessage("Updating database 33 -->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
                             break;
 
 
@@ -1585,6 +1590,24 @@ class DataBaseUpgrade {
         String column6 = "Alter Table HarvestorVisitHistory Add UpdatedDate datetime ";
 
 
+        String Crop_Maintenance_Document = "CREATE TABLE CropMaintenanceDocument(\n" +
+                "Id Integer primary key Autoincrement,\n" +
+                "Name VARCHAR(100) ,\n" +
+                "CMSectionId INT NOT NULL,\n" +
+                "FileName VARCHAR(100) ,\n" +
+                "FileLocation VARCHAR(250) ,\n" +
+                "FileExtension VARCHAR(25) ,\n" +
+                "IsActive BIT NOT NULL,\n" +
+                "CreatedByUserId INT NOT NULL,\n" +
+                "CreatedDate DATETIME NOT NULL,\n" +
+                "UpdatedByUserId INT NOT NULL,\n" +
+                "UpdatedDate DATETIME NOT NULL,\n" +
+                "ServerUpdatedStatus int NOT NULL)\n";
+
+        String column7 = "Alter Table Plot Add IsHOApproved INT";
+        String column8 = "Alter Table Plot Add PreProspectiveReasonTypeId INT";
+        String column9 = "Alter Table Plot Add PlotUprootmentStatusTypeId INT";
+
         try {
 
             db.execSQL(fingerprintcolumn);
@@ -1594,6 +1617,27 @@ class DataBaseUpgrade {
             db.execSQL(column4);
             db.execSQL(column5);
             db.execSQL(column6);
+            db.execSQL(Crop_Maintenance_Document);
+            db.execSQL(column7);
+            db.execSQL(column8);
+            db.execSQL(column9);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Added  on 10th August  2023
+    private static void upgradeDb33( final SQLiteDatabase db) {
+        Log.d(LOG_TAG, "****** upgradeDataBase 33 *****" + Palm3FoilDatabase.DATA_VERSION);
+
+        String GapFillingRequiredcolumn = "ALTER TABLE Uprootment Add IsGapFillingRequired BIT";
+        String SaplingsCountcolumn = "Alter Table Uprootment Add GapFillingSaplingsCount INT ";
+
+        try {
+
+            db.execSQL(GapFillingRequiredcolumn);
+            db.execSQL(SaplingsCountcolumn);
 
 
         } catch (Exception e) {

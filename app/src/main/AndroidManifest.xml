@@ -93,7 +93,8 @@
         <activity
             android:name=".areaextension.location.LocationSelectionScreen"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".ui.HomeScreen"/>
         <activity
             android:name=".cropmaintenance.CropMaintenanceHomeScreen"
             android:screenOrientation="portrait"

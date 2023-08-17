@@ -24,6 +24,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
+import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.oilpalm3f.mainapp.R;
 import com.oilpalm3f.mainapp.areaextension.UpdateUiListener;
 import com.oilpalm3f.mainapp.cloudhelper.Log;
@@ -35,11 +39,13 @@ import com.oilpalm3f.mainapp.database.DataAccessHandler;
 import com.oilpalm3f.mainapp.database.DatabaseKeys;
 import com.oilpalm3f.mainapp.database.Queries;
 import com.oilpalm3f.mainapp.datasync.helpers.DataManager;
+import com.oilpalm3f.mainapp.dbmodels.CropMaintenanceDocs;
 import com.oilpalm3f.mainapp.dbmodels.Disease;
 import com.oilpalm3f.mainapp.dbmodels.MainPestModel;
 import com.oilpalm3f.mainapp.dbmodels.Pest;
 import com.oilpalm3f.mainapp.dbmodels.PestChemicalXref;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -53,14 +59,14 @@ import static com.oilpalm3f.mainapp.cropmaintenance.CommonUtilsNavigation.getKey
  */
 
 //Used to enter Pest releated details during Crop maintenance
-public class PestDetailsFragment extends Fragment implements View.OnClickListener, PalmDetailsEditListener, UpdateUiListener {
+public class PestDetailsFragment extends Fragment implements View.OnClickListener, PalmDetailsEditListener, UpdateUiListener, OnPageChangeListener, OnLoadCompleteListener {
 
 
     private View rootView;
     private Spinner pestNameSpin, nameOfChemicalUsedSpin, rcmnduomSpin, percentageOfTreeSpin, controlMeasureSpin;
     private EditText ObservationsEdt;
     private LinearLayout parentLayout;
-    private Button saveBtn, historyBtn;
+    private Button saveBtn, historyBtn, pestpdfBtn;
     private RecyclerView pestDetailsList;
     private LinkedHashMap<String, String> pestNameDataMap, chemicalNameDataMap, percentageMap, recmChemicalMap, rcmnduomperDatamap;
     private DataAccessHandler dataAccessHandler;
@@ -82,6 +88,9 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
     private ActionBar actionBar;
 
     private ArrayList<Pest> pestlastvisitdatamap;
+
+    File fileToDownLoad;
+    CropMaintenanceDocs cropMaintenanceDocs;
 
 
     public PestDetailsFragment() {
@@ -124,6 +133,7 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
         setViews();
         //setHasOptionsMenu(true);
         dataAccessHandler = new DataAccessHandler(mContext);
+
         bindData();
 
         return rootView;
@@ -131,14 +141,82 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
 
 
     private void bindData() {
-        mainPestModelList = (ArrayList<MainPestModel>) DataManager.getInstance().getDataFromManager(DataManager.MAIN_PEST_DETAIL);
-        if (null == mainPestModelList)
-            mainPestModelList = new ArrayList<MainPestModel>();
+        mPestModelArray = (ArrayList<Pest>) DataManager.getInstance().getDataFromManager(DataManager.PEST_DETAILS);
 
-        pestDataAdapter = new GenericTypeAdapter(getActivity(), mainPestModelList, pestNameDataMap, chemicalNameDataMap, percentageMap, uomDataMap, GenericTypeAdapter.TYPE_PEST);
-        pestDetailsList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        pestDetailsList.setAdapter(pestDataAdapter);
-        pestDataAdapter.setEditClickListener(this);
+        if (mPestModelArray != null){
+
+        if (mPestModelArray.get(0).getPestid() == 223){
+            pestNameSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(pestNameDataMap,mPestModelArray.get(0).getPestid()));
+        }
+        else{
+
+            mainPestModelList = (ArrayList<MainPestModel>) DataManager.getInstance().getDataFromManager(DataManager.MAIN_PEST_DETAIL);
+            if (mainPestModelList != null){
+                pestNameSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(pestNameDataMap,mainPestModelList.get(0).getPest().getPestid()));
+                nameOfChemicalUsedSpin.setSelection(mainPestModelList.get(0).getmPestChemicalXref().getChemicalId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(chemicalNameDataMap,mainPestModelList.get(0).getmPestChemicalXref().getChemicalId()));
+                percentageOfTreeSpin.setSelection(mainPestModelList.get(0).getPest().getPercTreesId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(percentageMap,mainPestModelList.get(0).getPest().getPercTreesId()));
+                controlMeasureSpin.setSelection(mainPestModelList.get(0).getPest().getIsControlMeasure() == null ? 0 : mainPestModelList.get(0).getPest().getIsControlMeasure() == 1 ? 1 : 2);
+                nameOfChemicalUsedSpinRecmnd.setSelection(mainPestModelList.get(0).getPest().getRecommendFertilizerProviderId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(chemicalNameDataMap,mainPestModelList.get(0).getPest().getRecommendFertilizerProviderId()));
+
+                double recommendDosage = mainPestModelList.get(0).getPest().getRecommendDosage();
+                String valueFromMap;
+
+                if (recommendDosage == 0.0) {
+                    rcmndosageEdt.setText("");
+                } else {
+                    // Convert the double value to an integer for the map key
+                    int intValue = (int) recommendDosage;
+                    //valueFromMap = CommonUtilsNavigation.getStValueFromHashMap(chemicalNameDataMap, String.valueOf(intValue));
+                    rcmndosageEdt.setText(String.valueOf(intValue));
+                }
+
+
+
+                rcmnduomSpin.setSelection(mainPestModelList.get(0).getPest().getRecommendUOMId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(uomDataMap,mainPestModelList.get(0).getPest().getRecommendUOMId()));
+                rcmnduomperSpin.setSelection(mainPestModelList.get(0).getPest().getRecommendedUOMId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(rcmnduomperDatamap,mainPestModelList.get(0).getPest().getRecommendedUOMId()));
+                ObservationsEdt.setText(mainPestModelList.get(0).getPest().getComments() == null ? "" :mainPestModelList.get(0).getPest().getComments());
+
+            }
+        }
+
+
+        }
+
+//        mainPestModelList = (ArrayList<MainPestModel>) DataManager.getInstance().getDataFromManager(DataManager.MAIN_PEST_DETAIL);
+////        if (null == mainPestModelList)
+////            mainPestModelList = new ArrayList<MainPestModel>();
+////
+////        pestDataAdapter = new GenericTypeAdapter(getActivity(), mainPestModelList, pestNameDataMap, chemicalNameDataMap, percentageMap, uomDataMap, GenericTypeAdapter.TYPE_PEST);
+////        pestDetailsList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+////        pestDetailsList.setAdapter(pestDataAdapter);
+////        pestDataAdapter.setEditClickListener(this);
+//
+//        if (mainPestModelList != null){
+//            pestNameSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(pestNameDataMap,mainPestModelList.get(0).getPest().getPestid()));
+//            nameOfChemicalUsedSpin.setSelection(mainPestModelList.get(0).getmPestChemicalXref().getChemicalId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(chemicalNameDataMap,mainPestModelList.get(0).getmPestChemicalXref().getChemicalId()));
+//            percentageOfTreeSpin.setSelection(mainPestModelList.get(0).getPest().getPercTreesId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(percentageMap,mainPestModelList.get(0).getPest().getPercTreesId()));
+//            controlMeasureSpin.setSelection(mainPestModelList.get(0).getPest().getIsControlMeasure() == null ? 0 : mainPestModelList.get(0).getPest().getIsControlMeasure() == 1 ? 1 : 2);
+//            nameOfChemicalUsedSpinRecmnd.setSelection(mainPestModelList.get(0).getPest().getRecommendFertilizerProviderId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(chemicalNameDataMap,mainPestModelList.get(0).getPest().getRecommendFertilizerProviderId()));
+//
+//            double recommendDosage = mainPestModelList.get(0).getPest().getRecommendDosage();
+//            String valueFromMap;
+//
+//            if (recommendDosage == 0.0) {
+//                rcmndosageEdt.setText("");
+//            } else {
+//                // Convert the double value to an integer for the map key
+//                int intValue = (int) recommendDosage;
+//                //valueFromMap = CommonUtilsNavigation.getStValueFromHashMap(chemicalNameDataMap, String.valueOf(intValue));
+//                rcmndosageEdt.setText(String.valueOf(intValue));
+//            }
+//
+//
+//
+//            rcmnduomSpin.setSelection(mainPestModelList.get(0).getPest().getRecommendUOMId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(uomDataMap,mainPestModelList.get(0).getPest().getRecommendUOMId()));
+//            rcmnduomperSpin.setSelection(mainPestModelList.get(0).getPest().getRecommendedUOMId() == null ? 0 :CommonUtilsNavigation.getvalueFromHashMap(rcmnduomperDatamap,mainPestModelList.get(0).getPest().getRecommendedUOMId()));
+//            ObservationsEdt.setText(mainPestModelList.get(0).getPest().getComments() == null ? "" :mainPestModelList.get(0).getPest().getComments());
+//
+//        }
 
 
     }
@@ -156,14 +234,37 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
         ObservationsEdt = (EditText) rootView.findViewById(R.id.ObservationsEdt);
         saveBtn = (Button) rootView.findViewById(R.id.saveBtn);
         historyBtn = (Button) rootView.findViewById(R.id.historyBtn);
+        pestpdfBtn = (Button) rootView.findViewById(R.id.pestpdfBtn);
         pestDetailsList = (RecyclerView) rootView.findViewById(R.id.pestDetailsList);
         parentLayout = (LinearLayout) rootView.findViewById(R.id.pestParentLayout);
         complaintsBtn = (Button) rootView.findViewById(R.id.complaintsBtn);
         complaintsBtn.setEnabled(false);
         complaintsBtn.setVisibility(View.GONE);
 
+        cropMaintenanceDocs = (CropMaintenanceDocs) dataAccessHandler.getCMDocsData(Queries.getInstance().getPestPDFfile(), 0);
+
+        if (cropMaintenanceDocs != null) {
+            fileToDownLoad = new File(CommonUtils.get3FFileRootPath() + "3F_CMDocs/" + cropMaintenanceDocs.getFileName() + cropMaintenanceDocs.getFileExtension());
+
+
+            if (null != fileToDownLoad && fileToDownLoad.exists()) {
+
+                pestpdfBtn.setVisibility(View.VISIBLE);
+
+            } else {
+                pestpdfBtn.setVisibility(View.GONE);
+            }
+        }
+
       //  complaintsBtn.setVisibility((CommonUiUtils.isComplaintsDataEntered()) ? View.GONE : View.VISIBLE);
         rcmnduomperSpin = (Spinner) rootView.findViewById(R.id.rcmnduomperSpin);
+
+        pestpdfBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPestPDFDialog(getContext());
+            }
+        });
 
         complaintsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,6 +279,37 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
                         .commit();
             }
         });
+    }
+
+    public void showPestPDFDialog(Context activity) {
+        final Dialog dialog = new Dialog(activity);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.pdfdialog);
+
+        Toolbar titleToolbar;
+        titleToolbar = (Toolbar) dialog.findViewById(R.id.titleToolbar);
+        titleToolbar.setTitle("Pest PDF");
+        titleToolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+        PDFView fertpfdview;
+
+        fertpfdview = dialog.findViewById(R.id.fertpdfview);
+
+        fertpfdview.fromFile(fileToDownLoad)
+                .defaultPage(0)
+                .enableAnnotationRendering(true)
+                .onPageChange(this)
+                .onLoad(this)
+                .scrollHandle(new DefaultScrollHandle(getActivity()))
+                .load();
+
+        dialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }, 500);
     }
 
     private void setViews() {
@@ -195,15 +327,15 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
         nameOfChemicalUsedSpinRecmnd.setOnItemSelectedListener(spinListener);
         pestNameSpin.setOnItemSelectedListener(spinListener);
         pestNameDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("6"));
-        chemicalNameDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("7"));
+        chemicalNameDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("646"));
         percentageMap = dataAccessHandler.getGenericData(Queries.getInstance().getLookUpData("570"));
 
 
         pestNameSpin.setAdapter(adapterSetFromHashmap(getActivity(), "Pest Name", pestNameDataMap));
-        nameOfChemicalUsedSpin.setAdapter(adapterSetFromHashmap(getActivity(), "Name of Chemical", chemicalNameDataMap));
+        nameOfChemicalUsedSpin.setAdapter(adapterSetFromHashmap(getActivity(), "Name of Pesticide", chemicalNameDataMap));
         percentageOfTreeSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "Percentage of Tree", percentageMap));
 
-        nameOfChemicalUsedSpinRecmnd.setAdapter(adapterSetFromHashmap(getActivity(), "Name of Chemical", chemicalNameDataMap));
+        nameOfChemicalUsedSpinRecmnd.setAdapter(adapterSetFromHashmap(getActivity(), "Name of Pesticide", chemicalNameDataMap));
         uomDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getUOM());
         rcmnduomSpin.setAdapter(CommonUtilsNavigation.adapterSetFromHashmap(getActivity(), "UOM", uomDataMap));
 
@@ -252,6 +384,8 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
 
         String lastVisitCode = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getLatestCropMaintanaceHistoryCode(CommonConstants.PLOT_CODE));
         pestlastvisitdatamap = (ArrayList<Pest>) dataAccessHandler.getPestData(Queries.getInstance().getRecommndCropMaintenanceHistoryData(lastVisitCode, DatabaseKeys.TABLE_PEST), 1);
+        int pesticideusedid = 0;
+
 
         if (pestlastvisitdatamap.size() > 0){
             norecords.setVisibility(View.GONE);
@@ -259,7 +393,21 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
 
             String pestname = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getlookupdata(pestlastvisitdatamap.get(0).getPestid()));
 
+
             pestsseen.setText(pestname);
+            Log.d("pestname", pestname + "");
+            Log.d("pestid", pestlastvisitdatamap.get(0).getPestid() + "");
+
+            if (pestlastvisitdatamap.get(0).getPestid() != 223){
+                pesticideusedid = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getPesticideId(lastVisitCode));
+                Log.d("PesticideUsedId", pesticideusedid + "");
+                pestchemicalusedll.setVisibility(View.VISIBLE);
+                String chemicalused = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getlookupdata(pesticideusedid));
+                Log.d("PesticideUsedIdName", chemicalused + "");
+                pestchemicalused.setText(chemicalused);
+            }else{
+                pestchemicalusedll.setVisibility(View.GONE);
+            }
 
             if (pestlastvisitdatamap.get(0).getPercTreesId() != 0){
                 pestpercentageoftreesll.setVisibility(View.VISIBLE);
@@ -268,7 +416,6 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
             }else{
                 pestpercentageoftreesll.setVisibility(View.GONE);
             }
-
 
             if (pestlastvisitdatamap.get(0).getRecommendFertilizerProviderId() != null){
                 pestrecommendedchemicall.setVisibility(View.VISIBLE);
@@ -391,9 +538,13 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.saveBtn:
+
+                mainPestModelList = new ArrayList<MainPestModel>();
                 MainPestModel mainPestModel = new MainPestModel();
                 Pest mPestModel = new Pest();
                 PestChemicalXref mPestChemicalXref = new PestChemicalXref();
+                mPestModelArray = new ArrayList<Pest>();
+                mPestChemicalXrefModelArray = new ArrayList<>();
 
                 if (pestNameSpin.getSelectedItem().toString().equals("No Pest Deficiency")) {
 
@@ -402,22 +553,29 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
                         mPestModel.setComments(ObservationsEdt.getText().toString());
                         mPestModel.setCreateddate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                       //  mPestModel.setIsControlMeasure(controlMeasureSpin.getSelectedItemPosition() == 1 ? 1 : 0);
-
                         mainPestModel.setPest(mPestModel);
-
                         mPestModel.setCreateddate(CommonUtils.getcurrentDateTime(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS)));
+                        mainPestModelList.clear();
+                        mPestChemicalXrefModelArray.clear();
+                        DataManager.getInstance().deleteData(DataManager.CHEMICAL_DETAILS);
+                        mPestModelArray.clear();
                         mPestModelArray.add(mPestModel);
                         mainPestModelList.add(mainPestModel);
                         DataManager.getInstance().addData(DataManager.PEST_DETAILS, mPestModelArray);
                         ratingList.add('A');
+                        getFragmentManager().popBackStack();
 
                         pestNameSpin.setSelection(0);
                         controlMeasureSpin.setSelection(0);
-                        pestDataAdapter.notifyDataSetChanged();
+                        //pestDataAdapter.notifyDataSetChanged();
                         updateUiListener.updateUserInterface(0);
                     }
                 } else {
                     if (validateUI()) {
+
+                        mPestModelArray.clear();
+                        mPestChemicalXrefModelArray.clear();
+                        mainPestModelList.clear();
 
                         mPestModel.setPestid(pestNameSpin.getSelectedItemPosition() == 0 ? 0 : Integer.parseInt(getKey(pestNameDataMap, pestNameSpin.getSelectedItem().toString())));
                         mPestModel.setComments(ObservationsEdt.getText().toString());
@@ -436,7 +594,6 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
                         mPestModel.setCreateddate(CommonUtils.getcurrentDateTime(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS)));
                         mPestModelArray.add(mPestModel);
                         mPestChemicalXref.setChemicalId(nameOfChemicalUsedSpin.getSelectedItemPosition() == 0 ? 0 : Integer.parseInt(getKey(chemicalNameDataMap, nameOfChemicalUsedSpin.getSelectedItem().toString())));
-
                         mainPestModel.setmPestChemicalXref(mPestChemicalXref);
                         mainPestModelList.add(mainPestModel);
                         mPestChemicalXrefModelArray.add(mPestChemicalXref);
@@ -444,7 +601,7 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
                         DataManager.getInstance().addData(DataManager.CHEMICAL_DETAILS, mPestChemicalXrefModelArray);
                         DataManager.getInstance().addData(DataManager.MAIN_PEST_DETAIL, mainPestModelList);
                         addingValues();
-
+                        getFragmentManager().popBackStack();
                         pestNameSpin.setSelection(0);
                         nameOfChemicalUsedSpinRecmnd.setSelection(0);
                         percentageOfTreeSpin.setSelection(0);
@@ -452,7 +609,7 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
                         rcmnduomSpin.setSelection(0);
                         rcmnduomperSpin.setSelection(0);
                         rcmndosageEdt.setText("");
-                        pestDataAdapter.notifyDataSetChanged();
+                        //pestDataAdapter.notifyDataSetChanged();
                         updateUiListener.updateUserInterface(0);
 
                     }
@@ -472,7 +629,9 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
     AdapterView.OnItemSelectedListener spinListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            switch (parent.getId()) {
+            switch (parent.getId())
+
+            {
 
                 case R.id.pestNameSpin:
                     if (position == 0) {
@@ -492,6 +651,8 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
                         ObservationsEdt.setEnabled(false);
                         saveBtn.setEnabled(false);
                         saveBtn.setAlpha(0.5f);
+                        rcmndosageEdt.setText("");
+                        ObservationsEdt.setText("");
                     } else if (position == 13) {
 
                         nameOfChemicalUsedSpin.setSelection(0);
@@ -508,6 +669,8 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
                         rcmnduomperSpin.setSelection(0);
                         rcmnduomperSpin.setEnabled(false);
                         ObservationsEdt.setEnabled(true);
+                        rcmndosageEdt.setText("");
+                        ObservationsEdt.setText("");
                         saveBtn.setEnabled(true);
                         saveBtn.setAlpha(1.0f);
 
@@ -526,6 +689,61 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
                     }
                     break;
             }
+
+//            {
+//
+//                case R.id.pestNameSpin:
+//                    if (position == 0) {
+//                        nameOfChemicalUsedSpin.setSelection(0);
+//                        nameOfChemicalUsedSpin.setEnabled(false);
+//                        percentageOfTreeSpin.setSelection(0);
+//                        percentageOfTreeSpin.setEnabled(false);
+//                        nameOfChemicalUsedSpinRecmnd.setSelection(0);
+//                        nameOfChemicalUsedSpinRecmnd.setEnabled(false);
+//                        controlMeasureSpin.setSelection(0);
+//                        controlMeasureSpin.setEnabled(false);
+//                        rcmndosageEdt.setEnabled(false);
+//                        rcmnduomSpin.setSelection(0);
+//                        rcmnduomSpin.setEnabled(false);
+//                        rcmnduomperSpin.setSelection(0);
+//                        rcmnduomperSpin.setEnabled(false);
+//                        ObservationsEdt.setEnabled(false);
+//                        saveBtn.setEnabled(false);
+//                        saveBtn.setAlpha(0.5f);
+//                    } else if (position == 13) {
+//
+//                        nameOfChemicalUsedSpin.setSelection(0);
+//                        nameOfChemicalUsedSpin.setEnabled(false);
+//                        percentageOfTreeSpin.setSelection(0);
+//                        percentageOfTreeSpin.setEnabled(false);
+//                        nameOfChemicalUsedSpinRecmnd.setSelection(0);
+//                        nameOfChemicalUsedSpinRecmnd.setEnabled(false);
+//                        controlMeasureSpin.setSelection(0);
+//                        controlMeasureSpin.setEnabled(false);
+//                        rcmndosageEdt.setEnabled(false);
+//                        rcmnduomSpin.setSelection(0);
+//                        rcmnduomSpin.setEnabled(false);
+//                        rcmnduomperSpin.setSelection(0);
+//                        rcmnduomperSpin.setEnabled(false);
+//                        ObservationsEdt.setEnabled(true);
+//                        saveBtn.setEnabled(true);
+//                        saveBtn.setAlpha(1.0f);
+//
+//
+//                    } else {
+//                        nameOfChemicalUsedSpin.setEnabled(true);
+//                        nameOfChemicalUsedSpinRecmnd.setEnabled(true);
+//                        controlMeasureSpin.setEnabled(true);
+//                        percentageOfTreeSpin.setEnabled(true);
+//                        rcmnduomSpin.setEnabled(true);
+//                        rcmnduomperSpin.setEnabled(true);
+//                        ObservationsEdt.setEnabled(true);
+//                        rcmndosageEdt.setEnabled(true);
+//                        saveBtn.setEnabled(true);
+//                        saveBtn.setAlpha(1.0f);
+//                    }
+//                    break;
+//            }
         }
 
         @Override
@@ -535,7 +753,7 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
 
     private boolean validateUI() {
         return spinnerSelect(pestNameSpin, "Source of Pest", mContext)
-                && spinnerSelect(nameOfChemicalUsedSpin, "Name of Chemical", mContext)
+                && spinnerSelect(nameOfChemicalUsedSpin, "Name of Pesticide Used", mContext)
                 && spinnerSelect(percentageOfTreeSpin, "Percentage of Tree", mContext) && spinnerSelect(controlMeasureSpin, "Control Measure", mContext);
 
     }
@@ -599,6 +817,16 @@ public class PestDetailsFragment extends Fragment implements View.OnClickListene
     @Override
     public void updateUserInterface(int refreshPosition) {
         complaintsBtn.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void loadComplete(int nbPages) {
+
+    }
+
+    @Override
+    public void onPageChanged(int page, int pageCount) {
+
     }
 
     /**

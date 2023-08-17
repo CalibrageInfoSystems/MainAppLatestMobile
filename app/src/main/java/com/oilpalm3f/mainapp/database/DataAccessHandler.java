@@ -23,6 +23,7 @@ import com.oilpalm3f.mainapp.datasync.refreshsyncmodel.ImageDetails;
 import com.oilpalm3f.mainapp.dbmodels.ActivityLog;
 import com.oilpalm3f.mainapp.dbmodels.Address;
 import com.oilpalm3f.mainapp.dbmodels.Alerts;
+import com.oilpalm3f.mainapp.dbmodels.BankDataModel;
 import com.oilpalm3f.mainapp.dbmodels.BasicHarvestorDetails;
 import com.oilpalm3f.mainapp.dbmodels.ComplaintRepository;
 import com.oilpalm3f.mainapp.dbmodels.ComplaintRepositoryRefresh;
@@ -30,6 +31,7 @@ import com.oilpalm3f.mainapp.dbmodels.ComplaintStatusHistory;
 import com.oilpalm3f.mainapp.dbmodels.ComplaintTypeXref;
 import com.oilpalm3f.mainapp.dbmodels.Complaints;
 import com.oilpalm3f.mainapp.dbmodels.CookingOil;
+import com.oilpalm3f.mainapp.dbmodels.CropMaintenanceDocs;
 import com.oilpalm3f.mainapp.dbmodels.CropMaintenanceHistory;
 import com.oilpalm3f.mainapp.dbmodels.DigitalContract;
 import com.oilpalm3f.mainapp.dbmodels.Disease;
@@ -3554,6 +3556,8 @@ f
                     mUprootment.setServerupdatedstatus(cursor.getInt(13));
                     mUprootment.setCropMaintenanceCode(cursor.getString(14));
                     mUprootment.setExpectedPlamsCount(cursor.getInt(15));
+                    mUprootment.setIsGapFillingRequired(cursor.getInt(16));
+                    mUprootment.setGapFillingSaplingsCount(cursor.getInt(17));
                     if (type == 1) {
                         mUprootmentList.add(mUprootment);
                     }
@@ -4994,6 +4998,67 @@ f
 
         return (T) ((type == 0) ? closedcropInfoObj : closedcropList);
 
+    }
+
+    public T getCMDocsData(final String query, final int type) {
+        CropMaintenanceDocs mCMDocs = null;
+        List<CropMaintenanceDocs> mCMDocsList = new ArrayList<>();
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "@@@ farmer details query " + query);
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    mCMDocs = new CropMaintenanceDocs();
+                    mCMDocs.setName(cursor.getString(1));
+                    mCMDocs.setCMSectionId(cursor.getInt(2));
+                    mCMDocs.setFileName(cursor.getString(3));
+                    mCMDocs.setFileLocation(cursor.getString(4));
+                    mCMDocs.setFileExtension(cursor.getString(5));
+                    mCMDocs.setIsActive(cursor.getInt(6));
+                    mCMDocs.setCreatedByUserId(cursor.getInt(7));
+                    mCMDocs.setCreatedDate(cursor.getString(8));
+                    mCMDocs.setUpdatedByUserId(cursor.getInt(9));
+                    mCMDocs.setUpdatedDate(cursor.getString(10));
+                    mCMDocs.setServerUpdatedStatus(cursor.getInt(11));
+                    if (type == 1) {
+                        mCMDocsList.add(mCMDocs);
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "@@@ getting user details " + e.getMessage());
+        }
+        return (T) ((type == 0) ? mCMDocs : mCMDocsList);
+    }
+
+    public ArrayList<BankDataModel> getbankData(String query) {
+        BankDataModel bankDatamodel = null;
+        Cursor cursor = null;
+        ArrayList<BankDataModel> bankDataModelArrayList = new ArrayList<>();
+        android.util.Log.v(LOG_TAG, "bank query  " + query);
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+
+                do {
+                    bankDatamodel = new BankDataModel();
+
+
+                    bankDatamodel.setBankTypeId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    bankDatamodel.setbankname(cursor.getString(cursor.getColumnIndex("bankname")));
+                    bankDatamodel.setBranchName(cursor.getString(cursor.getColumnIndex("BranchName")));
+                    bankDatamodel.setIFSCCode(cursor.getString(cursor.getColumnIndex("IFSCCode")));
+
+                    bankDataModelArrayList.add(bankDatamodel);
+
+                } while (cursor.moveToNext());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bankDataModelArrayList;
     }
 
 }

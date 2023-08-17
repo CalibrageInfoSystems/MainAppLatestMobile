@@ -291,9 +291,6 @@ public class ClosecropMaintenanceList extends AppCompatActivity implements Close
                     @Override
                     public void onNext(OtpResponceModel ResponceModel) {
 
-
-
-
                         if (ResponceModel.getIsSuccess()) {
 
                             UiUtils.showCustomToastMessage("Sent OTP successfully ", ClosecropMaintenanceList.this, 0);

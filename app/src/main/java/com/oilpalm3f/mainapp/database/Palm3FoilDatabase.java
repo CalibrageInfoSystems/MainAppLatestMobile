@@ -29,7 +29,7 @@ public class Palm3FoilDatabase extends SQLiteOpenHelper {
     // TODO NEED TO SET VESION 30 for LIVE
 //    public final static int DATA_VERSION = 30;
     // public final static int DATA_VERSION = 31;//Changed on 25th Nov 2021
-    public final static int DATA_VERSION = 32;//Changed on 28th june 2023
+    public final static int DATA_VERSION = 33; //Changed on 11th Aug june 2023
 //    public final static int DATA_VERSION = 28;
     private final static String DATABASE_NAME = "3foilpalm.sqlite";
     public static String Lock = "dblock";

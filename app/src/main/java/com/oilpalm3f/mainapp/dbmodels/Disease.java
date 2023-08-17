@@ -23,8 +23,8 @@ public class Disease {
     private Integer RecommendedChemicalId ;
     private Integer UOMId  ;
     private double Dosage  ;
-    int IsControlMeasure;
-    int  PercTreesId;
+    Integer IsControlMeasure;
+    Integer  PercTreesId;
 
     private Integer RecommendedUOMId;
 
@@ -37,19 +37,19 @@ public class Disease {
     }
 
 
-    public int getPercTreesId() {
+    public Integer getPercTreesId() {
         return PercTreesId;
     }
 
-    public void setPercTreesId(int percTreesId) {
+    public void setPercTreesId(Integer percTreesId) {
         PercTreesId = percTreesId;
     }
 
-    public int getIsControlMeasure() {
+    public Integer getIsControlMeasure() {
         return IsControlMeasure;
     }
 
-    public void setIsControlMeasure(int isControlMeasure) {
+    public void setIsControlMeasure(Integer isControlMeasure) {
         IsControlMeasure = isControlMeasure;
     }
 

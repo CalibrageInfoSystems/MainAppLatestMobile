@@ -54,6 +54,18 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/diseasepdfBtn"
+                    style="@style/dialogBasicBtnStyle"
+                    android:text="View PDF"
+                    android:padding="4dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="end"
+                    android:visibility="gone"/>
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/diseasehistoryBtn"
                     style="@style/dialogBasicBtnStyle"
                     android:text="@string/last_visit_data"
@@ -92,7 +104,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Chemical Used" />
+                    android:text="Fungicide Used" />
 
                 <Spinner
                     android:id="@+id/nameOfChemicalUsedSpin"
@@ -150,7 +162,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="@string/recomd_chemical" />
+                    android:text="Fungicide Recommended" />
 
                 <Spinner
                     android:id="@+id/nameOfChemicalUsedSpinRecmnd"

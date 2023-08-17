@@ -20,6 +20,25 @@ public class Uprootment {
     private String UpdatedDate;
     private int ServerUpdatedStatus;
     private int ExpectedPlamsCount;
+    private Integer IsGapFillingRequired;
+
+    private Integer GapFillingSaplingsCount;
+
+    public Integer getIsGapFillingRequired() {
+        return IsGapFillingRequired;
+    }
+
+    public void setIsGapFillingRequired(Integer isGapFillingRequired) {
+        IsGapFillingRequired = isGapFillingRequired;
+    }
+
+    public Integer getGapFillingSaplingsCount() {
+        return GapFillingSaplingsCount;
+    }
+
+    public void setGapFillingSaplingsCount(Integer gapFillingSaplingsCount) {
+        GapFillingSaplingsCount = gapFillingSaplingsCount;
+    }
 
     public int getExpectedPlamsCount() {
         return ExpectedPlamsCount;

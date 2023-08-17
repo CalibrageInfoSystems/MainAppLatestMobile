@@ -370,6 +370,8 @@ public class YieldFragment extends Fragment implements View.OnClickListener, Pal
         saveBtn.setOnClickListener(new View.OnClickListener() {
                                        @Override
                                        public void onClick(View view) {
+
+                                           yieldArray.clear();
                                            if (valid()) {
 
                                                Log.d("Year in save btn", year + "");

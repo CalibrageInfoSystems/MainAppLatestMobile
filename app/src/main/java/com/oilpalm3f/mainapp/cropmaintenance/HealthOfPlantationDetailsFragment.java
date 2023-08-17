@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 import static com.oilpalm3f.mainapp.cropmaintenance.CommonUtilsNavigation.getKey;
@@ -122,24 +123,52 @@ public class HealthOfPlantationDetailsFragment extends Fragment implements View.
         return rootView;
     }
 
-    private void bindData() {
-        mHealthplantation = (Healthplantation) DataManager.getInstance().getDataFromManager(DataManager.WEEDING_HEALTH_OF_PLANTATION_DETAILS);
-        if (mHealthplantation != null) {
-            appearanceSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(appearanceDataMap, mHealthplantation.getTreesappearancetypeid()));
-            girthOfTreeSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(girthOfTreeDataMap, mHealthplantation.getTreegirthtypeid()));
-            heightOfTreeSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(heightOfTreeDataMap, mHealthplantation.getTreeheighttypeid()));
-            colorOfFruitSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(colorOfFruitDataMap, (null != mHealthplantation.getFruitcolortypeid()) ? mHealthplantation.getFruitcolortypeid() : 0));
-            sizeOfFruitSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(sizeOfFruitDataMap, (null != mHealthplantation.getFruitsizetypeid()) ? mHealthplantation.getFruitsizetypeid() : 0));
-            palmHyegieneSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(palmHyegieneDataMap, mHealthplantation.getFruithyegienetypeid()));
-            spearLeafSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(spearLeafDataMap, mHealthplantation.getSpearleafId()));
-            savedPictureData = (FileRepository) DataManager.getInstance().getDataFromManager(DataManager.HOP_FILE_REPOSITORY_PLANTATION);
-            if (savedPictureData != null && !TextUtils.isEmpty(savedPictureData.getPicturelocation())) {
-                mCurrentPhotoPath = savedPictureData.getPicturelocation();
-                loadImageFromStorage(savedPictureData.getPicturelocation());
-                profile_pic.invalidate();
+//    private void bindData() {
+//        mHealthplantation = (Healthplantation) DataManager.getInstance().getDataFromManager(DataManager.WEEDING_HEALTH_OF_PLANTATION_DETAILS);
+//        if (mHealthplantation != null) {
+//            appearanceSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(appearanceDataMap, mHealthplantation.getTreesappearancetypeid()));
+//            girthOfTreeSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(girthOfTreeDataMap, mHealthplantation.getTreegirthtypeid()));
+//            heightOfTreeSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(heightOfTreeDataMap, mHealthplantation.getTreeheighttypeid()));
+//            colorOfFruitSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(colorOfFruitDataMap, (null != mHealthplantation.getFruitcolortypeid()) ? mHealthplantation.getFruitcolortypeid() : 0));
+//            sizeOfFruitSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(sizeOfFruitDataMap, (null != mHealthplantation.getFruitsizetypeid()) ? mHealthplantation.getFruitsizetypeid() : 0));
+//            palmHyegieneSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(palmHyegieneDataMap, mHealthplantation.getFruithyegienetypeid()));
+//            spearLeafSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(spearLeafDataMap, mHealthplantation.getSpearleafId()));
+//            savedPictureData = (FileRepository) DataManager.getInstance().getDataFromManager(DataManager.HOP_FILE_REPOSITORY_PLANTATION);
+//            if (savedPictureData != null && !TextUtils.isEmpty(savedPictureData.getPicturelocation())) {
+//                mCurrentPhotoPath = savedPictureData.getPicturelocation();
+//                loadImageFromStorage(savedPictureData.getPicturelocation());
+//                profile_pic.invalidate();
+//        }
+//        }
+//    }
+private void bindData() {
+    mHealthplantation = (Healthplantation) DataManager.getInstance().getDataFromManager(DataManager.WEEDING_HEALTH_OF_PLANTATION_DETAILS);
+    if (mHealthplantation != null) {
+        appearanceSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(appearanceDataMap, mHealthplantation.getTreesappearancetypeid()));
+        girthOfTreeSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(girthOfTreeDataMap, mHealthplantation.getTreegirthtypeid()));
+        heightOfTreeSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(heightOfTreeDataMap, mHealthplantation.getTreeheighttypeid()));
+        colorOfFruitSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(colorOfFruitDataMap, (null != mHealthplantation.getFruitcolortypeid()) ? mHealthplantation.getFruitcolortypeid() : 0));
+        sizeOfFruitSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(sizeOfFruitDataMap, (null != mHealthplantation.getFruitsizetypeid()) ? mHealthplantation.getFruitsizetypeid() : 0));
+        palmHyegieneSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(palmHyegieneDataMap, mHealthplantation.getFruithyegienetypeid()));
+        spearLeafSpin.setSelection(CommonUtilsNavigation.getvalueFromHashMap(spearLeafDataMap, mHealthplantation.getSpearleafId()));
+        savedPictureData = (FileRepository) DataManager.getInstance().getDataFromManager(DataManager.HOP_FILE_REPOSITORY_PLANTATION);
+        if (savedPictureData != null && !TextUtils.isEmpty(savedPictureData.getPicturelocation())) {
+            mCurrentPhotoPath = savedPictureData.getPicturelocation();
+            loadImageFromStorage(savedPictureData.getPicturelocation());
+            profile_pic.invalidate();
         }
-        }
+        //  FloresceneEd,BuchesEd,BuchesWeightEd;
+
+
+        FloresceneEd.setText(Objects.toString(mHealthplantation.getNoOfFlorescene(), ""));
+
+        //   FloresceneEd.setText(mHealthplantation.getNoOfFlorescene() == null ? "" :mHealthplantation.getNoOfFlorescene());
+        BuchesEd.setText(Objects.toString(mHealthplantation.getNoOfBuches(), ""));
+
+        BuchesWeightEd.setText(Objects.toString(mHealthplantation.getBunchWeight(), ""));
+
     }
+}
 
     private void initViews() {
         dataAccessHandler = new DataAccessHandler(mContext);
@@ -305,6 +334,7 @@ public class HealthOfPlantationDetailsFragment extends Fragment implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.saveBtn:
+
                 if (validateFields()) {
                     savePictureData();
                     mHealthplantation = new Healthplantation();

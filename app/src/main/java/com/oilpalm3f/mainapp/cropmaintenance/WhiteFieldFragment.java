@@ -597,6 +597,9 @@ public class WhiteFieldFragment extends DialogFragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
                 if (mspinner_percent.getSelectedItem().toString().equals("0%")) {
                     dataBundle = new Bundle();
                     dataBundle.putString("Question", percentTv.getText().toString());

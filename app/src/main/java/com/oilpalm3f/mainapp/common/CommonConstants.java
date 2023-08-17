@@ -102,6 +102,7 @@ public class CommonConstants {
     public static String Spear_leaf_rating = "";
     public static String Prev_Fertilizer_CMD ="";
 
+
     public static UserData totalFarmerData = new UserData();
     // Bundle Constants
     public static String REFERRAL_DATA_MODEL = "referral_data_model";
@@ -223,6 +224,8 @@ public class CommonConstants {
 
     public static boolean isplotupdated = false;
     public static boolean leased = false;
+
+    public static String fertilizerapplydate = "";
 
     public static String SyncTableName = "Table";
 
