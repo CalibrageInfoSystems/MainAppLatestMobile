@@ -94,6 +94,8 @@ public class DataManager<T> {
     public static final String NEW_COMPLAINT_STATUS_HISTORY = "new_complaint_status_history";
     public static final String NEW_COMPLAINT_REPOSITORY = "new_complaint_repository";
     public static final String NEW_COMPLAINT_TYPE = "new_complaint_xref";
+    public static final String PlotGapFilling_Details = "PlotGapFillingDetails";
+
 
 
     private final Map<String, T> dataMap = new ConcurrentHashMap<>();

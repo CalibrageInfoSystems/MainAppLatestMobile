@@ -169,8 +169,8 @@ public class CommonUiUtils {
             return false;
         }
        List<IdentityProof> identityProof=(ArrayList<IdentityProof>) DataManager.getInstance().getDataFromManager(DataManager.ID_PROOFS_DATA);
-        return followUp.getIsfarmerreadytoconvert() == 1;
-        //return followUp.getIsfarmerreadytoconvert() == 1 &&  identityProof == null && identityProof.isEmpty();
+    //    return followUp.getIsfarmerreadytoconvert() == 1;
+        return followUp.getIsfarmerreadytoconvert() == 1 &&  identityProof == null && identityProof.isEmpty();
 
     }
 

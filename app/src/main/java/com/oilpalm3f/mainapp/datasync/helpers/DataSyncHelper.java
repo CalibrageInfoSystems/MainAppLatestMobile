@@ -65,6 +65,7 @@ import com.oilpalm3f.mainapp.dbmodels.PlantationFileRepositoryXref;
 import com.oilpalm3f.mainapp.dbmodels.Plot;
 import com.oilpalm3f.mainapp.dbmodels.PlotCurrentCrop;
 import com.oilpalm3f.mainapp.dbmodels.PlotFFBDetails;
+import com.oilpalm3f.mainapp.dbmodels.PlotGapFillingDetails;
 import com.oilpalm3f.mainapp.dbmodels.PlotGradingDetails;
 import com.oilpalm3f.mainapp.dbmodels.PlotIrrigationTypeXref;
 import com.oilpalm3f.mainapp.dbmodels.PlotLandlord;
@@ -439,6 +440,7 @@ public class DataSyncHelper {
         List<RecoveryFarmerGroup> recoveryFarmerGroupList = (List<RecoveryFarmerGroup>) dataAccessHandler.getSelectedRecoveryFarmerData(Queries.getInstance().getSelectedRecoveryFarmersRefresh(), 1);
         List<PlantationAuditAnswersModel> plantationAuditAnswerList = (List<PlantationAuditAnswersModel>) dataAccessHandler.getPlantationAuditAnswerData(Queries.getInstance().getPlantationAuditAnswersRefresh(), 1);
 
+        List<PlotGapFillingDetails> PlotgapfillingList = (List<PlotGapFillingDetails>) dataAccessHandler.getPlotgapFillingdetails(Queries.getInstance().getplotgapfillingrefresh(), 1);
 
 
 
@@ -493,6 +495,7 @@ public class DataSyncHelper {
         allRefreshDataMap.put(DatabaseKeys.TABLE_HarvestorVisitDetails, harvestorVisitList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_Recovery_Farmer_Group, recoveryFarmerGroupList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_Plantation_Audit_Answers, plantationAuditAnswerList);
+        allRefreshDataMap.put(DatabaseKeys.TABLE_PlotGapFillingDetails, PlotgapfillingList);
 
 //        allRefreshDataMap.put(DatabaseKeys.TABLE_Location_TRACKING_DETAILS, gpsTrackingList);
 
@@ -1014,6 +1017,17 @@ public class DataSyncHelper {
                 }
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "Code", data.getCode()));
             }
+            else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_PlotGapFillingDetails)) {
+                PlotGapFillingDetails data = (PlotGapFillingDetails) dataList.get(innerCountCheck);
+                whereCondition = " where PlotCode = '" + data.getPlotCode() + "'";
+                try {
+                    ccData = new JSONObject(gson.toJson(data));
+                    dataToInsert.add(CommonUtils.toMap(ccData));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+                }
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "PlotCode", data.getPlotCode()));
+            }
             if (dataList.size() != innerCountCheck) {
                 updateOrInsertData(tableName, dataToInsert, whereCondition, recordExisted, dataAccessHandler, new ApplicationThread.OnComplete() {
                     @Override
@@ -1501,6 +1515,15 @@ public class DataSyncHelper {
                             List<HarvestorVisitHistory> HarvestinghistoryDtails = gson.fromJson(dataArray.toString(), type);
                             if (null != HarvestinghistoryDtails && HarvestinghistoryDtails.size() > 0)
                                 dataToUpdate.put(tableName, HarvestinghistoryDtails);
+
+                        }
+                        else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_PlotGapFillingDetails)) {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<List<PlotGapFillingDetails>>() {
+                            }.getType();
+                            List<PlotGapFillingDetails> plotgapfillingdetails = gson.fromJson(dataArray.toString(), type);
+                            if (null != plotgapfillingdetails && plotgapfillingdetails.size() > 0)
+                                dataToUpdate.put(tableName, plotgapfillingdetails);
 
                         }
                     }

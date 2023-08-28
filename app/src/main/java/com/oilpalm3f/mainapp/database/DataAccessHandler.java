@@ -76,6 +76,7 @@ import com.oilpalm3f.mainapp.dbmodels.Plot;
 import com.oilpalm3f.mainapp.dbmodels.PlotAuditDetails;
 import com.oilpalm3f.mainapp.dbmodels.PlotCurrentCrop;
 import com.oilpalm3f.mainapp.dbmodels.PlotFFBDetails;
+import com.oilpalm3f.mainapp.dbmodels.PlotGapFillingDetails;
 import com.oilpalm3f.mainapp.dbmodels.PlotGradingDetails;
 import com.oilpalm3f.mainapp.dbmodels.PlotIrrigationTypeXref;
 import com.oilpalm3f.mainapp.dbmodels.PlotLandlord;
@@ -5059,6 +5060,59 @@ f
             e.printStackTrace();
         }
         return bankDataModelArrayList;
+    }
+    public T getPlotgapFillingdetails(final String query, final int type) {
+        PlotGapFillingDetails plotgapfillingdetails = null;
+        List<PlotGapFillingDetails> plotgapfillingList = new ArrayList<>();
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "@@@ farmer details query " + query);
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    plotgapfillingdetails = new PlotGapFillingDetails();
+                    // plotgapfillingdetails.setId(cursor.getInt(0));
+                    plotgapfillingdetails.setPlotCode(cursor.getString(1));
+                    plotgapfillingdetails.setSaplingsToBeIssued(cursor.getInt(2));
+                    plotgapfillingdetails.setImportedSaplingsToBeIssued(cursor.getInt(3));
+                    plotgapfillingdetails.setIndigenousSaplingsToBeIssued(cursor.getInt(4));
+                    //    plotgapfillingdetails.setReasontypeid((cursor.getInt(6) == 0) ? null : cursor.getInt(6));
+                    plotgapfillingdetails.setExpectedDateofPickup(cursor.getString(5));
+                    plotgapfillingdetails.setGapFillingReasonTypeId(cursor.getInt(6));
+                    plotgapfillingdetails.setIsApproved(cursor.getInt(7));
+                    plotgapfillingdetails.setIsDeclined(cursor.getInt(8));
+                    plotgapfillingdetails.setComments(cursor.getString(9));
+                    plotgapfillingdetails.setIsActive(cursor.getInt(10));
+                    plotgapfillingdetails.setFileName(cursor.getString(11));
+                    plotgapfillingdetails.setFileLocation(cursor.getString(12));
+                    plotgapfillingdetails.setFileExtension(cursor.getString(13));
+                    plotgapfillingdetails.setCreatedByUserId(cursor.getInt(14));
+                    plotgapfillingdetails.setCreatedDate(cursor.getString(15));
+                    plotgapfillingdetails.setUpdatedByUserId(cursor.getInt(16));
+
+                    plotgapfillingdetails.setUpdatedDate(cursor.getString(17));
+                    plotgapfillingdetails.setApprovedByUserId(cursor.getInt(18));
+                    plotgapfillingdetails.setApprovedDate(cursor.getString(19));
+                    plotgapfillingdetails.setDeclinedByUserId(cursor.getInt(20));
+                    plotgapfillingdetails.setDeclinedDate(cursor.getString(21));
+                    plotgapfillingdetails.setApprovedComments(cursor.getString(22));
+                    plotgapfillingdetails.setDeclinedComments(cursor.getString(23));
+                    plotgapfillingdetails.setIsVerified(cursor.getInt(24));
+                    plotgapfillingdetails.setGapFillingApprovedStatusTypeId(cursor.getInt(25));
+                    plotgapfillingdetails.setGapFillingApprovedComments(cursor.getString(26));
+                    plotgapfillingdetails.setGapFillingRejectedStatusTypeId(cursor.getInt(27));
+                    plotgapfillingdetails.setGapFillingRejectedComments(cursor.getString(28));
+                    plotgapfillingdetails.setServerUpdatedStatus(cursor.getInt(29));
+
+                    if (type == 1) {
+                        plotgapfillingList.add(plotgapfillingdetails);
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "@@@ getting gap filling details " + e.getMessage());
+        }
+        return (T) ((type == 0) ? plotgapfillingdetails : plotgapfillingList);
     }
 
 }

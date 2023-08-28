@@ -2125,6 +2125,14 @@ public class Queries {
                 "                INNER JOIN TypeCdDmt t on t.TypeCdId = b.BankTypeId WHERE  t.isActive ='true'";
     }
 
+    public String getGapFillingDetailsHistoryData() {
+        return "select * from PlotGapFillingDetails where PlotCode = '" + CommonConstants.PLOT_CODE + "' ORDER BY CreatedDate DESC LIMIT 1";
+
+    }
+    public String getplotgapfillingrefresh() {
+        return "select * from PlotGapFillingDetails  where ServerUpdatedStatus = 0";
+    }
+
 }
 
 

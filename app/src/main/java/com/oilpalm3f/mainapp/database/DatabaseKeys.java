@@ -88,6 +88,7 @@ public class DatabaseKeys {
     public final static String COLUMN_USERID = "UserId";
     public final static String COLUMN_UPDATEDON = "UpdatedOn";
 
+    public static String TABLE_PlotGapFillingDetails = "PlotGapFillingDetails";
 
     // PlotBoundaries database table info
     public final static String COLUMN_PLOTCODE = "PlotCode";

@@ -72,7 +72,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
     private static final String LOG_TAG = RefreshSyncActivity.class.getName();
     private static int consignmentCount = 0, collectionsCount = 0, collectionPlotsCountInt = 0;
     private TextView tvfarmer, tvidproofs, tvaddress, tvfarmerhistory, tvbank, tvplot, tvplotcurrentcrop,
-            tvneighbourplot, tvwaterresource, tvsoilresource, tvplotirrigation, geoBoundriesCountTxt, plantationCountTxt, uprootmentCountTxt, hopCountTxt,
+            tvneighbourplot, tvwaterresource, tvsoilresource, tvplotirrigation, geoBoundriesCountTxt, plantationCountTxt, uprootmentCountTxt, PlotGapFillingDetailsCount,hopCountTxt,
             tvfollowup, tvreferrals, tvmarketsurvey, tvimages, cmpCount, activity_logs, harvestor_visits,recovery_farmers, plantation_Audit,CropMaintenancehistory,
             HarvestorVisithistory;
     private Button btnsend, btnmastersync, btnDBcopy, transSyncBtn, btresetdatabase;
@@ -160,6 +160,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         allRefreshDataMap.add(DatabaseKeys.TABLE_Recovery_Farmer_Group);
         allRefreshDataMap.add(DatabaseKeys.TABLE_Plantation_Audit_Answers);
         allRefreshDataMap.add(DatabaseKeys.TABLE_HarvestorVisitHistory);
+        allRefreshDataMap.add(DatabaseKeys.TABLE_PlotGapFillingDetails);
         dataAccessHandler = new DataAccessHandler(this);
 
         CommonUtils.currentActivity = this;
@@ -180,7 +181,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         plantationCountTxt = findViewById(R.id.plantationCount);
         uprootmentCountTxt = findViewById(R.id.uprootmentCount);
         hopCountTxt = findViewById(R.id.hopCount);
-
+        PlotGapFillingDetailsCount = findViewById(R.id.PlotGapFillingDetailsCount);
         tvfarmer = findViewById(R.id.farmerCount);
         tvidproofs = findViewById(R.id.idproofCount);
         tvaddress = findViewById(R.id.addressCount);
@@ -284,6 +285,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
                 && tvbank.getText().toString().equalsIgnoreCase("0")
                 && geoBoundriesCountTxt.getText().toString().equalsIgnoreCase("0")
                 && uprootmentCountTxt.getText().toString().equalsIgnoreCase("0")
+                &&PlotGapFillingDetailsCount.getText().toString().equalsIgnoreCase("0")
                 && plantationCountTxt.getText().toString().equalsIgnoreCase("0")
                 && hopCountTxt.getText().toString().equalsIgnoreCase("0")
                 && cmpCount.getText().toString().equalsIgnoreCase("0")
@@ -334,6 +336,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             plantationCountTxt.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Plantation")));
             hopCountTxt.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("HealthPlantation")));
             cmpCount.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Complaints")));
+            PlotGapFillingDetailsCount.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("PlotGapFillingDetails")));
 
             //getVistLogRecords
             String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));

@@ -46,6 +46,7 @@ import com.oilpalm3f.mainapp.dbmodels.PestChemicalXref;
 import com.oilpalm3f.mainapp.dbmodels.Plantation;
 import com.oilpalm3f.mainapp.dbmodels.Plot;
 import com.oilpalm3f.mainapp.dbmodels.PlotCurrentCrop;
+import com.oilpalm3f.mainapp.dbmodels.PlotGapFillingDetails;
 import com.oilpalm3f.mainapp.dbmodels.PlotIrrigationTypeXref;
 import com.oilpalm3f.mainapp.dbmodels.PlotLandlord;
 import com.oilpalm3f.mainapp.dbmodels.RecommndFertilizer;
@@ -2344,6 +2345,7 @@ public class DataSavingHelper {
                         Log.v(LOG_TAG, "@@@ saveNutrientData data saved successfully");
                         DataManager.getInstance().deleteData(DataManager.NUTRIENT_DETAILS);
                         saveUpRootmentDetails(context, onComplete);
+                        saveGapfillingDetails(context, onComplete);
                     } else {
                         Log.e(LOG_TAG, "@@@ address saveNutrientData saving failed due to " + msg);
                         onComplete.execute(false, "saveNutrientData saving failed for saveNutrientData", "");
@@ -2352,6 +2354,45 @@ public class DataSavingHelper {
             });
         } else {
             saveUpRootmentDetails(context, onComplete);
+            saveGapfillingDetails(context, onComplete);
+        }
+    }
+
+
+    public static void saveGapfillingDetails(final Context context, final ApplicationThread.OnComplete<String> onComplete) {
+
+        PlotGapFillingDetails plotgapfillingdetails = (PlotGapFillingDetails) DataManager.getInstance().getDataFromManager(DataManager.PlotGapFilling_Details);
+        if (null != plotgapfillingdetails) {
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            JSONObject gapfillingData = null;
+            List dataToInsert = null;
+            try {
+                gapfillingData = new JSONObject(gson.toJson(plotgapfillingdetails));
+                dataToInsert = new ArrayList();
+                dataToInsert.add(CommonUtils.toMap(gapfillingData));
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, "@@@ error while inserting  PlotGapFillingDetails data");
+            }
+            Log.v(LOG_TAG, "@@ entered data " + gapfillingData.toString());
+            //  saveRecordIntoActivityLog(context, CommonConstants.Uprootment_Details);
+
+            final DataAccessHandler dataAccessHandler = new DataAccessHandler(context);
+            dataAccessHandler.insertDataOld(DatabaseKeys.TABLE_PlotGapFillingDetails, dataToInsert, new ApplicationThread.OnComplete<String>() {
+                @Override
+                public void execute(boolean success, String result, String msg) {
+                    if (success) {
+                        Log.v(LOG_TAG, "@@@ Gapfilling data saved successfully");
+                        DataManager.getInstance().deleteData(DataManager.PlotGapFilling_Details);
+
+                    } else {
+                        Log.e(LOG_TAG, "@@@ save gapfilling data saving failed due to " + msg);
+                        onComplete.execute(false, "data saving failed for PlotGapFillingDetails", "");
+                    }
+                }
+            });
+        } else {
+//            onComplete.execute(false, "data saving failed for saveUpRootmentDetails", "");
+            saveGeoTagData(context, onComplete);
         }
     }
 

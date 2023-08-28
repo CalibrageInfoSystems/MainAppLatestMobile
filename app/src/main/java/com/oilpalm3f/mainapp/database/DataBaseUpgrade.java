@@ -1629,22 +1629,54 @@ class DataBaseUpgrade {
 
     //Added  on 10th August  2023
     private static void upgradeDb33( final SQLiteDatabase db) {
-        Log.d(LOG_TAG, "****** upgradeDataBase 33 *****" + Palm3FoilDatabase.DATA_VERSION);
+        Log.d(LOG_TAG, "******* upgradeDataBase 33 ******" + Palm3FoilDatabase.DATA_VERSION);
 
         String GapFillingRequiredcolumn = "ALTER TABLE Uprootment Add IsGapFillingRequired BIT";
-        String SaplingsCountcolumn = "Alter Table Uprootment Add GapFillingSaplingsCount INT ";
+        String saplingsCountcolumn = "Alter Table Uprootment Add GapFillingSaplingsCount INT ";
+
+
+        String PlotGapFillingDetails = "CREATE TABLE PlotGapFillingDetails(\n" +
+                "Id Integer primary key Autoincrement,\n" +
+                "PlotCode VARCHAR(50) NOT NULL ,\n" +
+                "SaplingsToBeIssued INT NOT NULL,\n" +
+                "ImportedSaplingsToBeIssued INT ,\n" +
+                "IndigenousSaplingsToBeIssued INT ,\n" +
+                "ExpectedDateofPickup DATETIME NOT NULL,\n" +
+                "GapFillingReasonTypeId INT NOT NULL,\n" +
+                "IsApproved BIT ,\n" +
+                "IsDeclined BIT ,\n" +
+                "Comments VARCHAR(200) ,\n" +
+                "IsActive BIT NOT NULL,\n" +
+                "FileName VARCHAR(100) ,\n" +
+                "FileLocation VARCHAR(250) ,\n" +
+                "FileExtension VARCHAR(25) ,\n" +
+                "CreatedByUserId INT NOT NULL,\n" +
+                "CreatedDate DATETIME NOT NULL,\n" +
+                "UpdatedByUserId INT NOT NULL,\n" +
+                "UpdatedDate DATETIME NOT NULL,\n" +
+                "ApprovedByUserId INT ,\n" +
+                "ApprovedDate DATETIME ,\n" +
+                "DeclinedByUserId INT ,\n" +
+                "DeclinedDate DATETIME ,\n" +
+                "ApprovedComments VARCHAR(500) ,\n" +
+                "DeclinedComments VARCHAR(500) ,\n" +
+                "IsVerified BIT NOT NULL,\n" +
+                "GapFillingApprovedStatusTypeId INT ,\n" +
+                "GapFillingApprovedComments VARCHAR(500) ,\n" +
+                "GapFillingRejectedStatusTypeId INT ,\n" +
+                "GapFillingRejectedComments VARCHAR(500) ,\n" +
+                "ServerUpdatedStatus int NOT NULL)\n";
 
         try {
 
             db.execSQL(GapFillingRequiredcolumn);
-            db.execSQL(SaplingsCountcolumn);
-
+            db.execSQL(saplingsCountcolumn);
+            db.execSQL(PlotGapFillingDetails);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     private static void checkTheColumnIsThere(String tableName, String columnName, String dataType, final SQLiteDatabase db) {
 

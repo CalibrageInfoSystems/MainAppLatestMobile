@@ -1,261 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--<android.support.design.widget.CoordinatorLayout-->
-<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    android:orientation="vertical"-->
-<!--    android:background="@color/white"-->
-<!--    android:clickable="true"-->
-<!--    android:fitsSystemWindows="true"-->
-<!--    app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
-
-<!--    <include layout="@layout/toolbar_common">-->
-
-<!--    </include>-->
-
-<!--    <LinearLayout-->
-<!--        android:paddingTop="?attr/actionBarSize"-->
-<!--        android:id="@+id/parent_layout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_margin="@dimen/common_margin"-->
-<!--        android:orientation="vertical">-->
-
-<!--        <Button-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/currentplantationlastvisitdataBtn"-->
-<!--            style="@style/dialogBasicBtnStyle"-->
-<!--            android:text="@string/last_visit_data"-->
-<!--            android:padding="4dp"-->
-<!--            android:layout_gravity="end"/>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="@dimen/margin_top_layout"-->
-<!--            android:layout_marginTop="10dp">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/saplingsplanted"-->
-<!--                style="@style/header_h1_text_title"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/No_of_saplings_planted" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/saplingplanted_text"-->
-<!--                style="@style/header_h1_text_title"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_weight="1" />-->
-
-<!--        </LinearLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="@dimen/margin_top_layout"-->
-<!--            android:layout_marginTop="10dp">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/countoftreesvisit"-->
-<!--                style="@style/header_h1_text_title"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/Countoftrees_in_previous_visit" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/countoftreesvisit_text"-->
-<!--                style="@style/header_h1_text_title"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_weight="1"/>-->
-<!--        </LinearLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="@dimen/margin_top_layout"-->
-<!--            android:layout_marginTop="10dp">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/expectedTree_count"-->
-<!--                style="@style/header_h1_text_title"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/expected_tree_count_in_this_visit" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/expectedTreecountvisit"-->
-<!--                style="@style/header_h1_text_title"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_weight="1"/>-->
-<!--        </LinearLayout>-->
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="@dimen/margin_top_layout"-->
-<!--            android:layout_marginTop="10dp">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/counttresscurrentvisit"-->
-<!--                style="@style/header_h1_text_title"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/Count_of_trees_currently_present" />-->
-
-<!--            <EditText-->
-<!--                android:id="@+id/counttresscurrentvisitEdt"-->
-<!--                style="@style/editTxt_normal"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:gravity="center"-->
-<!--                android:inputType="number"-->
-<!--                android:maxLength="5"/>-->
-
-<!--        </LinearLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="@dimen/margin_top_layout"-->
-<!--            android:layout_marginTop="10dp">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/missingtrees"-->
-<!--                style="@style/header_h1_text_title"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/Missing_Trees" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/missingtrees_text"-->
-<!--                style="@style/header_h1_text_title"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_weight="1" />-->
-<!--        </LinearLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="@dimen/margin_top_layout"-->
-<!--            android:orientation="horizontal">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/noofmissingtrees"-->
-<!--                style="@style/header_h1_text_title_multi"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/no_of_missing_trees" />-->
-
-<!--            &lt;!&ndash;<TextView&ndash;&gt;-->
-<!--                &lt;!&ndash;android:id="@+id/no_of_missing_treesTV"&ndash;&gt;-->
-<!--                &lt;!&ndash;android:layout_width="0dp"&ndash;&gt;-->
-<!--                &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-<!--                &lt;!&ndash;android:layout_weight="1" />&ndash;&gt;-->
-<!--            <TextView-->
-<!--                android:id="@+id/no_of_missing_treesTV"-->
-<!--                style="@style/header_h1_text_title"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_weight="1" />-->
-
-<!--        </LinearLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:id="@+id/reasonformissingtreesLL"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="@dimen/margin_top_layout"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:visibility="gone">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/reasonmissingtrees"-->
-<!--                style="@style/header_h1_text_title_multi"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/reason_for_missing_trees" />-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/reason_for_missing_treesSpin"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:background="@drawable/spinner_bg" />-->
-
-<!--        </LinearLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="@dimen/margin_top_layout"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:orientation="vertical">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/comments_tv"-->
-<!--                style="@style/header_h1_text_title"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/comments" />-->
-
-<!--            <EditText-->
-<!--                android:id="@+id/commentsEdit"-->
-<!--                style="@style/editTxt_normal_address"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:digits="@string/digits"-->
-<!--                android:maxLength="150" />-->
-<!--        </LinearLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="20dp"-->
-<!--            android:gravity="center"-->
-<!--            android:orientation="horizontal">-->
-
-<!--            <Button-->
-<!--                android:id="@+id/SaveBtn"-->
-<!--                style="@style/basicBtnStyle"-->
-<!--                android:layout_width="350dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="10dp"-->
-<!--                android:text="@string/save" />-->
-
-<!--        </LinearLayout>-->
-
-<!--    </LinearLayout>-->
-<!--</android.support.design.widget.CoordinatorLayout>-->
-
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -271,7 +15,6 @@
         >
 
     </include>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -395,6 +138,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
+
                         android:inputType="number"
                         android:maxLength="5"/>
 
@@ -495,7 +239,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="Is Gap Filling Required? " />
+                        android:text="Is Gap Filling Required? * " />
                     <Spinner
                         android:id="@+id/requiredspinner"
                         style="@style/spinner_bg"
@@ -507,32 +251,208 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_top_layout"
-                    android:id="@+id/gapfillingcountlinear"
                     android:visibility="gone"
-                    android:layout_marginTop="10dp">
 
-                    <TextView
-                        android:id="@+id/gapfillingcounttext"
-                        style="@style/header_h1_text_title"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:text="No of saplings for gap filling" />
+                    android:id="@+id/sublinear"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_top_layout"
+                        android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/gapfillingcount"
-                        style="@style/editTxt_normal"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:maxLength="5"/>
+                        <TextView
+                            android:id="@+id/totalnoofmissingtrees"
+                            style="@style/header_h1_text_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:text="Total No of Missing Trees" />
 
+                        <!--<TextView-->
+                        <!--android:id="@+id/no_of_missing_treesTV"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1" />-->
+                        <TextView
+                            android:id="@+id/total_no_of_missing_treesTV"
+                            style="@style/header_h1_text_title"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_top_layout"
+                        android:id="@+id/Importedsaplinglinear"
+
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/Importedsaplingtext"
+                            style="@style/header_h1_text_title"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:text="Imported Saplings to be Issued" />
+
+                        <EditText
+                            android:id="@+id/Importedsaplingcount"
+                            style="@style/editTxt_normal"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="0"
+                            android:inputType="number"
+                            android:maxLength="5"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_top_layout"
+                        android:id="@+id/IndigenousSaplingslinear"
+
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/IndigenousSaplingstext"
+                            style="@style/header_h1_text_title"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+
+                            android:text="Indigenous Saplings to be Issued" />
+
+                        <EditText
+                            android:id="@+id/IndigenousSaplingcount"
+                            style="@style/editTxt_normal"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="0"
+                            android:inputType="number"
+                            android:maxLength="5"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_top_layout"
+                        android:id="@+id/gapfillingcountlinear"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/gapfillingcounttext"
+                            style="@style/header_h1_text_title"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:text="No of Saplings to be Issued * " />
+
+                        <EditText
+                            android:id="@+id/gapfillingcount"
+                            style="@style/editTxt_normal"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:editable="false"
+                            android:focusable="false"
+                            android:inputType="number"
+                            android:maxLength="5"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_top_layout"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/Expdate"
+                            style="@style/header_h1_text_title"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:text="Exp Date of Pickup *" />
+
+                        <EditText
+                            android:id="@+id/EdtExpdate"
+                            style="@style/editTxt_normal"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:inputType="date"
+                            android:editable="false"
+                            android:focusable="false"
+                            android:maxLength="10"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_top_layout"
+                        android:id="@+id/gapfillingreasonlinear"
+
+                        android:orientation="horizontal">
+
+                        <TextView
+
+                            style="@style/header_h1_text_title"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="Gap Filling Reason *" />
+                        <Spinner
+                            android:id="@+id/gapfillingreasonspinner"
+                            style="@style/spinner_bg"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_top_layout"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/gapfillingcomments"
+                            style="@style/header_h1_text_title"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:text="Gap Filling Commets" />
+
+                        <EditText
+                            android:id="@+id/Edtgapfillingcomments"
+                            style="@style/editTxt_normal"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+
+                            android:gravity="center"
+                            android:digits="@string/digits"
+                            android:maxLength="150"
+                            />
+
+                    </LinearLayout>
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -547,7 +467,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:text="@string/comments" />
+                        android:text="Comments *" />
 
                     <EditText
                         android:id="@+id/commentsEdit"

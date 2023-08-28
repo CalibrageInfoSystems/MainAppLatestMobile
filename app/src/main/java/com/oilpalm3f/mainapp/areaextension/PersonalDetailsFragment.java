@@ -75,6 +75,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -656,7 +657,28 @@ public class PersonalDetailsFragment extends Fragment implements RecyclerItemCli
         if (savedFarmerData.getDOB().equalsIgnoreCase("null")){
             dob.setText("");
         }else {
-            dob.setText("" + savedFarmerData.getDOB());
+            String outputFormat = "yyyy-MM-dd";
+            String myFormat = "MM/dd/yyyy";
+
+            // Create a SimpleDateFormat object to parse the input string
+            SimpleDateFormat inputDateFormat = new SimpleDateFormat(outputFormat);
+
+
+            try {
+                // Parse the input string into a Date object
+                Date parsedDate = inputDateFormat.parse(savedFarmerData.getDOB());
+
+                // Print the parsed Date object
+                System.out.println("Parsed Date: " + parsedDate);
+
+                SimpleDateFormat outputDateFormat = new SimpleDateFormat(myFormat);
+                dob.setText(outputDateFormat.format(parsedDate)+"");
+
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
         age.setText("" + savedFarmerData.getAge());
         if(savedFarmerData.getEmail().equalsIgnoreCase("null")){
