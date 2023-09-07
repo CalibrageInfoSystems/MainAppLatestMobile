@@ -1801,9 +1801,7 @@ public class DataSavingHelper {
                         Log.v(LOG_TAG, "@@@ saveRecordIntoFarmerHistory data saved successfully");
                          //oncomplete.execute(true, "data saved successfully", "");
                         if (CommonUtils.isFromConversion()) {
-                            if (CommonConstants.leased) {
                                 saveLandLordDetails(context, oncomplete);
-                            }
                         } else if(CommonUtils.isPlotSplitFarmerPlots()) {
                             savePlotData(context,oncomplete);
                         }else{

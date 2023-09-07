@@ -231,7 +231,7 @@ public class RegistrationFlowScreen extends OilPalmBaseActivity implements Updat
                 break;
 
             case R.id.finishBtn:
-                    if(CommonUiUtils.checkforIdentityDetails(this) && identityProofs.size() == 0 ){
+                    if(CommonUiUtils.checkforIdentityDetails(this) ){
                         UiUtils.showCustomToastMessage("Farmer is Ready To Convert Yes So Please Take IdentityDetails", RegistrationFlowScreen.this, 1);
                     }
               else if(CommonUiUtils.checkBankDetails(this)){

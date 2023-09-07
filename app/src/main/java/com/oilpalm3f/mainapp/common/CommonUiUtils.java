@@ -158,6 +158,22 @@ public class CommonUiUtils {
     }
 
     //Checks whether Identity Proof details entered or not
+//    public static boolean checkforIdentityDetails(final Context context){
+//        DataAccessHandler dataAccessHandler = new DataAccessHandler(context);
+//        boolean existed=dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().queryIdentityCheck(CommonConstants.FARMER_CODE));
+//        if (existed) {
+//            return false;
+//        }
+//        FollowUp followUp = (FollowUp) DataManager.getInstance().getDataFromManager(DataManager.PLOT_FOLLOWUP);
+//        if (followUp == null) {
+//            return false;
+//        }
+//       List<IdentityProof> identityProof=(ArrayList<IdentityProof>) DataManager.getInstance().getDataFromManager(DataManager.ID_PROOFS_DATA);
+//    //    return followUp.getIsfarmerreadytoconvert() == 1;
+//        return followUp.getIsfarmerreadytoconvert() == 1 &&  identityProof == null && identityProof.isEmpty();
+//
+//    }
+
     public static boolean checkforIdentityDetails(final Context context){
         DataAccessHandler dataAccessHandler = new DataAccessHandler(context);
         boolean existed=dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().queryIdentityCheck(CommonConstants.FARMER_CODE));
@@ -168,9 +184,8 @@ public class CommonUiUtils {
         if (followUp == null) {
             return false;
         }
-       List<IdentityProof> identityProof=(ArrayList<IdentityProof>) DataManager.getInstance().getDataFromManager(DataManager.ID_PROOFS_DATA);
-    //    return followUp.getIsfarmerreadytoconvert() == 1;
-        return followUp.getIsfarmerreadytoconvert() == 1 &&  identityProof == null && identityProof.isEmpty();
+        List<IdentityProof> identityProof=(ArrayList<IdentityProof>) DataManager.getInstance().getDataFromManager(DataManager.ID_PROOFS_DATA);
+        return followUp.getIsfarmerreadytoconvert() == 1 && identityProof == null;
 
     }
 

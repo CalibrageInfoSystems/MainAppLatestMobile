@@ -336,7 +336,7 @@ public class PreViewAreaCalScreen extends OilPalmBaseActivity {
                 String firstCoordinateKey = getCoordinateKey(firstCoordinate);
 
                 // Check if the first coordinate already exists in the set
-                if (!coordinateSet.contains(firstCoordinateKey)) {
+                if (coordinateSet.contains(firstCoordinateKey)) {
                     GeoBoundaries geoBoundary = new GeoBoundaries();
                     geoBoundary.setLatitude(firstCoordinate.latitude);
                     geoBoundary.setLongitude(firstCoordinate.longitude);
