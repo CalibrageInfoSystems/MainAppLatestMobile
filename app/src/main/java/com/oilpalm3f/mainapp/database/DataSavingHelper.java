@@ -1550,7 +1550,7 @@ public class DataSavingHelper {
             }
         }
         }else {
-            //saveConversionPotential(context, oncomplete);
+            saveConversionPotential(context, oncomplete);
         }
     }
 
@@ -1600,9 +1600,11 @@ public class DataSavingHelper {
             } else if (isFromCropMaintenance() || CommonUtils.isVisitRequests()){
                 oncomplete.execute(true, "data saving failed for saveConversionPotential", "");
 
-            }else {
-                oncomplete.execute(false, "data saving failed for saveConversionPotential", "");
             }
+//            else {
+//
+//                oncomplete.execute(false, "data saving failed for saveConversionPotential", "");
+//            }
         }
     }
 

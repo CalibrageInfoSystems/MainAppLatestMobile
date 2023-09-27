@@ -309,22 +309,23 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
 
                 } else {
 
-                 moveToNextScreen();
-//                    getLocationDetails();
-//                    if (CommonUtils.isFromConversion()) {
-//                        if ((IsRetakeGeoTagRequired == 1)) {
-//                            ReTakeGeoTagLL.setVisibility(View.VISIBLE);
-//                        }
-//                    }
-//                    String units = "meters";
-//                    if (actualDistance > 1000) {
-//
-//                        actualDistance = actualDistance * 0.001;
-//                        units = "kilometers";
-//                    }
-//                    actualDistance = Double.parseDouble(CommonUtils.twoDForm.format(actualDistance));
-//
-//                    UiUtils.showCustomToastMessageLong("This location is not actual plot location, distance from plot is " + actualDistance + " " + units + " and it should be with in 200 meters", getActivity(), 1, Toast.LENGTH_LONG);
+              //   moveToNextScreen();
+
+                    getLocationDetails();
+                    if (CommonUtils.isFromConversion()) {
+                        if ((IsRetakeGeoTagRequired == 1)) {
+                            ReTakeGeoTagLL.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    String units = "meters";
+                    if (actualDistance > 1000) {
+
+                        actualDistance = actualDistance * 0.001;
+                        units = "kilometers";
+                    }
+                    actualDistance = Double.parseDouble(CommonUtils.twoDForm.format(actualDistance));
+
+                    UiUtils.showCustomToastMessageLong("This location is not actual plot location, distance from plot is " + actualDistance + " " + units + " and it should be with in 200 meters", getActivity(), 1, Toast.LENGTH_LONG);
                 }
             } else {
                 UiUtils.showCustomToastMessage("Geo tag was not available in database", getActivity(), 1);
