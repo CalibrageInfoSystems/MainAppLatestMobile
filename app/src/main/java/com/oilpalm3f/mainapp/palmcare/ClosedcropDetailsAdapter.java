@@ -72,6 +72,7 @@ public class ClosedcropDetailsAdapter extends RecyclerView.Adapter<ClosedcropDet
 //            holder.tvcontactNumber.setText("");
 //        }
         holder.villagename.setText(item.getVillageName() != null ? item.getVillageName().trim() : "");
+        holder.contactNumber.setText(item.getContactNumber() != null ? item.getContactNumber().trim() : "");
         holder.clusterName.setText(item.getClusterName() != null ? item.getClusterName().trim() : "");
         holder.plotid.setText(item.getPlotCode() != null ? item.getPlotCode().trim() : "");
         holder.Farmerid.setText(item.getFarmerCode() != null ? item.getFarmerCode().trim() : "");
@@ -163,6 +164,7 @@ public class ClosedcropDetailsAdapter extends RecyclerView.Adapter<ClosedcropDet
 
         private TextView Farmerid;
         private TextView farmername;
+        private TextView contactNumber;
         private TextView villagename;
         private TextView clusterName;
         private TextView palmarea;
@@ -178,6 +180,7 @@ Button generateotp,resendotp,closebtn;
             plotid = (TextView) view.findViewById(R.id.plotid);
             Farmerid = (TextView) view.findViewById(R.id.Farmerid);
             farmername = (TextView) view.findViewById(R.id.farmername);
+            contactNumber = (TextView) view.findViewById(R.id.contactNumber);
             villagename = (TextView) view.findViewById(R.id.villagename);
             clusterName = (TextView) view.findViewById(R.id.clusterName);
             palmarea = (TextView) view.findViewById(R.id.palmarea);

@@ -1986,7 +1986,7 @@ public class Queries {
 //
 //    }
 
-    public static String getnotvisitedpoltlist(int limit, int offset, String fromDate, String toDate) {
+    public static String getnotvisitedpoltlist(int limit, int offset, String fromDate, String toDate, String seachKey) {
 //        return "SELECT P.Code, F.Code as FarmerCode, f.FirstName || ' ' || (CASE WHEN f.MiddleName = 'null' THEN '' ELSE f.MiddleName || ' ' END) || f.LastName  AS FarmerName, V.Name as VillageName, C.Name as ClusterName, P.TotalPalmArea,\n" +
 //                " CASE WHEN CHR.CreatedDate IS NULL AND HVR.CreatedDate IS NULL THEN NULL \n" +
 //                "\t\t\tWHEN CHR.CreatedDate > HVR.CreatedDate THEN CHR.CreatedDate ELSE HVR.CreatedDate END as lastvisiteddate,\n" +
@@ -2033,7 +2033,7 @@ public class Queries {
 //                ") HVR ON HVR.PlotCode = P.Code\n" +
 //                "WHERE (CH.CMCount IS NULL OR CH.CMCount = 0) AND (HV.HVCount IS NULL OR HV.HVCount = 0) AND F.IsActive = 1 AND P.IsActive = 1 and FH.StatusTypeId in(88,89,308)";
 
-        return "SELECT P.Code, F.Code as FarmerCode, f.FirstName || ' ' || (CASE WHEN f.MiddleName = 'null' THEN '' ELSE f.MiddleName || ' ' END) || f.LastName  AS FarmerName, V.Name as VillageName, C.Name as ClusterName, P.TotalPalmArea,\n" +
+        return "SELECT P.Code, F.Code as FarmerCode, f.FirstName || ' ' || (CASE WHEN f.MiddleName = 'null' THEN '' ELSE f.MiddleName || ' ' END) || f.LastName  AS FarmerName, V.Name as VillageName, C.Name as ClusterName, P.TotalPalmArea, f.ContactNumber, \n" +
                 " CASE WHEN CHR.CreatedDate IS NULL AND HVR.CreatedDate IS NULL THEN NULL \n" +
                     "WHEN CHR.CreatedDate IS NULL AND HVR.CreatedDate IS NOT NULL THEN HVR.CreatedDate\n" +
                     "WHEN CHR.CreatedDate IS NOT NULL AND HVR.CreatedDate IS NULL THEN CHR.CreatedDate\n" +
@@ -2081,13 +2081,13 @@ public class Queries {
                 "    ) MaxHV ON HV.PlotCode = MaxHV.PlotCode AND HV.CreatedDate = MaxHV.MaxDate\n" +
                 "    INNER JOIN UserInfo UI ON HV.CreatedByUserId = UI.ID\n" +
                 ") HVR ON HVR.PlotCode = P.Code\n" +
-                "WHERE (CH.CMCount IS NULL OR CH.CMCount = 0) AND (HV.HVCount IS NULL OR HV.HVCount = 0) AND F.IsActive = 1 AND P.IsActive = 1 and FH.StatusTypeId in(88,89,308)";
+                "WHERE (CH.CMCount IS NULL OR CH.CMCount = 0) AND (HV.HVCount IS NULL OR HV.HVCount = 0) AND F.IsActive = 1 AND P.IsActive = 1 and FH.StatusTypeId in(88,89,308)  AND ( F.FirstName like'%" + seachKey + "%' or F.MiddleName like '%" + seachKey + "%' or F.LastName like '%" + seachKey + "%'  or F.Code like '%" + seachKey + "%'or F.ContactNumber like '%" + seachKey + "%' or p.Code like '%" + seachKey + "%') ";
     }
 
 
-    public String getclosedcropinfo() {
+    public String getclosedcropinfo(String seachKey) {
         return " select cm.PlotCode, p.FarmerCode, f.FirstName || ' ' || (CASE WHEN f.MiddleName = 'null' THEN '' ELSE f.MiddleName || ' ' END) || f.LastName  AS FarmerName, \n" +
-                "     v.Name as VillageName, c.Name as ClusterName, p.TotalPalmArea, ui.UserName, cm.Code as CropCode,cm.CreatedDate from CropMaintenanceHistory cm\n" +
+                "     v.Name as VillageName, c.Name as ClusterName, p.TotalPalmArea, ui.UserName, cm.Code as CropCode,cm.CreatedDate,f.ContactNumber from CropMaintenanceHistory cm\n" +
                 "    Inner Join Plot p on p.Code = cm.PlotCode\n" +
                 "    Inner Join Farmer f on f.Code = p.FarmerCode\n" +
                 "    Inner Join Address ad on ad.Code = p.AddressCode\n" +
@@ -2095,12 +2095,12 @@ public class Queries {
                 "    Inner Join VillageClusterxref vc on vc.VillageId = ad.VillageId\n" +
                 "    Inner Join Cluster c on c.Id = vc.ClusterId\n" +
                 "    Inner Join UserInfo ui on ui.id = cm.CreatedByUserId\n" +
-                "    where IsVerified = 'false' AND f.IsActive = 1 and p.IsActive = 1 and cm.ServerUpdatedStatus = 1 ";
+                "    where IsVerified = 'false' AND f.IsActive = 1 and p.IsActive = 1 and cm.ServerUpdatedStatus = 1 AND ( F.FirstName like'%" + seachKey + "%' or F.MiddleName like '%" + seachKey + "%' or F.LastName like '%" + seachKey + "%'  or F.Code like '%" + seachKey + "%'or F.ContactNumber like '%" + seachKey + "%' or p.Code like '%" + seachKey + "%') ";
     }
 
-    public String getclosedharvestinfo() {
+    public String getclosedharvestinfo(String seachKey) {
         return "select hv.PlotCode, p.FarmerCode, f.FirstName || ' ' || (CASE WHEN f.MiddleName = 'null' THEN '' ELSE f.MiddleName || ' ' END) || f.LastName  AS FarmerName," +
-                " v.Name as VillageName, c.Name as ClusterName, p.TotalPalmArea, ui.UserName, hv.Code as CropCode,hv.CreatedDate from HarvestorVisitHistory hv\n" +
+                " v.Name as VillageName, c.Name as ClusterName, p.TotalPalmArea, ui.UserName, hv.Code as CropCode,hv.CreatedDate,f.ContactNumber from HarvestorVisitHistory hv\n" +
                 "Inner Join Plot p on p.Code = hv.PlotCode\n" +
                 "Inner Join Farmer f on f.Code = p.FarmerCode\n" +
                 "Inner Join Address ad on ad.Code = p.AddressCode\n" +
@@ -2108,7 +2108,7 @@ public class Queries {
                 "Inner Join VillageClusterxref vc on vc.VillageId = ad.VillageId\n" +
                 "Inner Join Cluster c on c.Id = vc.ClusterId\n" +
                 "Inner Join UserInfo ui on ui.id = hv.CreatedByUserId\n" +
-                "where hv.IsVerified = 'false' AND f.IsActive = 1 and p.IsActive = 1 and hv.ServerUpdatedStatus = 1";
+                "where hv.IsVerified = 'false' AND f.IsActive = 1 and p.IsActive = 1 and hv.ServerUpdatedStatus = 1 AND ( F.FirstName like'%" + seachKey + "%' or F.MiddleName like '%" + seachKey + "%' or F.LastName like '%" + seachKey + "%'  or F.Code like '%" + seachKey + "%'or F.ContactNumber like '%" + seachKey + "%' or p.Code like '%" + seachKey + "%') ";
     }
 
     public String getbankdetails(String ifsccode) {

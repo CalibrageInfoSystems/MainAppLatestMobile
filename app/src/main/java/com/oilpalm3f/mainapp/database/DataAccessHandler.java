@@ -4946,8 +4946,9 @@ f
                     notPlotvisitedInfoObj.setVillageName(cursor.getString(3));
                     notPlotvisitedInfoObj.setClusterName(cursor.getString(4));
                     notPlotvisitedInfoObj.setTotalPalmArea(cursor.getString(5));
-                    notPlotvisitedInfoObj.setLastvisiteddate(cursor.getString(6));
-                    notPlotvisitedInfoObj.setVisitedBy(cursor.getString(7));
+                    notPlotvisitedInfoObj.setContactNumber(cursor.getString(6));
+                    notPlotvisitedInfoObj.setLastvisiteddate(cursor.getString(7));
+                    notPlotvisitedInfoObj.setVisitedBy(cursor.getString(8));
                     PlotInfoList.add(notPlotvisitedInfoObj);
                 } while (cursor.moveToNext());
             }
@@ -4984,6 +4985,7 @@ f
                     closedcropInfoObj.setUserName(cursor.getString(6));
                     closedcropInfoObj.setCropCode(cursor.getString(7));
                     closedcropInfoObj.setCreatedDate(cursor.getString(8));
+                    closedcropInfoObj.setContactNumber(cursor.getString(9));
 
                     closedcropList.add(closedcropInfoObj);
                 } while (cursor.moveToNext());

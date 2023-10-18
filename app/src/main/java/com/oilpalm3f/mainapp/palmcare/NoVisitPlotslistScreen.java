@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +55,15 @@ public class NoVisitPlotslistScreen extends AppCompatActivity {
     private ActionBar actionBar;
     private Toolbar toolbar;
     private static final String LOG_TAG = NoVisitPlotslistScreen.class.getName();
+
+
+    private EditText searchtext;
+    private ImageView clearsearch;
+    private android.widget.ProgressBar searchprogress;
+    private boolean isSearch = false;
+
+    String searchKey = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +90,10 @@ public class NoVisitPlotslistScreen extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         fromDate.setText(sdf.format(new Date()));
         toDate.setText(sdf.format(new Date()));
+
+        searchtext = (EditText) findViewById(R.id.searchtext);
+        clearsearch = (ImageView) findViewById(R.id.clearsearch);
+        searchprogress = (android.widget.ProgressBar) findViewById(R.id.searchprogress);
     }
     private void setviews() {
         offset = offset + LIMIT;
@@ -84,7 +101,7 @@ public class NoVisitPlotslistScreen extends AppCompatActivity {
 
 
             ProgressBar.showProgressBar(this, "Please wait...");
-            notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,fromDateStr,toDateStr), 1);
+            notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,fromDateStr,toDateStr, searchKey), 1);
             Collections.reverse(notVisitedplotsInfoList);
 
             ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
@@ -149,22 +166,85 @@ public class NoVisitPlotslistScreen extends AppCompatActivity {
         });
 
         notvisitedplotslist(offset);
+
+        clearsearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSearch = false;
+                notVisitedplotsInfoList.clear();
+                searchtext.setText("");
+            }
+        });
+
+        searchtext.addTextChangedListener(mTextWatcher);
+    }
+
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            com.oilpalm3f.mainapp.cloudhelper.Log.d("WhatisinSearch", "is :"+ s);
+            //
+            offset = 0;
+            ApplicationThread.uiPost(LOG_TAG, "search", new Runnable() {
+                @Override
+                public void run() {
+                    doSearch(s.toString().trim());
+                    if (s.toString().length() > 0) {
+                        clearsearch.setVisibility(View.VISIBLE);
+                    } else {
+                        clearsearch.setVisibility(View.GONE);
+                    }
+                }
+            }, 100);
+        }
+
+        @Override
+        public void afterTextChanged(final Editable s) {
+
+        }
+    };
+
+    public void doSearch(String searchQuery) {
+        com.oilpalm3f.mainapp.cloudhelper.Log.d("DoSearchQuery", "is :" +  searchQuery);
+        offset = 0;
+        hasMoreItems = true;
+        if (searchQuery !=null &  !TextUtils.isEmpty(searchQuery)  & searchQuery.length()  > 0) {
+
+            offset = 0;
+            isSearch = true;
+            searchKey = searchQuery.trim();
+            notvisitedplotslist(offset);
+        } else {
+            searchKey = "";
+            isSearch = false;
+            notvisitedplotslist(offset);
+        }
     }
 
 
     private void notvisitedplotslist(final int offset) {
-        ProgressBar.showProgressBar(this, "Please wait...");
+        //ProgressBar.showProgressBar(this, "Please wait...");
+
+        if (searchprogress != null) {
+            searchprogress.setVisibility(View.VISIBLE);
+        }
         ApplicationThread.bgndPost(LOG_TAG, "notvisitedplots", new Runnable() {
             @Override
             public void run() {
 
-                notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,fromDateStr,toDateStr), 1);
+                notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,fromDateStr,toDateStr, searchKey), 1);
                 Collections.reverse(notVisitedplotsInfoList);
 
                 ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
                     @Override
                     public void run() {
-                        ProgressBar.hideProgressBar();
+                        //ProgressBar.hideProgressBar();
+                        searchprogress.setVisibility(View.GONE);
                         noVisitsDetailsRecyclerAdapter = new NoVisitsInfoAdapter(NoVisitPlotslistScreen.this, notVisitedplotsInfoList);
                         if (notVisitedplotsInfoList != null && !notVisitedplotsInfoList.isEmpty()) {
                             novisitplot_list.setVisibility(View.VISIBLE);

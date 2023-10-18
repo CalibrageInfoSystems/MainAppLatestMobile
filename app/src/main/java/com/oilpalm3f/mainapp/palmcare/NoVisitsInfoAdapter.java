@@ -51,7 +51,6 @@ public class NoVisitsInfoAdapter extends RecyclerView.Adapter<NoVisitsInfoAdapte
         View view = inflater.inflate(R.layout.no_visits_item, viewGroup, false);
         ViewHolder myHolder = new ViewHolder(view);
         return myHolder;
-
     }
 
     @Override

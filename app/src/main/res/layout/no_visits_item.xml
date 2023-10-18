@@ -129,6 +129,39 @@
                         android:textColor="@color/text_dark_gray" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/header_h1_text_title_list_item"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Contact Number"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        style="@style/header_h1_text_title_list_item"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.02"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_contactNumber"
+                        style="@style/header_h1_text_title_list_item"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/text_dark_gray" />
+                </LinearLayout>
+
 
 
                 <LinearLayout

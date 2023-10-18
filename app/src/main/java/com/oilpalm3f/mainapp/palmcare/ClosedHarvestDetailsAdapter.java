@@ -72,6 +72,8 @@ public class ClosedHarvestDetailsAdapter extends RecyclerView.Adapter<ClosedHarv
 //        } else {
 //            holder.tvcontactNumber.setText("");
 //        }
+
+        holder.contactNumber.setText(item.getContactNumber() != null ? item.getContactNumber().trim() : "");
         holder.villagename.setText(item.getVillageName() != null ? item.getVillageName().trim() : "");
         holder.clusterName.setText(item.getClusterName() != null ? item.getClusterName().trim() : "");
         holder.plotid.setText(item.getPlotCode() != null ? item.getPlotCode().trim() : "");
@@ -164,6 +166,8 @@ Log.e("====>",dop);
         private TextView lastvisiteddate;
         Button generateotp,resendotp,closebtn;
         private View convertView;
+        private TextView contactNumber;
+
 
         public ViewHolder(View view) {
             super(view);
@@ -181,6 +185,7 @@ Log.e("====>",dop);
             generateotp = (Button) view.findViewById(R.id.generateotp);
             resendotp = (Button) view.findViewById(R.id.resendotp);
             closebtn = (Button) view.findViewById(R.id.closebtn);
+            contactNumber = (TextView) view.findViewById(R.id.contactNumber);
         }
     }
 

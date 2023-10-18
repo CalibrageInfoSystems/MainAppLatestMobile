@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +62,14 @@ public class CloseHarvestingList extends AppCompatActivity implements ClosedHarv
     private PinEntryEditText pinEntry;
     Button dialogButton;
     TextView no_text;
+
+    private EditText searchtext;
+    private ImageView clearsearch;
+    private android.widget.ProgressBar searchprogress;
+    private boolean isSearch = false;
+    private boolean hasMoreItems = true;
+
+    String searchKey = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,27 +90,95 @@ public class CloseHarvestingList extends AppCompatActivity implements ClosedHarv
         no_text = findViewById(R.id.no_text);
         closedharvest_list =  findViewById(R.id.closedharvest_list);
         dataAccessHandler = new DataAccessHandler(this);
+
+        searchtext = (EditText) findViewById(R.id.searchtext);
+        clearsearch = (ImageView) findViewById(R.id.clearsearch);
+        searchprogress = (android.widget.ProgressBar) findViewById(R.id.searchprogress);
     }
 
     private void setviews() {
         offset = offset + LIMIT;
 
         ClosedharvestList();
+
+        clearsearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSearch = false;
+                ClosedharvestInfoList.clear();
+                searchtext.setText("");
+            }
+        });
+
+        searchtext.addTextChangedListener(mTextWatcher);
+    }
+
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            com.oilpalm3f.mainapp.cloudhelper.Log.d("WhatisinSearch", "is :"+ s);
+            //
+            offset = 0;
+            ApplicationThread.uiPost(LOG_TAG, "search", new Runnable() {
+                @Override
+                public void run() {
+                    doSearch(s.toString().trim());
+                    if (s.toString().length() > 0) {
+                        clearsearch.setVisibility(View.VISIBLE);
+                    } else {
+                        clearsearch.setVisibility(View.GONE);
+                    }
+                }
+            }, 100);
+        }
+
+        @Override
+        public void afterTextChanged(final Editable s) {
+
+        }
+    };
+
+    public void doSearch(String searchQuery) {
+        com.oilpalm3f.mainapp.cloudhelper.Log.d("DoSearchQuery", "is :" +  searchQuery);
+        offset = 0;
+        hasMoreItems = true;
+        if (searchQuery !=null &  !TextUtils.isEmpty(searchQuery)  & searchQuery.length()  > 0) {
+
+            offset = 0;
+            isSearch = true;
+            searchKey = searchQuery.trim();
+            ClosedharvestList();
+        } else {
+            searchKey = "";
+            isSearch = false;
+            ClosedharvestList();
+        }
     }
 
     private void ClosedharvestList() {
-        ProgressBar.showProgressBar(this, "Please wait...");
+        //ProgressBar.showProgressBar(this, "Please wait...");
+
+        if (searchprogress != null) {
+            searchprogress.setVisibility(View.VISIBLE);
+        }
+
         ApplicationThread.bgndPost(LOG_TAG, "renderAlerts", new Runnable() {
             @Override
             public void run() {
 
-                ClosedharvestInfoList = (List<ClosedDataDetails>) dataAccessHandler.getClosedcropInfo(Queries.getInstance().getclosedharvestinfo(), 1);
+                ClosedharvestInfoList = (List<ClosedDataDetails>) dataAccessHandler.getClosedcropInfo(Queries.getInstance().getclosedharvestinfo(searchKey), 1);
                 Collections.reverse(ClosedharvestInfoList);
 
                 ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
                     @Override
                     public void run() {
-                        ProgressBar.hideProgressBar();
+                        //ProgressBar.hideProgressBar();
+                        searchprogress.setVisibility(View.GONE);
                         closedharvestDetailsRecyclerAdapter = new ClosedHarvestDetailsAdapter(CloseHarvestingList.this, ClosedharvestInfoList,CloseHarvestingList.this);
                         if (ClosedharvestInfoList != null && !ClosedharvestInfoList.isEmpty()&& ClosedharvestInfoList.size()!=0) {
                             closedharvest_list.setVisibility(View.VISIBLE);

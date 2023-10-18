@@ -7,8 +7,18 @@ public class NotVisitedPlotsInfo {
     private String villageName;
     private String ClusterName;
     private String TotalPalmArea;
+
+    private String ContactNumber;
     private String lastvisiteddate;
     private String VisitedBy;
+
+    public String getContactNumber() {
+        return ContactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        ContactNumber = contactNumber;
+    }
 
     public String getPlotCode() {
         return plotCode;

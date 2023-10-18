@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +65,14 @@ public class ClosecropMaintenanceList extends AppCompatActivity implements Close
     TextView no_text;
     Button dialogButton;
     private PinEntryEditText pinEntry;
+
+    private EditText searchtext;
+    private ImageView clearsearch;
+    private android.widget.ProgressBar searchprogress;
+    private boolean isSearch = false;
+    private boolean hasMoreItems = true;
+
+    String searchKey = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,28 +92,96 @@ public class ClosecropMaintenanceList extends AppCompatActivity implements Close
         }
         closedcrop_list =  findViewById(R.id.closedcrop_list);
         no_text = findViewById(R.id.no_text);
+
+        searchtext = (EditText) findViewById(R.id.searchtext);
+        clearsearch = (ImageView) findViewById(R.id.clearsearch);
+        searchprogress = (android.widget.ProgressBar) findViewById(R.id.searchprogress);
+
         dataAccessHandler = new DataAccessHandler(this);
     }
     private void setviews() {
         offset = offset + LIMIT;
 
         ClosedcropList();
+
+        clearsearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSearch = false;
+                ClosedcropInfoList.clear();
+                searchtext.setText("");
+            }
+        });
+
+        searchtext.addTextChangedListener(mTextWatcher);
+    }
+
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            com.oilpalm3f.mainapp.cloudhelper.Log.d("WhatisinSearch", "is :"+ s);
+            //
+            offset = 0;
+            ApplicationThread.uiPost(LOG_TAG, "search", new Runnable() {
+                @Override
+                public void run() {
+                    doSearch(s.toString().trim());
+                    if (s.toString().length() > 0) {
+                        clearsearch.setVisibility(View.VISIBLE);
+                    } else {
+                        clearsearch.setVisibility(View.GONE);
+                    }
+                }
+            }, 100);
+        }
+
+        @Override
+        public void afterTextChanged(final Editable s) {
+
+        }
+    };
+
+    public void doSearch(String searchQuery) {
+        com.oilpalm3f.mainapp.cloudhelper.Log.d("DoSearchQuery", "is :" +  searchQuery);
+        offset = 0;
+        hasMoreItems = true;
+        if (searchQuery !=null &  !TextUtils.isEmpty(searchQuery)  & searchQuery.length()  > 0) {
+
+            offset = 0;
+            isSearch = true;
+            searchKey = searchQuery.trim();
+            ClosedcropList();
+        } else {
+            searchKey = "";
+            isSearch = false;
+            ClosedcropList();
+        }
     }
 
 
     private void ClosedcropList() {
-        ProgressBar.showProgressBar(this, "Please wait...");
+        //ProgressBar.showProgressBar(this, "Please wait...");
+
+        if (searchprogress != null) {
+            searchprogress.setVisibility(View.VISIBLE);
+        }
+
         ApplicationThread.bgndPost(LOG_TAG, " ClosedcropList", new Runnable() {
             @Override
             public void run() {
 
-                ClosedcropInfoList = (List<ClosedDataDetails>) dataAccessHandler.getClosedcropInfo(Queries.getInstance().getclosedcropinfo(), 1);
+                ClosedcropInfoList = (List<ClosedDataDetails>) dataAccessHandler.getClosedcropInfo(Queries.getInstance().getclosedcropinfo(searchKey), 1);
                 Collections.reverse(ClosedcropInfoList);
 
                 ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
                     @Override
                     public void run() {
-                        ProgressBar.hideProgressBar();
+                        searchprogress.setVisibility(View.GONE);
                         closedcropDetailsRecyclerAdapter = new ClosedcropDetailsAdapter(ClosecropMaintenanceList.this, ClosedcropInfoList,ClosecropMaintenanceList.this);
                         if (ClosedcropInfoList != null && !ClosedcropInfoList.isEmpty() && ClosedcropInfoList.size()!=0 ) {
                             closedcrop_list.setVisibility(View.VISIBLE);
