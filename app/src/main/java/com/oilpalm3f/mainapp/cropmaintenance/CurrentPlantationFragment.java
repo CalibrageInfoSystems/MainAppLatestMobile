@@ -596,20 +596,22 @@ public class CurrentPlantationFragment extends Fragment {
         });
     }
 
+
+
+
     private void plotgapfillingdetails() {
         Log.e("=========>",CommonConstants.PLOT_CODE);
         plotgapfillingdetails = new PlotGapFillingDetails();
         // plotgapfillingdetails.setId();
         plotgapfillingdetails.setPlotCode(CommonConstants.PLOT_CODE);
         plotgapfillingdetails.setSaplingsToBeIssued(totalimportedandIndigenousSaplingscount);
-        //   plotgapfillingdetails.setSaplingsToBeIssued(missingtrees_text.getText().toString().contains("Yes") ? 1 : 0);
         plotgapfillingdetails.setImportedSaplingsToBeIssued(ImportedSaplingscount);
         plotgapfillingdetails.setIndigenousSaplingsToBeIssued(IndigenousSaplingscount);
         plotgapfillingdetails.setExpectedDateofPickup(Exp_date);
         plotgapfillingdetails.setGapFillingReasonTypeId(gapfillingreasonspinner.getSelectedItemPosition() == 0 ? null :
                 Integer.parseInt(getKey(gapfillingreasonDataMap, gapfillingreasonspinner.getSelectedItem().toString())));
         plotgapfillingdetails.setIsApproved(0);
-        plotgapfillingdetails.setIsDeclined(0);
+        plotgapfillingdetails.setIsActive(0);
         plotgapfillingdetails.setComments(Edtgapfillingcomments.getText().toString());
         plotgapfillingdetails.setIsActive(1);
         plotgapfillingdetails.setFileName("");
@@ -619,18 +621,20 @@ public class CurrentPlantationFragment extends Fragment {
         plotgapfillingdetails.setCreatedDate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         plotgapfillingdetails.setUpdatedByUserId(Integer.parseInt(CommonConstants.USER_ID));
         plotgapfillingdetails.setUpdatedDate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        plotgapfillingdetails.setApprovedByUserId(null);
         plotgapfillingdetails.setApprovedDate("");
+        plotgapfillingdetails.setDeclinedByUserId(null);
         plotgapfillingdetails.setDeclinedDate("");
         plotgapfillingdetails.setApprovedComments("");
         plotgapfillingdetails.setDeclinedComments("");
         plotgapfillingdetails.setIsVerified(0);
+        plotgapfillingdetails.setGapFillingApprovedStatusTypeId(null);
         plotgapfillingdetails.setGapFillingApprovedComments("");
+        plotgapfillingdetails.setGapFillingRejectedStatusTypeId(null); // Use null instead of 'null'
+        plotgapfillingdetails.setGapFillingRejectedStatusTypeId(null); // Use null instead of 'null'
         plotgapfillingdetails.setGapFillingRejectedComments("");
         plotgapfillingdetails.setServerUpdatedStatus(0);
-        plotgapfillingdetails.setApprovedByUserId(null); // Use null instead of 'null'
-        plotgapfillingdetails.setDeclinedByUserId(null); // Use null instead of 'null'
-        plotgapfillingdetails.setGapFillingApprovedStatusTypeId(null); // Use null instead of 'null'
-        plotgapfillingdetails.setGapFillingRejectedStatusTypeId(null); // Use null instead of 'null'
+
 
         DataManager.getInstance().addData(DataManager.PlotGapFilling_Details, plotgapfillingdetails);
         CommonUtilsNavigation.hideKeyBoard(getActivity());
@@ -704,7 +708,7 @@ public class CurrentPlantationFragment extends Fragment {
 
         String lastVisitCode = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getLatestCropMaintanaceHistoryCode(CommonConstants.PLOT_CODE));
         currentplantationlastvisitdatamap = (ArrayList<Uprootment>) dataAccessHandler.getUprootmentData(Queries.getInstance().getRecommndCropMaintenanceHistoryData(lastVisitCode, DatabaseKeys.TABLE_UPROOTMENT), 1);
-        lastgapfillingdetails = (ArrayList<PlotGapFillingDetails>) dataAccessHandler.getPlotgapFillingdetails(Queries.getInstance().getGapFillingDetailsHistoryData(), 1);
+        lastgapfillingdetails = (ArrayList<PlotGapFillingDetails>) dataAccessHandler.getPlotGapFillingDetails(Queries.getInstance().getGapFillingDetailsHistoryData(), 1);
 
         if (currentplantationlastvisitdatamap.size() > 0) {
             norecords.setVisibility(View.GONE);

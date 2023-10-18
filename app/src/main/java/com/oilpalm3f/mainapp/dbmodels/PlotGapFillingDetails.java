@@ -1,125 +1,74 @@
 package com.oilpalm3f.mainapp.dbmodels;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
+import java.util.Date;
 
 public class PlotGapFillingDetails {
 
-//    @SerializedName("Id")
-//    @Expose
-//    private Integer id;
-    @SerializedName("PlotCode")
-    @Expose
-    private String plotCode;
-    @SerializedName("SaplingsToBeIssued")
-    @Expose
-    private Integer saplingsToBeIssued;
-    @SerializedName("ImportedSaplingsToBeIssued")
-    @Expose
-    private Integer importedSaplingsToBeIssued;
-    @SerializedName("IndigenousSaplingsToBeIssued")
-    @Expose
-    private Integer indigenousSaplingsToBeIssued;
-    @SerializedName("ExpectedDateofPickup")
-    @Expose
-    private String expectedDateofPickup;
-    @SerializedName("GapFillingReasonTypeId")
-    @Expose
-    private Integer gapFillingReasonTypeId;
-    @SerializedName("IsApproved")
-    @Expose
-    private int isApproved;
-    @SerializedName("IsDeclined")
-    @Expose
-    private int isDeclined;
-    @SerializedName("Comments")
-    @Expose
-    private String comments;
-    @SerializedName("IsActive")
-    @Expose
-    private int isActive;
-    @SerializedName("FileName")
-    @Expose
-    private String fileName;
-    @SerializedName("FileLocation")
-    @Expose
-    private String fileLocation;
-    @SerializedName("FileExtension")
-    @Expose
-    private String fileExtension;
-    @SerializedName("CreatedByUserId")
-    @Expose
-    private Integer createdByUserId;
-    @SerializedName("CreatedDate")
-    @Expose
-    private String createdDate;
-    @SerializedName("UpdatedByUserId")
-    @Expose
-    private Integer updatedByUserId;
-    @SerializedName("UpdatedDate")
-    @Expose
-    private String updatedDate;
-    @SerializedName("ApprovedByUserId")
-    @Expose
-    private Integer approvedByUserId;
-    @SerializedName("ApprovedDate")
-    @Expose
-    private String approvedDate;
-    @SerializedName("DeclinedByUserId")
-    @Expose
-    private Integer declinedByUserId;
-    @SerializedName("DeclinedDate")
-    @Expose
-    private String declinedDate;
-    @SerializedName("ApprovedComments")
-    @Expose
-    private String approvedComments;
-    @SerializedName("DeclinedComments")
-    @Expose
-    private String declinedComments;
-    @SerializedName("IsVerified")
-    @Expose
-    private Integer isVerified;
-    @SerializedName("GapFillingApprovedStatusTypeId")
-    @Expose
-    private Integer gapFillingApprovedStatusTypeId;
-    @SerializedName("GapFillingApprovedComments")
-    @Expose
-    private String gapFillingApprovedComments;
-    @SerializedName("GapFillingRejectedStatusTypeId")
-    @Expose
-    private Integer gapFillingRejectedStatusTypeId;
-    @SerializedName("GapFillingRejectedComments")
-    @Expose
-    private String gapFillingRejectedComments;
-    @SerializedName("ServerUpdatedStatus")
-    @Expose
-    private int serverUpdatedStatus;
+//        private int id;
+        private String plotCode;
+        private int saplingsToBeIssued;
+        private Integer importedSaplingsToBeIssued;
+        private Integer indigenousSaplingsToBeIssued;
+        private String expectedDateofPickup;
+        private Integer gapFillingReasonTypeId;
+        private Integer isApproved;
+        private Integer isDeclined;
+        private String comments;
+        private int isActive;
+        private String fileName;
+        private String fileLocation;
+        private String fileExtension;
+        private int createdByUserId;
+        private String createdDate;
+        private int updatedByUserId;
+        private String updatedDate;
+        private Integer approvedByUserId;
+        private String approvedDate;
+        private Integer declinedByUserId;
+        private String declinedDate;
+        private String approvedComments;
+        private String declinedComments;
+        private int isVerified;
+        private Integer gapFillingApprovedStatusTypeId;
+        private String gapFillingApprovedComments;
+        private Integer gapFillingRejectedStatusTypeId;
+        private String gapFillingRejectedComments;
+        private int serverUpdatedStatus;
 
-//    public Integer getId() {
-//        return id;
-//    }
+
+//        public int getId() {
+//            return id;
+//        }
 //
-//    public void setId(Integer id) {
-//        this.id = id;
-//    }
+//        public void setId(int id) {
+//            this.id = id;
+//        }
 
-    public String getPlotCode() {
-        return plotCode;
-    }
+        public String getPlotCode() {
+            return plotCode;
+        }
 
-    public void setPlotCode(String plotCode) {
-        this.plotCode = plotCode;
-    }
+        public void setPlotCode(String plotCode) {
+            this.plotCode = plotCode;
+        }
 
-    public Integer getSaplingsToBeIssued() {
-        return saplingsToBeIssued;
-    }
+        public int getSaplingsToBeIssued() {
+            return saplingsToBeIssued;
+        }
 
-    public void setSaplingsToBeIssued(Integer saplingsToBeIssued) {
-        this.saplingsToBeIssued = saplingsToBeIssued;
-    }
+        public void setSaplingsToBeIssued(int saplingsToBeIssued) {
+            this.saplingsToBeIssued = saplingsToBeIssued;
+        }
+
+        // Repeat the same pattern for other fields
+
+        public int getServerUpdatedStatus() {
+            return serverUpdatedStatus;
+        }
+
+        public void setServerUpdatedStatus(int serverUpdatedStatus) {
+            this.serverUpdatedStatus = serverUpdatedStatus;
+        }
 
     public Integer getImportedSaplingsToBeIssued() {
         return importedSaplingsToBeIssued;
@@ -153,19 +102,19 @@ public class PlotGapFillingDetails {
         this.gapFillingReasonTypeId = gapFillingReasonTypeId;
     }
 
-    public int getIsApproved() {
+    public Integer getIsApproved() {
         return isApproved;
     }
 
-    public void setIsApproved(int isApproved) {
+    public void setIsApproved(Integer isApproved) {
         this.isApproved = isApproved;
     }
 
-    public int getIsDeclined() {
+    public Integer getIsDeclined() {
         return isDeclined;
     }
 
-    public void setIsDeclined(int isDeclined) {
+    public void setIsDeclined(Integer isDeclined) {
         this.isDeclined = isDeclined;
     }
 
@@ -209,11 +158,11 @@ public class PlotGapFillingDetails {
         this.fileExtension = fileExtension;
     }
 
-    public Integer getCreatedByUserId() {
+    public int getCreatedByUserId() {
         return createdByUserId;
     }
 
-    public void setCreatedByUserId(Integer createdByUserId) {
+    public void setCreatedByUserId(int createdByUserId) {
         this.createdByUserId = createdByUserId;
     }
 
@@ -225,11 +174,11 @@ public class PlotGapFillingDetails {
         this.createdDate = createdDate;
     }
 
-    public Integer getUpdatedByUserId() {
+    public int getUpdatedByUserId() {
         return updatedByUserId;
     }
 
-    public void setUpdatedByUserId(Integer updatedByUserId) {
+    public void setUpdatedByUserId(int updatedByUserId) {
         this.updatedByUserId = updatedByUserId;
     }
 
@@ -289,11 +238,11 @@ public class PlotGapFillingDetails {
         this.declinedComments = declinedComments;
     }
 
-    public Integer getIsVerified() {
+    public int getIsVerified() {
         return isVerified;
     }
 
-    public void setIsVerified(Integer isVerified) {
+    public void setIsVerified(int isVerified) {
         this.isVerified = isVerified;
     }
 
@@ -328,13 +277,4 @@ public class PlotGapFillingDetails {
     public void setGapFillingRejectedComments(String gapFillingRejectedComments) {
         this.gapFillingRejectedComments = gapFillingRejectedComments;
     }
-
-    public int getServerUpdatedStatus() {
-        return serverUpdatedStatus;
-    }
-
-    public void setServerUpdatedStatus(int serverUpdatedStatus) {
-        this.serverUpdatedStatus = serverUpdatedStatus;
-    }
-
 }

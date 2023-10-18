@@ -5061,58 +5061,65 @@ f
         }
         return bankDataModelArrayList;
     }
-    public T getPlotgapFillingdetails(final String query, final int type) {
-        PlotGapFillingDetails plotgapfillingdetails = null;
-        List<PlotGapFillingDetails> plotgapfillingList = new ArrayList<>();
+    public T getPlotGapFillingDetails(final String query, final int type) {
+        PlotGapFillingDetails plotGapFillingDetails = null;
+        List<PlotGapFillingDetails> plotGapFillingList = new ArrayList<>();
         Cursor cursor = null;
         Log.v(LOG_TAG, "@@@ farmer details query " + query);
+
         try {
             cursor = mDatabase.rawQuery(query, null);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    plotgapfillingdetails = new PlotGapFillingDetails();
-                    // plotgapfillingdetails.setId(cursor.getInt(0));
-                    plotgapfillingdetails.setPlotCode(cursor.getString(1));
-                    plotgapfillingdetails.setSaplingsToBeIssued(cursor.getInt(2));
-                    plotgapfillingdetails.setImportedSaplingsToBeIssued(cursor.getInt(3));
-                    plotgapfillingdetails.setIndigenousSaplingsToBeIssued(cursor.getInt(4));
-                    //    plotgapfillingdetails.setReasontypeid((cursor.getInt(6) == 0) ? null : cursor.getInt(6));
-                    plotgapfillingdetails.setExpectedDateofPickup(cursor.getString(5));
-                    plotgapfillingdetails.setGapFillingReasonTypeId(cursor.getInt(6));
-                    plotgapfillingdetails.setIsApproved(cursor.getInt(7));
-                    plotgapfillingdetails.setIsDeclined(cursor.getInt(8));
-                    plotgapfillingdetails.setComments(cursor.getString(9));
-                    plotgapfillingdetails.setIsActive(cursor.getInt(10));
-                    plotgapfillingdetails.setFileName(cursor.getString(11));
-                    plotgapfillingdetails.setFileLocation(cursor.getString(12));
-                    plotgapfillingdetails.setFileExtension(cursor.getString(13));
-                    plotgapfillingdetails.setCreatedByUserId(cursor.getInt(14));
-                    plotgapfillingdetails.setCreatedDate(cursor.getString(15));
-                    plotgapfillingdetails.setUpdatedByUserId(cursor.getInt(16));
+                    plotGapFillingDetails = new PlotGapFillingDetails();
 
-                    plotgapfillingdetails.setUpdatedDate(cursor.getString(17));
-                    plotgapfillingdetails.setApprovedByUserId(cursor.getInt(18));
-                    plotgapfillingdetails.setApprovedDate(cursor.getString(19));
-                    plotgapfillingdetails.setDeclinedByUserId(cursor.getInt(20));
-                    plotgapfillingdetails.setDeclinedDate(cursor.getString(21));
-                    plotgapfillingdetails.setApprovedComments(cursor.getString(22));
-                    plotgapfillingdetails.setDeclinedComments(cursor.getString(23));
-                    plotgapfillingdetails.setIsVerified(cursor.getInt(24));
-                    plotgapfillingdetails.setGapFillingApprovedStatusTypeId(cursor.getInt(25));
-                    plotgapfillingdetails.setGapFillingApprovedComments(cursor.getString(26));
-                    plotgapfillingdetails.setGapFillingRejectedStatusTypeId(cursor.getInt(27));
-                    plotgapfillingdetails.setGapFillingRejectedComments(cursor.getString(28));
-                    plotgapfillingdetails.setServerUpdatedStatus(cursor.getInt(29));
+                    // Populate the model with all fields
+                 //   plotGapFillingDetails.setId(cursor.getInt(0));
+                    plotGapFillingDetails.setPlotCode(cursor.getString(1));
+                    plotGapFillingDetails.setSaplingsToBeIssued(cursor.getInt(2));
+                    plotGapFillingDetails.setImportedSaplingsToBeIssued(cursor.getInt(3));
+                    plotGapFillingDetails.setIndigenousSaplingsToBeIssued(cursor.getInt(4));
+                    plotGapFillingDetails.setExpectedDateofPickup(cursor.getString(5));
+                    plotGapFillingDetails.setGapFillingReasonTypeId(cursor.getInt(6));
+                    plotGapFillingDetails.setIsApproved(cursor.getInt(7));
+                    plotGapFillingDetails.setIsDeclined(cursor.getInt(8));
+                    plotGapFillingDetails.setComments(cursor.getString(9));
+                    plotGapFillingDetails.setIsActive(cursor.getInt(10));
+                    plotGapFillingDetails.setFileName(cursor.getString(11));
+                    plotGapFillingDetails.setFileLocation(cursor.getString(12));
+                    plotGapFillingDetails.setFileExtension(cursor.getString(13));
+                    plotGapFillingDetails.setCreatedByUserId(cursor.getInt(14));
+                    plotGapFillingDetails.setCreatedDate(cursor.getString(15));
+                    plotGapFillingDetails.setUpdatedByUserId(cursor.getInt(16));
+                    plotGapFillingDetails.setUpdatedDate(cursor.getString(17));
+                    plotGapFillingDetails.setApprovedByUserId(cursor.getInt(18));
+                    plotGapFillingDetails.setApprovedDate(cursor.getString(19));
+                    plotGapFillingDetails.setDeclinedByUserId(cursor.getInt(20));
+                    plotGapFillingDetails.setDeclinedDate(cursor.getString(21));
+                    plotGapFillingDetails.setApprovedComments(cursor.getString(22));
+                    plotGapFillingDetails.setDeclinedComments(cursor.getString(23));
+                    plotGapFillingDetails.setIsVerified(cursor.getInt(24));
+                    plotGapFillingDetails.setGapFillingApprovedStatusTypeId(cursor.getInt(25));
+                    plotGapFillingDetails.setGapFillingApprovedComments(cursor.getString(26));
+                    plotGapFillingDetails.setGapFillingRejectedStatusTypeId(cursor.getInt(27));
+                    plotGapFillingDetails.setGapFillingRejectedComments(cursor.getString(28));
+                    plotGapFillingDetails.setServerUpdatedStatus(cursor.getInt(29));
 
                     if (type == 1) {
-                        plotgapfillingList.add(plotgapfillingdetails);
+                        plotGapFillingList.add(plotGapFillingDetails);
                     }
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "@@@ getting gap filling details " + e.getMessage());
+            Log.e(LOG_TAG, "@@@ Getting gap filling details " + e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-        return (T) ((type == 0) ? plotgapfillingdetails : plotgapfillingList);
+
+        return (T) ((type == 0) ? plotGapFillingDetails : plotGapFillingList);
     }
+
 
 }

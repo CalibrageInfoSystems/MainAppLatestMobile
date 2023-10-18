@@ -58,6 +58,7 @@ class DataBaseUpgrade {
                 upgradeDb31(db);
                 upgradeDb32(db);
                 upgradeDb33(db);
+                upgradeDb34(db);
 
             } else {
                 boolean isDbUpgradeFinished = sharedPreferences.getBoolean(String.valueOf(Palm3FoilDatabase.DATA_VERSION), false);
@@ -194,6 +195,10 @@ class DataBaseUpgrade {
                         case 33:
                             upgradeDb33(db);
                             UiUtils.showCustomToastMessage("Updating database 33 -->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
+                            break;
+                        case 34:
+                            upgradeDb34(db);
+                            UiUtils.showCustomToastMessage("Updating database 34 -->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
                             break;
 
 
@@ -1672,6 +1677,66 @@ class DataBaseUpgrade {
             db.execSQL(GapFillingRequiredcolumn);
             db.execSQL(saplingsCountcolumn);
             db.execSQL(PlotGapFillingDetails);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Added  on 12th oct  2023
+    private static void upgradeDb34( final SQLiteDatabase db) {
+        Log.d(LOG_TAG, "******* upgradeDataBase 34 ******" + Palm3FoilDatabase.DATA_VERSION);
+
+
+        String plotGapFillingDetails = "DROP TABLE PlotGapFillingDetails";
+        db.execSQL(plotGapFillingDetails);
+
+
+        String newPlotGapFillingDetails = "CREATE TABLE PlotGapFillingDetails(\n" +
+                "Id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "PlotCode TEXT NOT NULL,\n" +
+                "SaplingsToBeIssued INTEGER NOT NULL,\n" +
+                "ImportedSaplingsToBeIssued INTEGER,\n" +
+                "IndigenousSaplingsToBeIssued INTEGER,\n" +
+                "ExpectedDateofPickup DATETIME NOT NULL,\n" +
+                "GapFillingReasonTypeId INTEGER NOT NULL,\n" +
+                "IsApproved INTEGER,\n" +
+                "IsDeclined INTEGER,\n" +
+                "Comments TEXT,\n" +
+                "IsActive INTEGER NOT NULL,\n" +
+                "FileName TEXT,\n" +
+                "FileLocation TEXT,\n" +
+                "FileExtension TEXT,\n" +
+                "CreatedByUserId INTEGER NOT NULL,\n" +
+                "CreatedDate DATETIME NOT NULL,\n" +
+                "UpdatedByUserId INTEGER NOT NULL,\n" +
+                "UpdatedDate DATETIME NOT NULL,\n" +
+                "ApprovedByUserId INTEGER,\n" +
+                "ApprovedDate DATETIME,\n" +
+                "DeclinedByUserId INTEGER,\n" +
+                "DeclinedDate DATETIME,\n" +
+                "ApprovedComments TEXT,\n" +
+                "DeclinedComments TEXT,\n" +
+                "IsVerified INTEGER NOT NULL,\n" +
+                "GapFillingApprovedStatusTypeId INTEGER,\n" +
+                "GapFillingApprovedComments TEXT,\n" +
+                "GapFillingRejectedStatusTypeId INTEGER,\n" +
+                "GapFillingRejectedComments TEXT,\n" +
+                "ServerUpdatedStatus INTEGER NOT NULL)";
+
+        String CMApprovalCommentscolumn = "ALTER TABLE Plot Add CMApprovalComments VARCHAR(500)";
+        String SHApprovalCommentscolumn = "ALTER TABLE Plot Add SHApprovalComments VARCHAR(500)";
+
+        String AHApprovalCommentscolumn = "ALTER TABLE Plot Add AHApprovalComments VARCHAR(500)";
+
+
+        try {
+
+
+            db.execSQL(newPlotGapFillingDetails);
+            db.execSQL(CMApprovalCommentscolumn);
+            db.execSQL(SHApprovalCommentscolumn);
+            db.execSQL(AHApprovalCommentscolumn);
 
         } catch (Exception e) {
             e.printStackTrace();

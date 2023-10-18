@@ -440,7 +440,7 @@ public class DataSyncHelper {
         List<RecoveryFarmerGroup> recoveryFarmerGroupList = (List<RecoveryFarmerGroup>) dataAccessHandler.getSelectedRecoveryFarmerData(Queries.getInstance().getSelectedRecoveryFarmersRefresh(), 1);
         List<PlantationAuditAnswersModel> plantationAuditAnswerList = (List<PlantationAuditAnswersModel>) dataAccessHandler.getPlantationAuditAnswerData(Queries.getInstance().getPlantationAuditAnswersRefresh(), 1);
 
-        List<PlotGapFillingDetails> PlotgapfillingList = (List<PlotGapFillingDetails>) dataAccessHandler.getPlotgapFillingdetails(Queries.getInstance().getplotgapfillingrefresh(), 1);
+        List<PlotGapFillingDetails> PlotgapfillingList = (List<PlotGapFillingDetails>) dataAccessHandler.getPlotGapFillingDetails(Queries.getInstance().getplotgapfillingrefresh(), 1);
 
 
 
