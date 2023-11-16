@@ -283,6 +283,7 @@ public class CurrentPlantationFragment extends Fragment {
                 int previusTrees = 0;
                 if (!s.toString().equalsIgnoreCase("")) {
                     currentTrees = CommonUtils.convertToBigNumber(s.toString());
+
                     if (currentTrees > Integer.parseInt(expecetedTreesCount)) {
                         UiUtils.showCustomToastMessage(" Count Of Trees should be less than or equal to the Count of trees ", mContext, 0);
                         counttresscurrentvisitEdt.setText("");
@@ -292,7 +293,7 @@ public class CurrentPlantationFragment extends Fragment {
                     if (Integer.parseInt(expecetedTreesCount) > currentTrees) {
                         missingtrees_text.setText("Yes");
                         noofmissingtrees_text.setText("" + (Integer.parseInt(expecetedTreesCount) - currentTrees));
-                        reasonformissingtreesLL.setVisibility(View.VISIBLE);
+                        reasonformissingtreesLL.setVisibility(View.VISIBLE);;
                         gapfillinglinear.setVisibility(View.VISIBLE);
                         comments_tv.setText("Comments*");
                         missingTrees = (Integer.parseInt(expecetedTreesCount) - currentTrees);

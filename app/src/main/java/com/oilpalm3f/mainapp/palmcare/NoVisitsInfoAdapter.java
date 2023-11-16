@@ -64,6 +64,7 @@ public class NoVisitsInfoAdapter extends RecyclerView.Adapter<NoVisitsInfoAdapte
         holder.tvvillageName.setText(item.getVillageName() != null ? item.getVillageName().trim() : "");
      holder.tvPlotcluster.setText(item.getClusterName() != null ? item.getClusterName().trim() : "");
         holder.tvplotCode.setText(item.getPlotCode() != null ? item.getPlotCode().trim() : "");
+       holder.tvContactNumber.setText(item.getContactNumber() != null ? item.getContactNumber().trim() : "");
         holder.tvfarmerCode.setText(item.getFarmerCode() != null ? item.getFarmerCode().trim() : "");
         holder.tvtotalPlotArea.setText(item.getTotalPalmArea() != null ? item.getTotalPalmArea().trim() : "");
         holder.tvvisitedby.setText(item.getVisitedBy() != null ? item.getVisitedBy().trim() : "");
@@ -107,6 +108,7 @@ public class NoVisitsInfoAdapter extends RecyclerView.Adapter<NoVisitsInfoAdapte
         private TextView tvfirstName;
         private TextView tvPlotcluster;
         private TextView tvvisitedby;
+        private TextView tvContactNumber;
         private TextView tvvillageName;
         private TextView tvtotalPlotArea;
         private TextView tvdateofplanting;
@@ -127,6 +129,7 @@ public class NoVisitsInfoAdapter extends RecyclerView.Adapter<NoVisitsInfoAdapte
             tvtotalPlotArea = (TextView) view.findViewById(R.id.tvSize);
             tvvisitedby = (TextView) view.findViewById(R.id.tvvisitedby);
             tvplotvisiteddate = (TextView) view.findViewById(R.id.tvplotvisiteddate);
+            tvContactNumber = (TextView) view.findViewById(R.id.tv_contactNumber);
         }
     }
 }

@@ -313,7 +313,8 @@
                         android:id="@+id/plot_area_edt"
                         style="@style/editTxt_normal"
                         android:layout_width="0dp"
-                        android:layout_height="50dp"
+                       android:longClickable="false"
+                    android:layout_height="50dp"
                         android:layout_weight="1"
                         android:inputType="numberDecimal"
                         android:maxLength="5">

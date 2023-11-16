@@ -285,7 +285,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
                 && tvbank.getText().toString().equalsIgnoreCase("0")
                 && geoBoundriesCountTxt.getText().toString().equalsIgnoreCase("0")
                 && uprootmentCountTxt.getText().toString().equalsIgnoreCase("0")
-                &&PlotGapFillingDetailsCount.getText().toString().equalsIgnoreCase("0")
+                && PlotGapFillingDetailsCount.getText().toString().equalsIgnoreCase("0")
                 && plantationCountTxt.getText().toString().equalsIgnoreCase("0")
                 && hopCountTxt.getText().toString().equalsIgnoreCase("0")
                 && cmpCount.getText().toString().equalsIgnoreCase("0")
