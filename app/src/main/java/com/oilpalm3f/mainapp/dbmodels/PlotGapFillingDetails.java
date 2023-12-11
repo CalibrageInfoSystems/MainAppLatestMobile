@@ -1,39 +1,38 @@
 package com.oilpalm3f.mainapp.dbmodels;
 
-import java.util.Date;
 
 public class PlotGapFillingDetails {
 
-//        private int id;
-        private String plotCode;
-        private int saplingsToBeIssued;
-        private Integer importedSaplingsToBeIssued;
-        private Integer indigenousSaplingsToBeIssued;
-        private String expectedDateofPickup;
-        private Integer gapFillingReasonTypeId;
-        private Integer isApproved;
-        private Integer isDeclined;
-        private String comments;
-        private int isActive;
-        private String fileName;
-        private String fileLocation;
-        private String fileExtension;
-        private int createdByUserId;
-        private String createdDate;
-        private int updatedByUserId;
-        private String updatedDate;
-        private Integer approvedByUserId;
-        private String approvedDate;
-        private Integer declinedByUserId;
-        private String declinedDate;
-        private String approvedComments;
-        private String declinedComments;
-        private int isVerified;
-        private Integer gapFillingApprovedStatusTypeId;
-        private String gapFillingApprovedComments;
-        private Integer gapFillingRejectedStatusTypeId;
-        private String gapFillingRejectedComments;
-        private int serverUpdatedStatus;
+    //        private int id;
+
+    private String plotCode;
+    private int saplingsToBeIssued;
+    private int importedSaplingsToBeIssued;
+    private int indigenousSaplingsToBeIssued;
+    private String expectedDateOfPickup;
+    private int gapFillingReasonTypeId;
+    private int isApproved;
+    private int isDeclined;
+    private String comments;
+    private int isActive;
+    private String fileName;
+    private String fileLocation;
+    private String fileExtension;
+    private int createdByUserId;
+    private String createdDate;
+    private int updatedByUserId;
+    private String updatedDate;
+    private Integer approvedByUserId;
+    private String approvedDate;
+    private Integer declinedByUserId;
+    private String declinedDate;
+    private String ashApprovedComments;
+    private String declinedComments;
+    private int isVerified;
+    private Integer gapFillingStatusTypeId;
+    private String shApprovedComments;
+    private int serverUpdatedStatus;
+    private String cmApprovedComments;
 
 
 //        public int getId() {
@@ -44,31 +43,31 @@ public class PlotGapFillingDetails {
 //            this.id = id;
 //        }
 
-        public String getPlotCode() {
-            return plotCode;
-        }
+    public String getPlotCode() {
+        return plotCode;
+    }
 
-        public void setPlotCode(String plotCode) {
-            this.plotCode = plotCode;
-        }
+    public void setPlotCode(String plotCode) {
+        this.plotCode = plotCode;
+    }
 
-        public int getSaplingsToBeIssued() {
-            return saplingsToBeIssued;
-        }
+    public int getSaplingsToBeIssued() {
+        return saplingsToBeIssued;
+    }
 
-        public void setSaplingsToBeIssued(int saplingsToBeIssued) {
-            this.saplingsToBeIssued = saplingsToBeIssued;
-        }
+    public void setSaplingsToBeIssued(int saplingsToBeIssued) {
+        this.saplingsToBeIssued = saplingsToBeIssued;
+    }
 
-        // Repeat the same pattern for other fields
+    // Repeat the same pattern for other fields
 
-        public int getServerUpdatedStatus() {
-            return serverUpdatedStatus;
-        }
+    public int getServerUpdatedStatus() {
+        return serverUpdatedStatus;
+    }
 
-        public void setServerUpdatedStatus(int serverUpdatedStatus) {
-            this.serverUpdatedStatus = serverUpdatedStatus;
-        }
+    public void setServerUpdatedStatus(int serverUpdatedStatus) {
+        this.serverUpdatedStatus = serverUpdatedStatus;
+    }
 
     public Integer getImportedSaplingsToBeIssued() {
         return importedSaplingsToBeIssued;
@@ -86,13 +85,7 @@ public class PlotGapFillingDetails {
         this.indigenousSaplingsToBeIssued = indigenousSaplingsToBeIssued;
     }
 
-    public String getExpectedDateofPickup() {
-        return expectedDateofPickup;
-    }
 
-    public void setExpectedDateofPickup(String expectedDateofPickup) {
-        this.expectedDateofPickup = expectedDateofPickup;
-    }
 
     public Integer getGapFillingReasonTypeId() {
         return gapFillingReasonTypeId;
@@ -222,13 +215,7 @@ public class PlotGapFillingDetails {
         this.declinedDate = declinedDate;
     }
 
-    public String getApprovedComments() {
-        return approvedComments;
-    }
 
-    public void setApprovedComments(String approvedComments) {
-        this.approvedComments = approvedComments;
-    }
 
     public String getDeclinedComments() {
         return declinedComments;
@@ -246,35 +233,44 @@ public class PlotGapFillingDetails {
         this.isVerified = isVerified;
     }
 
-    public Integer getGapFillingApprovedStatusTypeId() {
-        return gapFillingApprovedStatusTypeId;
+
+    public String getExpectedDateOfPickup() {
+        return expectedDateOfPickup;
     }
 
-    public void setGapFillingApprovedStatusTypeId(Integer gapFillingApprovedStatusTypeId) {
-        this.gapFillingApprovedStatusTypeId = gapFillingApprovedStatusTypeId;
+    public void setExpectedDateOfPickup(String expectedDateOfPickup) {
+        this.expectedDateOfPickup = expectedDateOfPickup;
     }
 
-    public String getGapFillingApprovedComments() {
-        return gapFillingApprovedComments;
+    public String getAshApprovedComments() {
+        return ashApprovedComments;
     }
 
-    public void setGapFillingApprovedComments(String gapFillingApprovedComments) {
-        this.gapFillingApprovedComments = gapFillingApprovedComments;
+    public void setAshApprovedComments(String ashApprovedComments) {
+        this.ashApprovedComments = ashApprovedComments;
     }
 
-    public Integer getGapFillingRejectedStatusTypeId() {
-        return gapFillingRejectedStatusTypeId;
+    public Integer getGapFillingStatusTypeId() {
+        return gapFillingStatusTypeId;
     }
 
-    public void setGapFillingRejectedStatusTypeId(Integer gapFillingRejectedStatusTypeId) {
-        this.gapFillingRejectedStatusTypeId = gapFillingRejectedStatusTypeId;
+    public void setGapFillingStatusTypeId(Integer gapFillingStatusTypeId) {
+        this.gapFillingStatusTypeId = gapFillingStatusTypeId;
     }
 
-    public String getGapFillingRejectedComments() {
-        return gapFillingRejectedComments;
+    public String getShApprovedComments() {
+        return shApprovedComments;
     }
 
-    public void setGapFillingRejectedComments(String gapFillingRejectedComments) {
-        this.gapFillingRejectedComments = gapFillingRejectedComments;
+    public void setShApprovedComments(String shApprovedComments) {
+        this.shApprovedComments = shApprovedComments;
+    }
+
+    public String getCmApprovedComments() {
+        return cmApprovedComments;
+    }
+
+    public void setCmApprovedComments(String cmApprovedComments) {
+        this.cmApprovedComments = cmApprovedComments;
     }
 }

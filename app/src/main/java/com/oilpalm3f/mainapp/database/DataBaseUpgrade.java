@@ -1690,8 +1690,38 @@ class DataBaseUpgrade {
 
         String plotGapFillingDetails = "DROP TABLE PlotGapFillingDetails";
         db.execSQL(plotGapFillingDetails);
-
-
+//
+//        {
+//            "Id": 1334,
+//                "PlotCode": "APAB0001000010",
+//                "SaplingsToBeIssued": 6,
+//                "ImportedSaplingsToBeIssued": 3,
+//                "IndigenousSaplingsToBeIssued": 3,
+//                "ExpectedDateofPickup": "2023-11-17T00:00:00",
+//                "GapFillingReasonTypeId": 176,
+//                "IsApproved": true,
+//                "IsDeclined": null,
+//                "Comments": "by firefox",
+//                "IsActive": true,
+//                "FileName": "20231117010352748",
+//                "FileLocation": "2023\\11\\17\\GapFilling",
+//                "FileExtension": ".pdf",
+//                "CreatedByUserId": 397,
+//                "CreatedDate": "2023-11-17T13:03:18.957",
+//                "UpdatedByUserId": 397,
+//                "UpdatedDate": "2023-11-17T13:05:22.23",
+//                "ApprovedByUserId": 397,
+//                "ApprovedDate": "2023-11-17T13:05:22.23",
+//                "DeclinedByUserID": null,
+//                "DeclinedDate": null,
+//                "ASHApprovedComments": "Adv state app by n ",
+//                "DeclinedComments": null,
+//                "IsVerified": true,
+//                "GapFillingStatusTypeId": 664,
+//                "SHApprovedComments": "State App by n",
+//                "ServerUpdatedStatus": false,
+//                "CMApprovedComments": "cluster app by n"
+//        },
         String newPlotGapFillingDetails = "CREATE TABLE PlotGapFillingDetails(\n" +
                 "Id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "PlotCode TEXT NOT NULL,\n" +
@@ -1713,16 +1743,15 @@ class DataBaseUpgrade {
                 "UpdatedDate DATETIME NOT NULL,\n" +
                 "ApprovedByUserId INTEGER,\n" +
                 "ApprovedDate DATETIME,\n" +
-                "DeclinedByUserId INTEGER,\n" +
+                "DeclinedByUserID INTEGER,\n" +
                 "DeclinedDate DATETIME,\n" +
-                "ApprovedComments TEXT,\n" +
+                "ASHApprovedComments TEXT,\n" +
                 "DeclinedComments TEXT,\n" +
                 "IsVerified INTEGER NOT NULL,\n" +
-                "GapFillingApprovedStatusTypeId INTEGER,\n" +
-                "GapFillingApprovedComments TEXT,\n" +
-                "GapFillingRejectedStatusTypeId INTEGER,\n" +
-                "GapFillingRejectedComments TEXT,\n" +
-                "ServerUpdatedStatus INTEGER NOT NULL)";
+                "GapFillingStatusTypeId INTEGER,\n" +
+                "SHApprovedComments TEXT,\n" +
+                "ServerUpdatedStatus INTEGER,\n" +
+                "CMApprovedComments TEXT)";
 
         String CMApprovalCommentscolumn = "ALTER TABLE Plot Add CMApprovalComments VARCHAR(500)";
         String SHApprovalCommentscolumn = "ALTER TABLE Plot Add SHApprovalComments VARCHAR(500)";

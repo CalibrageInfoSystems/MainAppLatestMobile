@@ -5077,11 +5077,14 @@ f
 
                     // Populate the model with all fields
                  //   plotGapFillingDetails.setId(cursor.getInt(0));
+
+
+
                     plotGapFillingDetails.setPlotCode(cursor.getString(1));
                     plotGapFillingDetails.setSaplingsToBeIssued(cursor.getInt(2));
                     plotGapFillingDetails.setImportedSaplingsToBeIssued(cursor.getInt(3));
                     plotGapFillingDetails.setIndigenousSaplingsToBeIssued(cursor.getInt(4));
-                    plotGapFillingDetails.setExpectedDateofPickup(cursor.getString(5));
+                    plotGapFillingDetails.setExpectedDateOfPickup(cursor.getString(5));
                     plotGapFillingDetails.setGapFillingReasonTypeId(cursor.getInt(6));
                     plotGapFillingDetails.setIsApproved(cursor.getInt(7));
                     plotGapFillingDetails.setIsDeclined(cursor.getInt(8));
@@ -5098,14 +5101,14 @@ f
                     plotGapFillingDetails.setApprovedDate(cursor.getString(19));
                     plotGapFillingDetails.setDeclinedByUserId(cursor.getInt(20));
                     plotGapFillingDetails.setDeclinedDate(cursor.getString(21));
-                    plotGapFillingDetails.setApprovedComments(cursor.getString(22));
+                    plotGapFillingDetails.setAshApprovedComments(cursor.getString(22));
                     plotGapFillingDetails.setDeclinedComments(cursor.getString(23));
                     plotGapFillingDetails.setIsVerified(cursor.getInt(24));
-                    plotGapFillingDetails.setGapFillingApprovedStatusTypeId(cursor.getInt(25));
-                    plotGapFillingDetails.setGapFillingApprovedComments(cursor.getString(26));
-                    plotGapFillingDetails.setGapFillingRejectedStatusTypeId(cursor.getInt(27));
-                    plotGapFillingDetails.setGapFillingRejectedComments(cursor.getString(28));
-                    plotGapFillingDetails.setServerUpdatedStatus(cursor.getInt(29));
+                    plotGapFillingDetails.setGapFillingStatusTypeId(cursor.getInt(25));
+                    plotGapFillingDetails.setShApprovedComments(cursor.getString(26));
+                    plotGapFillingDetails.setServerUpdatedStatus(cursor.getInt(27));
+                    plotGapFillingDetails.setCmApprovedComments(cursor.getString(28));
+                 //   plotGapFillingDetails.setServerUpdatedStatus(cursor.getInt(29));
 
                     if (type == 1) {
                         plotGapFillingList.add(plotGapFillingDetails);

@@ -84,7 +84,7 @@ public final class ApplicationThread  {
                     public void run() {
                         final long startTime = System.nanoTime();
                         try {
-                            runable.run();
+                                   runable.run();
                         } catch (Throwable ex) {
                             Log.e(LOG_TAG, LOG_TAG, ex);
                         } finally {

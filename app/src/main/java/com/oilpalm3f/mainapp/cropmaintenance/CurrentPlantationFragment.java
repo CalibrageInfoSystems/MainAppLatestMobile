@@ -186,11 +186,11 @@ public class CurrentPlantationFragment extends Fragment {
                     Log.e("=========180",Integer.parseInt(mUprootmentModel.getPlamscount()+"")+"");
                     Log.e("=========TotalMissingTreesbind",TotalMissingTrees+"");
                     total_no_of_missing_treesTV.setText(TotalMissingTrees+"");
-                    Exp_date = plotgapfillingdetails.getExpectedDateofPickup();
+                    Exp_date = plotgapfillingdetails.getExpectedDateOfPickup();
 
                     try {
                         // Parse the input string into a Date object
-                        Date parsedDate = inputDateFormat.parse(plotgapfillingdetails.getExpectedDateofPickup());
+                        Date parsedDate = inputDateFormat.parse(plotgapfillingdetails.getExpectedDateOfPickup());
 
                         // Print the parsed Date object
                         System.out.println("Parsed Date: " + parsedDate);
@@ -284,11 +284,11 @@ public class CurrentPlantationFragment extends Fragment {
                 if (!s.toString().equalsIgnoreCase("")) {
                     currentTrees = CommonUtils.convertToBigNumber(s.toString());
 
-                    if (currentTrees > Integer.parseInt(expecetedTreesCount)) {
-                        UiUtils.showCustomToastMessage(" Count Of Trees should be less than or equal to the Count of trees ", mContext, 0);
-                        counttresscurrentvisitEdt.setText("");
-                        return;
-                    }
+//                    if (currentTrees > Integer.parseInt(expecetedTreesCount)) {
+//                        UiUtils.showCustomToastMessage(" Count Of Trees should be less than or equal to the Count of trees ", mContext, 0);
+//                        counttresscurrentvisitEdt.setText("");
+//                        return;
+//                    }
 
                     if (Integer.parseInt(expecetedTreesCount) > currentTrees) {
                         missingtrees_text.setText("Yes");
@@ -298,7 +298,7 @@ public class CurrentPlantationFragment extends Fragment {
                         comments_tv.setText("Comments*");
                         missingTrees = (Integer.parseInt(expecetedTreesCount) - currentTrees);
                         Log.v("@@@missing", "" + missingTrees);
-                        TotalMissingTrees = Integer.parseInt(treesCount) - currentTrees;
+                        TotalMissingTrees = Integer.parseInt(preCount) - currentTrees;
                         total_no_of_missing_treesTV.setText(TotalMissingTrees+"");
                     } else {
                         missingtrees_text.setText("No");
@@ -598,8 +598,6 @@ public class CurrentPlantationFragment extends Fragment {
     }
 
 
-
-
     private void plotgapfillingdetails() {
         Log.e("=========>",CommonConstants.PLOT_CODE);
         plotgapfillingdetails = new PlotGapFillingDetails();
@@ -608,11 +606,11 @@ public class CurrentPlantationFragment extends Fragment {
         plotgapfillingdetails.setSaplingsToBeIssued(totalimportedandIndigenousSaplingscount);
         plotgapfillingdetails.setImportedSaplingsToBeIssued(ImportedSaplingscount);
         plotgapfillingdetails.setIndigenousSaplingsToBeIssued(IndigenousSaplingscount);
-        plotgapfillingdetails.setExpectedDateofPickup(Exp_date);
+        plotgapfillingdetails.setExpectedDateOfPickup(Exp_date);
         plotgapfillingdetails.setGapFillingReasonTypeId(gapfillingreasonspinner.getSelectedItemPosition() == 0 ? null :
                 Integer.parseInt(getKey(gapfillingreasonDataMap, gapfillingreasonspinner.getSelectedItem().toString())));
         plotgapfillingdetails.setIsApproved(0);
-        plotgapfillingdetails.setIsActive(0);
+        plotgapfillingdetails.setIsDeclined(0);
         plotgapfillingdetails.setComments(Edtgapfillingcomments.getText().toString());
         plotgapfillingdetails.setIsActive(1);
         plotgapfillingdetails.setFileName("");
@@ -626,15 +624,15 @@ public class CurrentPlantationFragment extends Fragment {
         plotgapfillingdetails.setApprovedDate("");
         plotgapfillingdetails.setDeclinedByUserId(null);
         plotgapfillingdetails.setDeclinedDate("");
-        plotgapfillingdetails.setApprovedComments("");
+        plotgapfillingdetails.setAshApprovedComments("");
         plotgapfillingdetails.setDeclinedComments("");
         plotgapfillingdetails.setIsVerified(0);
-        plotgapfillingdetails.setGapFillingApprovedStatusTypeId(null);
-        plotgapfillingdetails.setGapFillingApprovedComments("");
-        plotgapfillingdetails.setGapFillingRejectedStatusTypeId(null); // Use null instead of 'null'
-        plotgapfillingdetails.setGapFillingRejectedStatusTypeId(null); // Use null instead of 'null'
-        plotgapfillingdetails.setGapFillingRejectedComments("");
+
+        plotgapfillingdetails.setGapFillingStatusTypeId(null); // Use null instead of 'null'
+        plotgapfillingdetails.setShApprovedComments(null); // Use null instead of 'null'
+
         plotgapfillingdetails.setServerUpdatedStatus(0);
+        plotgapfillingdetails.setCmApprovedComments("");
 
 
         DataManager.getInstance().addData(DataManager.PlotGapFilling_Details, plotgapfillingdetails);
@@ -799,7 +797,7 @@ public class CurrentPlantationFragment extends Fragment {
 
             try {
                 // Parse the input string into a Date object
-                Date parsedDate = inputDateFormat.parse(lastgapfillingdetails.get(0).getExpectedDateofPickup());
+                Date parsedDate = inputDateFormat.parse(lastgapfillingdetails.get(0).getExpectedDateOfPickup());
 
                 // Print the parsed Date object
                 System.out.println("Parsed Date: " + parsedDate);
