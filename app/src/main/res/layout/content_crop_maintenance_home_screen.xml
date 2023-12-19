@@ -61,6 +61,7 @@
             <Button
                 android:id="@+id/plantationBtn"
                 style="@style/moduleBtnStyle"
+                android:visibility="gone"
                 android:text="@string/plantation_details_cm" />
             <Button
                 android:id="@+id/currentPlantation"

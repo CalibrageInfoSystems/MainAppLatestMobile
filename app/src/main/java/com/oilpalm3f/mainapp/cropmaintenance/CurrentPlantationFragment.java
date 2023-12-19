@@ -102,6 +102,8 @@ public class CurrentPlantationFragment extends Fragment {
     private Calendar myCalendar = Calendar.getInstance();
     String Exp_date;
     int Isverified = 0;
+
+
     private PlotGapFillingDetails plotgapfillingdetails;
     public CurrentPlantationFragment() {
 
@@ -177,12 +179,14 @@ public class CurrentPlantationFragment extends Fragment {
                 gapfillingsaplingcount.setText(mUprootmentModel.getGapFillingSaplingsCount() + "");
 
                 if(plotgapfillingdetails!=null){
+                    preCount = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().queryGetCountOfPreviousTrees(CommonConstants.PLOT_CODE));
+
                     String outputFormat = "yyyy-MM-dd";
                     String myFormat = "MM/dd/yyyy";
 
                     // Create a SimpleDateFormat object to parse the input string
                     SimpleDateFormat inputDateFormat = new SimpleDateFormat(outputFormat);
-                    TotalMissingTrees= Integer.parseInt(treesCount) - Integer.parseInt(mUprootmentModel.getPlamscount()+"");
+                    TotalMissingTrees= Integer.parseInt(preCount) - Integer.parseInt(mUprootmentModel.getPlamscount()+"");
                     Log.e("=========180",Integer.parseInt(mUprootmentModel.getPlamscount()+"")+"");
                     Log.e("=========TotalMissingTreesbind",TotalMissingTrees+"");
                     total_no_of_missing_treesTV.setText(TotalMissingTrees+"");
@@ -218,6 +222,7 @@ public class CurrentPlantationFragment extends Fragment {
             } else {
                 reasonformissingtreesLL.setVisibility(View.GONE);
                 gapfillinglinear.setVisibility(View.GONE);
+             //   sublinear.setVisibility(View.VISIBLE);
             }
             comment_edit.setText("" + mUprootmentModel.getComments());
             preCount = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().queryGetCountOfPreviousTrees(CommonConstants.PLOT_CODE));
@@ -281,7 +286,7 @@ public class CurrentPlantationFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 String count = s.toString();
                 int previusTrees = 0;
-                if (!s.toString().equalsIgnoreCase("")) {
+                if (!s.toString().equalsIgnoreCase("") && s != null) {
                     currentTrees = CommonUtils.convertToBigNumber(s.toString());
 
 //                    if (currentTrees > Integer.parseInt(expecetedTreesCount)) {
@@ -298,8 +303,12 @@ public class CurrentPlantationFragment extends Fragment {
                         comments_tv.setText("Comments*");
                         missingTrees = (Integer.parseInt(expecetedTreesCount) - currentTrees);
                         Log.v("@@@missing", "" + missingTrees);
+                        Log.v("@@@preCount", "" + preCount);
                         TotalMissingTrees = Integer.parseInt(preCount) - currentTrees;
                         total_no_of_missing_treesTV.setText(TotalMissingTrees+"");
+                       sublinear.setVisibility(View.GONE);
+                        requiredspinner.setSelection(0);
+                        reasonformissing.setSelection(0);
                     } else {
                         missingtrees_text.setText("No");
                         noofmissingtrees_text.setText("0");
@@ -307,6 +316,16 @@ public class CurrentPlantationFragment extends Fragment {
                         reasonformissingtreesLL.setVisibility(View.GONE);
                         gapfillinglinear.setVisibility(View.GONE);
                         missingTrees = 0;
+                        gapfillingsaplingcount.setText("");
+                        EdtExpdate.setText("");
+                        Importedsaplingcount.setText("");
+                        IndigenousSaplingcount.setText("");
+                        Edtgapfillingcomments.setText("");
+                        gapfillingreasonspinner.setSelection(0);
+                        requiredspinner.setSelection(0);
+                        reasonformissing.setSelection(0);
+                        gapfillingcountlinear.setVisibility(View.GONE);
+                      sublinear.setVisibility(View.GONE);
                         Log.v("@@@missing", "" + missingTrees);
                     }
 
@@ -315,6 +334,16 @@ public class CurrentPlantationFragment extends Fragment {
                     missingtrees_text.setText("No");
                     noofmissingtrees_text.setText("0");
                     missingTrees = 0;
+                    gapfillingsaplingcount.setText("");
+                    EdtExpdate.setText("");
+                    Importedsaplingcount.setText("");
+                    IndigenousSaplingcount.setText("");
+                    Edtgapfillingcomments.setText("");
+                    gapfillingreasonspinner.setSelection(0);
+                    reasonformissingtreesLL.setVisibility(View.GONE);
+                    gapfillinglinear.setVisibility(View.GONE);
+                    gapfillingcountlinear.setVisibility(View.GONE);
+                 sublinear.setVisibility(View.GONE);
                     Log.v("@@@missing", "" + missingTrees);
                 }
 

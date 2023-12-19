@@ -1755,10 +1755,10 @@ class DataBaseUpgrade {
 
         String CMApprovalCommentscolumn = "ALTER TABLE Plot Add CMApprovalComments VARCHAR(500)";
         String SHApprovalCommentscolumn = "ALTER TABLE Plot Add SHApprovalComments VARCHAR(500)";
-
         String AHApprovalCommentscolumn = "ALTER TABLE Plot Add AHApprovalComments VARCHAR(500)";
 
-
+        String SAPCodecolumn = "ALTER TABLE Nursery Add SAPCode VARCHAR(5)";
+        String CostCentercolumn = "ALTER TABLE Nursery Add CostCenter VARCHAR(25)";
         try {
 
 
@@ -1766,6 +1766,8 @@ class DataBaseUpgrade {
             db.execSQL(CMApprovalCommentscolumn);
             db.execSQL(SHApprovalCommentscolumn);
             db.execSQL(AHApprovalCommentscolumn);
+            db.execSQL(SAPCodecolumn);
+            db.execSQL(CostCentercolumn);
 
         } catch (Exception e) {
             e.printStackTrace();

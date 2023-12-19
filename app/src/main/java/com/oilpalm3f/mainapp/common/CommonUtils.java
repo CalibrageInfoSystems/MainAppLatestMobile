@@ -876,11 +876,11 @@ public class CommonUtils {
             deviceId = mTelephony.getDeviceId();
         }
 
-  //return deviceId;
+  return deviceId;
 
         //return "351558072968326";// KA User(AnandGoud)
-       return "358525086163783"; //AR & CH State User(Nikhil)
-            //return "351558072434071"; //NikHil
+      // return "358525086163783"; //AR & CH State User(Roja)
+   //   return "351558072434071"; //NikHil
       //  return "351558072360896";//Arun
         //return "1dbe5ccba1b98ae4";//Live FarmerAddress missing
         //return "351558072736715";//Srihari sir Live
