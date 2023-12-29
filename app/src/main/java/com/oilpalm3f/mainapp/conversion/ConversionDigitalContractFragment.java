@@ -1,5 +1,6 @@
 package com.oilpalm3f.mainapp.conversion;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -26,6 +27,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -118,12 +120,15 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
     String base64String = "";
     public static final int REQUEST_UPDATE_PERSONAL_DETAILS = 0;
     private boolean isUpdateData = false;
+    private  TextView nocontract;
+    private RelativeLayout contactlayout;
 
     public ConversionDigitalContractFragment() {
 
     }
 
     //Initializing the Class and assigning digital contract based on state code
+    @SuppressLint("MissingInflatedId")
     @Override
     public void Initialize() {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
@@ -180,6 +185,8 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
 
         saveBtn = (Button) parentView.findViewById(R.id.digitalSaveBtn);
         agreeChbk = (CheckBox) parentView.findViewById(R.id.agreedView);
+        nocontract =  (TextView) parentView.findViewById(R.id.nocontract);
+        contactlayout =  (RelativeLayout) parentView.findViewById(R.id.contactlayout);
 
         parentLayout = (LinearLayout) parentView.findViewById(R.id.parent_layout);
         parentLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -242,30 +249,26 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
 
         if (null != digitalContract) {
             Log.d("digitalContracttt", "isnotnull");
-        }else{
+            nocontract.setVisibility(View.GONE);
+            contactlayout.setVisibility(View.VISIBLE);
+            rootDirectory = new File(CommonUtils.get3FFileRootPath() + "3F_DigitalContract/");
+//        Log.d("rootDirectory", rootDirectory+"");
+//        Log.d("filename", digitalContract.getFILENAME()+"");
+//        Log.d("fileextension",  digitalContract.getFileExtension()+"");
+            fileToDownLoad = new File(CommonUtils.get3FFileRootPath() + "3F_DigitalContract/" + digitalContract.getFILENAME() + digitalContract.getFileExtension());
 
-            Log.d("digitalContracttt", "isnull");
-        }
-
-
-        rootDirectory = new File(CommonUtils.get3FFileRootPath() + "3F_DigitalContract/");
-        Log.d("rootDirectory", rootDirectory+"");
-        Log.d("filename", digitalContract.getFILENAME()+"");
-        Log.d("fileextension",  digitalContract.getFileExtension()+"");
-        fileToDownLoad = new File(CommonUtils.get3FFileRootPath() + "3F_DigitalContract/" + digitalContract.getFILENAME() + digitalContract.getFileExtension());
-
-        Log.d("fileToDownLoad", fileToDownLoad+"");
-        // String strFileName = file.getName();
-        // if (null != digitalContract) {
-        //   fileToDownLoad = new File(rootDirectory + digitalContract.getFILENAME() + digitalContract.getFileExtension());
-        if (null != fileToDownLoad && fileToDownLoad.exists()) {
-            dataView.fromFile(fileToDownLoad)
-                    .defaultPage(0)
-                    .enableAnnotationRendering(true)
-                    .onPageChange(this)
-                    .onLoad(this)
-                    .scrollHandle(new DefaultScrollHandle(getActivity()))
-                    .load();
+            Log.d("fileToDownLoad", fileToDownLoad+"");
+            // String strFileName = file.getName();
+            // if (null != digitalContract) {
+            //   fileToDownLoad = new File(rootDirectory + digitalContract.getFILENAME() + digitalContract.getFileExtension());
+            if (null != fileToDownLoad && fileToDownLoad.exists()) {
+                dataView.fromFile(fileToDownLoad)
+                        .defaultPage(0)
+                        .enableAnnotationRendering(true)
+                        .onPageChange(this)
+                        .onLoad(this)
+                        .scrollHandle(new DefaultScrollHandle(getActivity()))
+                        .load();
 
 //                try {
 //                    PdfReader reader = new PdfReader(String.valueOf(fileToDownLoad));
@@ -279,7 +282,17 @@ public class ConversionDigitalContractFragment extends BaseFragment implements O
 //                } catch (Exception e) {
 //                    System.out.println(e);
 //                }
+            }
+        }else{
+
+            Log.d("digitalContracttt", "isnull");
+            nocontract.setVisibility(View.VISIBLE);
+            contactlayout.setVisibility(View.GONE);
+
         }
+
+
+
 //            else {
 //               // String url = Config.image_url + "/" + digitalContract.getFileLocation() + "/" + digitalContract.getFILENAME() + digitalContract.getFileExtension();
 //                //new DownloadFileFromURL().execute(url);

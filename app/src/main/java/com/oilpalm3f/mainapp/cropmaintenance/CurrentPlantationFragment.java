@@ -98,7 +98,7 @@ public class CurrentPlantationFragment extends Fragment {
     int currentTrees;
     private int TotalMissingTrees = 0;
     private int TotalMissingTreesbind = 0;
-
+    int previouscount;
     private Calendar myCalendar = Calendar.getInstance();
     String Exp_date;
     int Isverified = 0;
@@ -301,10 +301,18 @@ public class CurrentPlantationFragment extends Fragment {
                         reasonformissingtreesLL.setVisibility(View.VISIBLE);;
                         gapfillinglinear.setVisibility(View.VISIBLE);
                         comments_tv.setText("Comments*");
-                        missingTrees = (Integer.parseInt(expecetedTreesCount) - currentTrees);
+                        missingTrees = Integer.parseInt(expecetedTreesCount) - currentTrees;
                         Log.v("@@@missing", "" + missingTrees);
+                        Log.v("@@@missing1", "" + (Integer.parseInt(expecetedTreesCount) - currentTrees));
                         Log.v("@@@preCount", "" + preCount);
-                        TotalMissingTrees = Integer.parseInt(preCount) - currentTrees;
+                        if (preCount == null){
+                            previouscount  = 0;
+                        }else{
+                            previouscount  = (Integer.parseInt(expecetedTreesCount) - currentTrees);
+                        }
+                        Log.v("@@@previouscount", "" + previouscount);
+                       // TotalMissingTrees = previouscount - currentTrees;
+                        TotalMissingTrees = missingTrees;
                         total_no_of_missing_treesTV.setText(TotalMissingTrees+"");
                        sublinear.setVisibility(View.GONE);
                         requiredspinner.setSelection(0);
