@@ -814,49 +814,51 @@ public class CurrentPlantationFragment extends Fragment {
                 commentsll.setVisibility(View.VISIBLE);
                 comments.setText(currentplantationlastvisitdatamap.get(0).getComments() + "");
             }
+
+            if (lastgapfillingdetails.size() > 0){
+                String gapfillingreason= null;
+                cpdatatotalno_of_missing_treesTV.setText((currentplantationlastvisitdatamap.get(0).getSeedsplanted() - currentplantationlastvisitdatamap.get(0).getPlamscount() )  + "");
+                NoofImportedSaplings.setText(lastgapfillingdetails.get(0).getImportedSaplingsToBeIssued()+"");
+                NoofIndigenousSaplings.setText(lastgapfillingdetails.get(0).getIndigenousSaplingsToBeIssued()+"");
+
+                String outputFormat = "yyyy-MM-dd";
+                String myFormat = "MM/dd/yyyy";
+
+                // Create a SimpleDateFormat object to parse the input string
+                SimpleDateFormat inputDateFormat = new SimpleDateFormat(outputFormat);
+
+
+                try {
+                    // Parse the input string into a Date object
+                    Date parsedDate = inputDateFormat.parse(lastgapfillingdetails.get(0).getExpectedDateOfPickup());
+
+                    // Print the parsed Date object
+                    System.out.println("Parsed Date: " + parsedDate);
+
+                    SimpleDateFormat outputDateFormat = new SimpleDateFormat(myFormat);
+                    ExpDateofPickup_tv.setText(outputDateFormat.format(parsedDate)+"");
+
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+                if (lastgapfillingdetails.get(0).getGapFillingReasonTypeId() != null) {
+
+
+                    gapfillingreason = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getlookupdata(lastgapfillingdetails.get(0).getGapFillingReasonTypeId()));
+                }
+                GapFillingReason_tv.setText(gapfillingreason+"");
+                cpdatagapfillingcomments_tv.setText(lastgapfillingdetails.get(0).getComments());
+
+            }
         } else {
             mainLL.setVisibility(View.GONE);
             norecords.setVisibility(View.VISIBLE);
         }
 
-        if (lastgapfillingdetails.size() > 0){
-            String gapfillingreason= null;
-            cpdatatotalno_of_missing_treesTV.setText((currentplantationlastvisitdatamap.get(0).getSeedsplanted() - currentplantationlastvisitdatamap.get(0).getPlamscount() )  + "");
-            NoofImportedSaplings.setText(lastgapfillingdetails.get(0).getImportedSaplingsToBeIssued()+"");
-            NoofIndigenousSaplings.setText(lastgapfillingdetails.get(0).getIndigenousSaplingsToBeIssued()+"");
 
-            String outputFormat = "yyyy-MM-dd";
-            String myFormat = "MM/dd/yyyy";
-
-            // Create a SimpleDateFormat object to parse the input string
-            SimpleDateFormat inputDateFormat = new SimpleDateFormat(outputFormat);
-
-
-            try {
-                // Parse the input string into a Date object
-                Date parsedDate = inputDateFormat.parse(lastgapfillingdetails.get(0).getExpectedDateOfPickup());
-
-                // Print the parsed Date object
-                System.out.println("Parsed Date: " + parsedDate);
-
-                SimpleDateFormat outputDateFormat = new SimpleDateFormat(myFormat);
-                ExpDateofPickup_tv.setText(outputDateFormat.format(parsedDate)+"");
-
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-
-            if (lastgapfillingdetails.get(0).getGapFillingReasonTypeId() != null) {
-
-
-                gapfillingreason = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getlookupdata(lastgapfillingdetails.get(0).getGapFillingReasonTypeId()));
-            }
-            GapFillingReason_tv.setText(gapfillingreason+"");
-            cpdatagapfillingcomments_tv.setText(lastgapfillingdetails.get(0).getComments());
-
-        }
 
 
 
