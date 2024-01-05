@@ -187,9 +187,14 @@ public class CloudDataHandler {
                                 while (keysToCopyIterator.hasNext()) {
 
                                     String key = (String) keysToCopyIterator.next();
-                                    if (key.equalsIgnoreCase("CollectionFarmer") ||key.equalsIgnoreCase("CollectionFarmerBank")
-                                            ||key.equalsIgnoreCase("CollectionFarmerIdentityProof")||key.equalsIgnoreCase("CollectionFileRepository")
-                                            || key.equalsIgnoreCase("UserMonthlyTarget")|| key.equalsIgnoreCase("UserKRA"))
+                                    if (key.equalsIgnoreCase("CollectionFarmer") ||
+                                            key.equalsIgnoreCase("Collection") ||
+                                            key.equalsIgnoreCase("CollectionPlotXref") ||
+                                            key.equalsIgnoreCase("CollectionFarmerBank")
+                                            ||key.equalsIgnoreCase("CollectionFarmerIdentityProof")||
+                                            key.equalsIgnoreCase("CollectionFileRepository")
+                                            || key.equalsIgnoreCase("UserMonthlyTarget")||
+                                            key.equalsIgnoreCase("UserKRA"))
                                     {
                                         Log.v(LOG_TAG,"response is null-->"+ key);
                                     }else {
