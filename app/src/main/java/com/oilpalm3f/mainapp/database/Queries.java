@@ -337,6 +337,10 @@ public class Queries {
         return "select count(0) from " + tablename + " where ServerUpdatedStatus='0'";
     }
 
+    public String getRefreshCountQueryforPlotGapFillingDetails(String tablename) {
+        return "select count(0) from PlotGapFillingDetails where ServerUpdatedStatus='0' AND PlotCode != 'null'";
+    }
+
 
 
     public String getRefreshCountQueryForFileRepo() {
@@ -2130,7 +2134,7 @@ public class Queries {
 
     }
     public String getplotgapfillingrefresh() {
-        return "select * from PlotGapFillingDetails  where ServerUpdatedStatus = 0";
+        return "select * from PlotGapFillingDetails  where ServerUpdatedStatus = 0 AND PlotCode != 'null'";
     }
 
 }

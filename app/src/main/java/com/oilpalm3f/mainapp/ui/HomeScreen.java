@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -37,7 +39,9 @@ import com.oilpalm3f.mainapp.farmersearch.SearchFarmerScreen;
 import com.oilpalm3f.mainapp.palmcare.palmcareScreen;
 import com.oilpalm3f.mainapp.utils.UiUtils;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import static com.oilpalm3f.mainapp.common.CommonUiUtils.resetPrevRegData;
 
@@ -61,6 +65,7 @@ public class HomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+
 
         this.refreshRel = (LinearLayout) findViewById(R.id.refreshRel1);
         this.cropMaintenanceRel = (RelativeLayout) findViewById(R.id.cropMaintenanceRel);

@@ -92,6 +92,7 @@
 
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/vistCount"
                 style="@style/header_h1_text_title_list_item"
                 android:layout_width="match_parent"

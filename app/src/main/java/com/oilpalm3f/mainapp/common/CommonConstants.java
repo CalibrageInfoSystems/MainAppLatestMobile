@@ -55,8 +55,8 @@ public class CommonConstants {
     public static String DATE_FORMAT_1 = "dd-MM-yyyy HH:mm a";
     public static String DATE_FORMAT_2 = "dd-MM-yyyy";
     public static String DATE_FORMAT_3 = "dd/MM/yyyy";
-    //public static String IS_MASTER_SYNC_SUCCESS = "is_master_sync_success";
-    public static String IS_MASTER_SYNC_SUCCESS = "null";
+    public static String IS_MASTER_SYNC_SUCCESS = "is_master_sync_success";
+   // public static String IS_MASTER_SYNC_SUCCESS = "null";
     public static String PREVIOUS_PRINTER_ADDRESS = "previous_printer_address";
     public static String IS_ANY_PALM_DETAIL_Fill = "is_any_palm_detail_fill";
     public static String USER_ID = "12345";

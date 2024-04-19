@@ -97,6 +97,7 @@ public class NoVisitPlotslistScreen extends AppCompatActivity {
     }
     private void setviews() {
         offset = offset + LIMIT;
+
         searchBtn.setOnClickListener(v ->{
 
 
@@ -243,8 +244,7 @@ public class NoVisitPlotslistScreen extends AppCompatActivity {
                 ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
                     @Override
                     public void run() {
-                        //ProgressBar.hideProgressBar();
-                        searchprogress.setVisibility(View.GONE);
+                        //ProgressBar.hideProgressBar();                        searchprogress.setVisibility(View.GONE);
                         noVisitsDetailsRecyclerAdapter = new NoVisitsInfoAdapter(NoVisitPlotslistScreen.this, notVisitedplotsInfoList);
                         if (notVisitedplotsInfoList != null && !notVisitedplotsInfoList.isEmpty()) {
                             novisitplot_list.setVisibility(View.VISIBLE);

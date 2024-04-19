@@ -59,6 +59,7 @@ class DataBaseUpgrade {
                 upgradeDb32(db);
                 upgradeDb33(db);
                 upgradeDb34(db);
+                upgradeDb35(db);
 
             } else {
                 boolean isDbUpgradeFinished = sharedPreferences.getBoolean(String.valueOf(Palm3FoilDatabase.DATA_VERSION), false);
@@ -199,6 +200,10 @@ class DataBaseUpgrade {
                         case 34:
                             upgradeDb34(db);
                             UiUtils.showCustomToastMessage("Updating database 34 -->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
+                            break;
+                        case 35:
+                            upgradeDb35(db);
+                            UiUtils.showCustomToastMessage("Updating database 35 -->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
                             break;
 
 
@@ -1768,6 +1773,20 @@ class DataBaseUpgrade {
             db.execSQL(AHApprovalCommentscolumn);
             db.execSQL(SAPCodecolumn);
             db.execSQL(CostCentercolumn);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void upgradeDb35( final SQLiteDatabase db) {
+        Log.d(LOG_TAG, "******* upgradeDataBase 35 ******" + Palm3FoilDatabase.DATA_VERSION);
+
+        String locationidcc = "ALTER TABLE CollectionCenter Add MillLocationTypeId INT";
+
+
+        try {
+            db.execSQL(locationidcc);
 
         } catch (Exception e) {
             e.printStackTrace();

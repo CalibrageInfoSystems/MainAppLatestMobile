@@ -185,7 +185,6 @@ public class HarvestingActivity extends OilPalmBaseActivity {
         }
     };
 
-
     private void setViews() {
 
         harvestercode.setFocusable(false);

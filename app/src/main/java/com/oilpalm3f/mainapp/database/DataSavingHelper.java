@@ -2360,9 +2360,8 @@ public class DataSavingHelper {
 
 
     public static void saveGapfillingDetails(final Context context, final ApplicationThread.OnComplete<String> onComplete) {
-
         PlotGapFillingDetails plotgapfillingdetails = (PlotGapFillingDetails) DataManager.getInstance().getDataFromManager(DataManager.PlotGapFilling_Details);
-        if (null != plotgapfillingdetails) {
+        if (!plotgapfillingdetails.getPlotCode().equalsIgnoreCase("null")) {
             Gson gson = new GsonBuilder().serializeNulls().create();
             JSONObject gapfillingData = null;
             List dataToInsert = null;

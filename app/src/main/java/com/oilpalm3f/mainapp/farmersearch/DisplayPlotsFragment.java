@@ -310,7 +310,7 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
                 } else {
 
               moveToNextScreen();
-
+//
 //                    getLocationDetails();
 //                    if (CommonUtils.isFromConversion()) {
 //                        if ((IsRetakeGeoTagRequired == 1)) {

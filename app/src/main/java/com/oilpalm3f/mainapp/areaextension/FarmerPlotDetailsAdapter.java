@@ -107,18 +107,18 @@ public class FarmerPlotDetailsAdapter extends SelectableAdapter<FarmerPlotDetail
 
         if (CommonUtils.isFromCropMaintenance() || CommonUtils.isFromHarvesting()) {
 
-            if (!count.equals("0")) {
-                holder.vist_count.setText("Plot Visit Count : " + count);
-            } else {
-                holder.vist_count.setVisibility(View.GONE);
-                // holder.lastest_vistDate.setVisibility(View.GONE);
-            }
+//            if (!count.equals("0")) {
+//                holder.vist_count.setText("Plot Visit Count : " + count);
+//            } else {
+//                holder.vist_count.setVisibility(View.GONE);
+//                // holder.lastest_vistDate.setVisibility(View.GONE);
+//            }
 
             if (!TextUtils.isEmpty(date))
                 holder.lastest_vistDate.setText("Last Visit Date : " + date.split("T")[0]);
 
         } else {
-            holder.vist_count.setVisibility(View.GONE);
+            //holder.vist_count.setVisibility(View.GONE);
             holder.lastest_vistDate.setVisibility(View.GONE);
         }
 

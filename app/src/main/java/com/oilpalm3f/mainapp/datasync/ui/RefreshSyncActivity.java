@@ -336,7 +336,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             plantationCountTxt.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Plantation")));
             hopCountTxt.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("HealthPlantation")));
             cmpCount.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Complaints")));
-            PlotGapFillingDetailsCount.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("PlotGapFillingDetails")));
+            PlotGapFillingDetailsCount.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQueryforPlotGapFillingDetails("PlotGapFillingDetails")));
 
             //getVistLogRecords
             String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));

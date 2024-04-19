@@ -121,10 +121,10 @@ public class DataSyncHelper {
     private static final String LOG_TAG = DataSyncHelper.class.getName();
 
     //public static String PREVIOUS_SYNC_DATE = null;
-   // public static String PREVIOUS_SYNC_DATE = "previous_sync_date";
+    public static String PREVIOUS_SYNC_DATE = "previous_sync_date";
     public static String FIRST_TIME = null;
     public static String NULLDATE;
-    public static String PREVIOUS_SYNC_DATE = "";
+    //public static String PREVIOUS_SYNC_DATE = "";
     public static LinkedHashMap<String, List> dataToUpdate = new LinkedHashMap<>();
     public static int countCheck, transactionsCheck = 0, imagesCount = 0, reverseSyncTransCount = 0, innerCountCheck = 0;
     public static List<String> refreshtableNamesList = new ArrayList<>();
@@ -1568,6 +1568,7 @@ public class DataSyncHelper {
 
                             } else {
                                 UiUtils.showCustomToastMessage("Data is not Synced Properly Again its DownLoading the Data ", context, 1);
+                               Log.d("FromRestCount", "Yes");
                                 if (CommonUtils.isNetworkAvailable(context)) {
                                     updateSyncDate(context, null);
                                     for (String s : RefreshSyncActivity.allRefreshDataMap) {
@@ -1584,6 +1585,7 @@ public class DataSyncHelper {
 
                         } else {
                             UiUtils.showCustomToastMessage("Data is not Synced Properly Again its DownLoading the Data", context, 1);
+                            Log.d("FromRestCount", "No");
                             if (CommonUtils.isNetworkAvailable(context)) {
                                 updateSyncDate(context, null);
                                 for (String s : RefreshSyncActivity.allRefreshDataMap) {
