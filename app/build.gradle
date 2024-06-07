@@ -100,6 +100,7 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
+
     testImplementation 'junit:junit:4.12'
 //    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2. 2', {
 //        exclude group: 'com.android.support', module: 'support-annotations'
@@ -166,5 +167,12 @@ dependencies {
     implementation 'io.reactivex:rxandroid:1.2.1'
     implementation 'io.reactivex:rxjava:1.1.6'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+ //   implementation 'com.google.android.gms:play-services-location:21.0.1'
+//  implementation 'com.karumi:dexter:6.2.1'
+
+//   implementation 'com.google.android.material:material:1.4.0'
+
 
 }

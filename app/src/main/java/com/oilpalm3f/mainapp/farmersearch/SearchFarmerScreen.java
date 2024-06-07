@@ -193,7 +193,7 @@ public class  SearchFarmerScreen extends OilPalmBaseActivity implements Recycler
         }
 //        ProgressBar.showProgressBar(this, "Please wait...");
         ApplicationThread.bgndPost(LOG_TAG, "getting transactions data", () ->
-                dataAccessHandler.getFarmerDetailsForSearch(searchKey, offset, LIMIT,
+                dataAccessHandler. getFarmerDetailsForSearch(searchKey, offset, LIMIT,
                         new ApplicationThread.OnComplete<List<BasicFarmerDetails>>() {
             @Override
             public void execute(boolean success, final List<BasicFarmerDetails> farmerDetails, String msg) {
@@ -278,7 +278,8 @@ public class  SearchFarmerScreen extends OilPalmBaseActivity implements Recycler
         }
 
         else if (CommonUtils.isFromFollowUp() || CommonUtils.isFromConversion() || CommonUtils.isFromCropMaintenance()||
-                CommonUtils.isPlotSplitFarmerPlots() || CommonUtils.isVisitRequests() || CommonUtils.isFromHarvesting() || CommonUtils.isFromPlantationAudit())  {
+                CommonUtils.isPlotSplitFarmerPlots() || CommonUtils.isVisitRequests() || CommonUtils.isFromHarvesting()
+                || CommonUtils.isFromPlantationAudit() || CommonUtils.isFromviewonmaps())  {
             Log.e("========>282","Re Take Geo");
             FragmentManager fm = getSupportFragmentManager();
             DisplayPlotsFragment displayPlotsFragment = DisplayPlotsFragment.newInstance(mFarmersList.get(position));

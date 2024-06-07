@@ -800,6 +800,8 @@
     <string name="doharvesting">Do Harvesting Visit</string>
     <string name="closeharvesting">Close Harvesting Visit</string>
     <string name="notvisitedplots">Not Visited Plots</string>
+    <string name="harvesting"> Harvesting Visit</string>
+    <string name="crop_maintenancevisit"> Crop Maintenance Visit</string>
     <string-array name="Month">
         <item>None</item>
         <item>January</item>

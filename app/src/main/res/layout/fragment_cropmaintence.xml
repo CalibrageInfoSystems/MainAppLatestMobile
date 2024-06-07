@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context="com.oilpalm3f.mainapp.palmcare.CropmaintenceFragment">
+
+    <RelativeLayout
+        android:id="@+id/rl_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+
+        android:background="@color/light_gray"
+        android:padding="6dp">
+
+        <EditText
+            android:id="@+id/searchtext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_edittext"
+            android:hint="Search by name or mobile number or farmer code"
+            android:inputType="textNoSuggestions|textVisiblePassword"
+            android:padding="6dp"
+            android:textColor="@color/action_color"
+            android:textSize="16sp" />
+
+        <ProgressBar
+            android:id="@+id/searchprogrescrop"
+            style="?android:progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/clearsearch"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/clearsearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:src="@mipmap/close_icon"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/novisitplot_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rl_search"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:divider="@color/gray"
+        android:dividerHeight="2px" />
+
+    <TextView
+        android:id="@+id/no_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fontFamily="@font/hind_semibold"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:text="No Data Available"
+        android:textColor="@color/red"
+        android:textSize="20sp" />
+
+</RelativeLayout>

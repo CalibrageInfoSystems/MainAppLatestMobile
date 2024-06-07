@@ -879,11 +879,11 @@ public class CommonUtils {
  // return deviceId;
 
         //return "351558072968326";// KA User(AnandGoud)
-       //return "358525086163783"; //AR & CH State User(Roja)
+       return "358525086163783"; //AR & CH State User(Roja)
       //return "351558072434071"; //NikHil
       //return "87846711fe3fac40"; //Assam User
      // return "8c36dbcb47dcef24"; //Live Data issue
-        return "351558072360896";//Arun
+       // return "351558072360896";//Arun
         //return "04eef79c34f0aec6";//Live Registration not working
         //return "351558072736715";//Srihari sir Live
         //return "351558072998505";//SrihariTEST UAT
@@ -1543,6 +1543,9 @@ public class CommonUtils {
 
     public static boolean isVisitRequests() {
         return (CommonConstants.REGISTRATION_SCREEN_FROM.equalsIgnoreCase(CommonConstants.REGISTRATION_SCREEN_FROM_VISIT_REQUESTS));
+    }
+    public static boolean isFromviewonmaps() {
+        return (CommonConstants.REGISTRATION_SCREEN_FROM.equalsIgnoreCase(CommonConstants.REGISTRATION_SCREEN_FROM_Viewonmaps));
     }
 
 

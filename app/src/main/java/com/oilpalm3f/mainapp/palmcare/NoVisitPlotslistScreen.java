@@ -1,6 +1,13 @@
 package com.oilpalm3f.mainapp.palmcare;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.support.design.widget.TabItem;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,7 +57,7 @@ public class NoVisitPlotslistScreen extends AppCompatActivity {
     private LinearLayoutManager layoutManager;
     private RecyclerView novisitplot_list;
     private DataAccessHandler dataAccessHandler;
-
+    PageAdapter pageAdapter;
     TextView no_text;
     private ActionBar actionBar;
     private Toolbar toolbar;
@@ -63,7 +70,11 @@ public class NoVisitPlotslistScreen extends AppCompatActivity {
     private boolean isSearch = false;
 
     String searchKey = "";
+    ViewPager viewPager;
+    TabLayout tabLayout;
 
+    TabItem tabcrop;
+    TabItem tabHarvest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,47 +95,81 @@ public class NoVisitPlotslistScreen extends AppCompatActivity {
         fromDate = findViewById(R.id.fromDate);
         toDate = findViewById(R.id.toDate);
         searchBtn = findViewById(R.id.searchBtnT);
-        novisitplot_list =  findViewById(R.id.novisitplot_list);
+//        novisitplot_list =  findViewById(R.id.novisitplot_list);
         no_text = findViewById(R.id.no_text);
         dataAccessHandler = new DataAccessHandler(this);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         fromDate.setText(sdf.format(new Date()));
         toDate.setText(sdf.format(new Date()));
-
-        searchtext = (EditText) findViewById(R.id.searchtext);
-        clearsearch = (ImageView) findViewById(R.id.clearsearch);
+        tabLayout = findViewById(R.id.tabLayout);
+//        tabcrop = findViewById(R.id.tabcrop);
+//        tabHarvest = findViewById(R.id.tabHarvest);
+//        searchtext = (EditText) findViewById(R.id.searchtext);
+//        clearsearch = (ImageView) findViewById(R.id.clearsearch);
         searchprogress = (android.widget.ProgressBar) findViewById(R.id.searchprogress);
+        viewPager = findViewById(R.id.viewPager);
+
+        tabLayout.addTab(tabLayout.newTab().setText("Crop Maintenance Visit"));
+        tabLayout.addTab(tabLayout.newTab().setText("Harvesting Visit"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+
+
+
+        pageAdapter = new PageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(pageAdapter);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
     }
     private void setviews() {
         offset = offset + LIMIT;
 
         searchBtn.setOnClickListener(v ->{
+            Intent intent = new Intent("KEY");
+            intent.putExtra("todate", toDateStr);
+            intent.putExtra("fromdate", fromDateStr);
+            sendBroadcast(intent);
 
-
-            ProgressBar.showProgressBar(this, "Please wait...");
-            notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,fromDateStr,toDateStr, searchKey), 1);
-            Collections.reverse(notVisitedplotsInfoList);
-
-            ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
-                @Override
-                public void run() {
-                    ProgressBar.hideProgressBar();
-                    noVisitsDetailsRecyclerAdapter = new NoVisitsInfoAdapter(NoVisitPlotslistScreen.this, notVisitedplotsInfoList);
-                    if (notVisitedplotsInfoList != null && !notVisitedplotsInfoList.isEmpty() && notVisitedplotsInfoList.size()!= 0) {
-                        novisitplot_list.setVisibility(View.VISIBLE);
-                        no_text.setVisibility(View.GONE);
-                        layoutManager = new LinearLayoutManager(NoVisitPlotslistScreen.this, LinearLayoutManager.VERTICAL, false);
-                        novisitplot_list.setLayoutManager(layoutManager);
-
-                        novisitplot_list.setAdapter(noVisitsDetailsRecyclerAdapter);
-                     //   setTitle(alert_type, offset == 0 ? alertsVisitsInfoList.size() : offset);
-                    }
-                    else{
-                        novisitplot_list.setVisibility(View.GONE);
-                        no_text.setVisibility(View.VISIBLE);
-                    }
-                }
-            });
+//            ProgressBar.showProgressBar(this, "Please wait...");
+//            notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,fromDateStr,toDateStr, searchKey), 1);
+//            Collections.reverse(notVisitedplotsInfoList);
+//
+//            ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
+//                @Override
+//                public void run() {
+//                    ProgressBar.hideProgressBar();
+//                    noVisitsDetailsRecyclerAdapter = new NoVisitsInfoAdapter(NoVisitPlotslistScreen.this, notVisitedplotsInfoList);
+//                    if (notVisitedplotsInfoList != null && !notVisitedplotsInfoList.isEmpty() && notVisitedplotsInfoList.size()!= 0) {
+//                        novisitplot_list.setVisibility(View.VISIBLE);
+//                        no_text.setVisibility(View.GONE);
+//                        layoutManager = new LinearLayoutManager(NoVisitPlotslistScreen.this, LinearLayoutManager.VERTICAL, false);
+//                        novisitplot_list.setLayoutManager(layoutManager);
+//
+//                        novisitplot_list.setAdapter(noVisitsDetailsRecyclerAdapter);
+//                     //   setTitle(alert_type, offset == 0 ? alertsVisitsInfoList.size() : offset);
+//                    }
+//                    else{
+//                        novisitplot_list.setVisibility(View.GONE);
+//                        no_text.setVisibility(View.VISIBLE);
+//                    }
+//                }
+//            });
         });
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -166,105 +211,105 @@ public class NoVisitPlotslistScreen extends AppCompatActivity {
             datePickerDialog.show();
         });
 
-        notvisitedplotslist(offset);
-
-        clearsearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isSearch = false;
-                notVisitedplotsInfoList.clear();
-                searchtext.setText("");
-            }
-        });
-
-        searchtext.addTextChangedListener(mTextWatcher);
-    }
-
-    private TextWatcher mTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            com.oilpalm3f.mainapp.cloudhelper.Log.d("WhatisinSearch", "is :"+ s);
-            //
-            offset = 0;
-            ApplicationThread.uiPost(LOG_TAG, "search", new Runnable() {
-                @Override
-                public void run() {
-                    doSearch(s.toString().trim());
-                    if (s.toString().length() > 0) {
-                        clearsearch.setVisibility(View.VISIBLE);
-                    } else {
-                        clearsearch.setVisibility(View.GONE);
-                    }
-                }
-            }, 100);
-        }
-
-        @Override
-        public void afterTextChanged(final Editable s) {
-
-        }
-    };
-
-    public void doSearch(String searchQuery) {
-        com.oilpalm3f.mainapp.cloudhelper.Log.d("DoSearchQuery", "is :" +  searchQuery);
-        offset = 0;
-        hasMoreItems = true;
-        if (searchQuery !=null &  !TextUtils.isEmpty(searchQuery)  & searchQuery.length()  > 0) {
-
-            offset = 0;
-            isSearch = true;
-            searchKey = searchQuery.trim();
-            notvisitedplotslist(offset);
-        } else {
-            searchKey = "";
-            isSearch = false;
-            notvisitedplotslist(offset);
-        }
-    }
 
 
-    private void notvisitedplotslist(final int offset) {
-        //ProgressBar.showProgressBar(this, "Please wait...");
+//        clearsearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                isSearch = false;
+//                notVisitedplotsInfoList.clear();
+//                searchtext.setText("");
+//            }
+//        });
+//
+//        searchtext.addTextChangedListener(mTextWatcher);
+//    }
 
-        if (searchprogress != null) {
-            searchprogress.setVisibility(View.VISIBLE);
-        }
-        ApplicationThread.bgndPost(LOG_TAG, "notvisitedplots", new Runnable() {
-            @Override
-            public void run() {
+//    private TextWatcher mTextWatcher = new TextWatcher() {
+//        @Override
+//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//        }
+//
+//        @Override
+//        public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            com.oilpalm3f.mainapp.cloudhelper.Log.d("WhatisinSearch", "is :"+ s);
+//            //
+//            offset = 0;
+//            ApplicationThread.uiPost(LOG_TAG, "search", new Runnable() {
+//                @Override
+//                public void run() {
+//                    doSearch(s.toString().trim());
+//                    if (s.toString().length() > 0) {
+//                        clearsearch.setVisibility(View.VISIBLE);
+//                    } else {
+//                        clearsearch.setVisibility(View.GONE);
+//                    }
+//                }
+//            }, 100);
+//        }
+//
+//        @Override
+//        public void afterTextChanged(final Editable s) {
+//
+//        }
+//    };
+//
+//    public void doSearch(String searchQuery) {
+//        com.oilpalm3f.mainapp.cloudhelper.Log.d("DoSearchQuery", "is :" +  searchQuery);
+//        offset = 0;
+//        hasMoreItems = true;
+//        if (searchQuery !=null &  !TextUtils.isEmpty(searchQuery)  & searchQuery.length()  > 0) {
+//
+//            offset = 0;
+//            isSearch = true;
+//            searchKey = searchQuery.trim();
+//            notvisitedplotslist(offset);
+//        } else {
+//            searchKey = "";
+//            isSearch = false;
+//            notvisitedplotslist(offset);
+//        }
+//    }
 
-                notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,fromDateStr,toDateStr, searchKey), 1);
-                Collections.reverse(notVisitedplotsInfoList);
 
-                ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
-                    @Override
-                    public void run() {
-                        //ProgressBar.hideProgressBar();                        searchprogress.setVisibility(View.GONE);
-                        noVisitsDetailsRecyclerAdapter = new NoVisitsInfoAdapter(NoVisitPlotslistScreen.this, notVisitedplotsInfoList);
-                        if (notVisitedplotsInfoList != null && !notVisitedplotsInfoList.isEmpty()) {
-                            novisitplot_list.setVisibility(View.VISIBLE);
-                            no_text.setVisibility(View.GONE);
-                            layoutManager = new LinearLayoutManager(NoVisitPlotslistScreen.this, LinearLayoutManager.VERTICAL, false);
-                            novisitplot_list.setLayoutManager(layoutManager);
-
-                            novisitplot_list.setAdapter(noVisitsDetailsRecyclerAdapter);
-                            //   setTitle(alert_type, offset == 0 ? alertsVisitsInfoList.size() : offset);
-                        }
-                        else{
-                            novisitplot_list.setVisibility(View.GONE);
-                            no_text.setVisibility(View.VISIBLE);
-                        }
-                    }
-                });
-
-            }
-        });
-    }
+//    private void notvisitedplotslist(final int offset) {
+//        //ProgressBar.showProgressBar(this, "Please wait...");
+//
+//        if (searchprogress != null) {
+//            searchprogress.setVisibility(View.VISIBLE);
+//        }
+//        ApplicationThread.bgndPost(LOG_TAG, "notvisitedplots", new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,fromDateStr,toDateStr, searchKey), 1);
+//                Collections.reverse(notVisitedplotsInfoList);
+//
+//                ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //ProgressBar.hideProgressBar();                        searchprogress.setVisibility(View.GONE);
+//                        noVisitsDetailsRecyclerAdapter = new NoVisitsInfoAdapter(NoVisitPlotslistScreen.this, notVisitedplotsInfoList);
+//                        if (notVisitedplotsInfoList != null && !notVisitedplotsInfoList.isEmpty()) {
+//                            novisitplot_list.setVisibility(View.VISIBLE);
+//                            no_text.setVisibility(View.GONE);
+//                            layoutManager = new LinearLayoutManager(NoVisitPlotslistScreen.this, LinearLayoutManager.VERTICAL, false);
+//                            novisitplot_list.setLayoutManager(layoutManager);
+//
+//                            novisitplot_list.setAdapter(noVisitsDetailsRecyclerAdapter);
+//                            //   setTitle(alert_type, offset == 0 ? alertsVisitsInfoList.size() : offset);
+//                        }
+//                        else{
+//                            novisitplot_list.setVisibility(View.GONE);
+//                            no_text.setVisibility(View.VISIBLE);
+//                        }
+//                    }
+//                });
+//
+//            }
+//        });
+  }
     private void updateLabel(int type) {
         String myFormat = "dd-MM-yyyy";
         String dateFormatter = "yyyy-MM-dd";
@@ -310,5 +355,47 @@ public class NoVisitPlotslistScreen extends AppCompatActivity {
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class PageAdapter extends FragmentPagerAdapter {
+        String spinner_item;
+        public String getSpinner_item() {
+            return spinner_item;
+        }
+
+        public void setSpinner_item(String spinner_item) {
+            this.spinner_item = spinner_item;
+        }
+
+
+        private int numOfTabs;
+
+        PageAdapter(FragmentManager fm, int numOfTabs) {
+            super(fm);
+            this.numOfTabs = numOfTabs;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            //  String selectedText= SharedPrefsData.getInstance(getApplicationContext()).getStringFromSharedPrefs("sitem");
+            switch (position) {
+                case 0:
+
+                    return new CropmaintenceFragment();
+
+
+                case 1:
+                    return new HarvestingFragment();
+
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return numOfTabs;
+        }
     }
 }

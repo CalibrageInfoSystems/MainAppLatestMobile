@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.oilpalm3f.mainapp.FaLogTracking.LocationTracker;
 import com.oilpalm3f.mainapp.alerts.AlertsPlotInfo;
 import com.oilpalm3f.mainapp.alerts.AlertsVisitsInfo;
@@ -1120,7 +1121,10 @@ f
             query = Queries.getInstance().getFilterBasedFarmersCrop(key, offset, limit);
         } else if (CommonUtils.isPlotSplitFarmerPlots()) {
             query = Queries.getInstance().getFilterBasedFarmersCropRetake(key, offset, limit);
-        } else if (CommonUtils.isVisitRequests()) {
+        } else if (CommonUtils.isFromviewonmaps()) {
+            query = Queries.getInstance().getviewmapsdata(key, offset, limit);
+        }
+        else if (CommonUtils.isVisitRequests()) {
             query = Queries.getInstance().getVisitRequestFarmers(key, offset, limit);
             Log.v("@@@query", "2");
         }
@@ -1387,7 +1391,7 @@ f
         Cursor cursor = null;
         String query = null;
         if (CommonUtils.isFromCropMaintenance() || CommonUtils.isComplaint()) {
-            query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus, 89, true);
+            query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus, 89, true, false);
         } else if (CommonUtils.isFromFollowUp()) {
             query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus);
         } else if (CommonUtils.isPlotSplitFarmerPlots()) {
@@ -5124,6 +5128,36 @@ f
         }
 
         return (T) ((type == 0) ? plotGapFillingDetails : plotGapFillingList);
+    }
+
+    public LinkedHashMap<String, List<LatLng>> getGenericDataa(final String query) {
+        Log.v(LOG_TAG, "@@@ Generic Query " + query);
+        LinkedHashMap<String, List<LatLng>> mGenericData = new LinkedHashMap<>();
+        Cursor genericDataQuery = null;
+        try {
+            genericDataQuery = mDatabase.rawQuery(query, null);
+            if (genericDataQuery.moveToFirst()) {
+                do {
+                    String plotCode = genericDataQuery.getString(genericDataQuery.getColumnIndex("PlotCode"));
+                    double latitude = genericDataQuery.getDouble(genericDataQuery.getColumnIndex("Latitude"));
+                    double longitude = genericDataQuery.getDouble(genericDataQuery.getColumnIndex("Longitude"));
+                    LatLng latLng = new LatLng(latitude, longitude);
+
+                    if (!mGenericData.containsKey(plotCode)) {
+                        mGenericData.put(plotCode, new ArrayList<>());
+                    }
+                    mGenericData.get(plotCode).add(latLng);
+                } while (genericDataQuery.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, e.getMessage());
+        } finally {
+            if (genericDataQuery != null) {
+                genericDataQuery.close();
+            }
+            closeDataBase();
+        }
+        return mGenericData;
     }
 
 

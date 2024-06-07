@@ -126,6 +126,7 @@ public class CommonConstants {
 
     public static String REGISTRATION_SCREEN_FROM_PLOT_SPLIT = "registration_screen_from_plot_split";
     public static String REGISTRATION_SCREEN_FROM_VISIT_REQUESTS = "registration_screen_from_visit_request";
+    public static String REGISTRATION_SCREEN_FROM_Viewonmaps = "registration_screen_from_Viewonmaps";
     public static String REGISTRATION_SCREEN_FROM_TRANSPORT_SERVICE_QUESTIONER = "registration_screen_from_transport_service_questioner";
 
     public static boolean isModeEdit = false;
@@ -228,6 +229,7 @@ public class CommonConstants {
     public static String fertilizerapplydate = "";
 
     public static String SyncTableName = "Table";
+
 
 
     public static final class Flags {

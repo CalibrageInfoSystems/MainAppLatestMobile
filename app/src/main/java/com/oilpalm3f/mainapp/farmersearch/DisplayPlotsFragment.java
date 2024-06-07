@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oilpalm3f.mainapp.R;
+import com.oilpalm3f.mainapp.ViewmapsActivity;
 import com.oilpalm3f.mainapp.areacalculator.LocationProvider;
 import com.oilpalm3f.mainapp.areacalculator.PreViewAreaCalScreen;
 import com.oilpalm3f.mainapp.areaextension.FarmerPlotDetailsAdapter;
@@ -211,7 +212,12 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
             plotStatus = 81;
         } else if (CommonUtils.isPlotSplitFarmerPlots()) {
             plotStatus = 258;
-        } else {
+        }
+        else if (CommonUtils.isFromviewonmaps()) {
+            plotStatus = 81;
+//
+        }
+        else {
             plotStatus = 89;
         }
 
@@ -327,7 +333,8 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
 //
 //                    UiUtils.showCustomToastMessageLong("This location is not actual plot location, distance from plot is " + actualDistance + " " + units + " and it should be with in 200 meters", getActivity(), 1, Toast.LENGTH_LONG);
                 }
-            } else {
+            }
+            else {
                 UiUtils.showCustomToastMessage("Geo tag was not available in database", getActivity(), 1);
             }
 
@@ -376,6 +383,13 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
                 }
                 else if (CommonUtils.isFromPlantationAudit()) {
                     Intent intent = new Intent(getActivity(), PlantationAudit.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+                else if (CommonUtils.isFromviewonmaps()) {
+                    Log.v(LOG_TAG, "@@@@ PlotCode isFromviewonmaps " + CommonConstants.PLOT_CODE);
+                    Intent intent = new Intent(getActivity(), ViewmapsActivity.class);
+                    intent.putExtra("plotcode", CommonConstants.PLOT_CODE);
                     startActivity(intent);
                     getActivity().finish();
                 }

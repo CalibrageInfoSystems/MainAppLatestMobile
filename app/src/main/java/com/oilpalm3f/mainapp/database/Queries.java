@@ -3,6 +3,8 @@ package com.oilpalm3f.mainapp.database;
 
 import com.oilpalm3f.mainapp.common.CommonConstants;
 
+import java.util.List;
+
 //Queries can be written here
 public class Queries {
 
@@ -566,11 +568,14 @@ public class Queries {
 
     }
 
-    public String getPlotDetailsForCC(final String farmercode, final int plotStatus, final int multiStatus, boolean fromCm) {
+    public String getPlotDetailsForCC(final String farmercode, final int plotStatus, final int multiStatus, boolean fromCm, boolean isFromVIewonMap) {
         String statusType = "";
         if (fromCm) {
             statusType = "and fh.StatusTypeId IN ('" + plotStatus + "','" + multiStatus + "','308' )";
-        } else {
+        }else if (isFromVIewonMap) {
+            statusType = "and fh.StatusTypeId IN ('" + plotStatus + "','" + multiStatus + "','83','85','86','88','89','259','308','387')";
+        }
+        else {
             statusType = "and fh.StatusTypeId = '" + plotStatus + "'";
         }
 //        return "select p.Code, p.TotalPalmArea, p.TotalPlotArea, p.GPSPlotArea, p.SurveyNumber, addr.Landmark,\n" +
@@ -591,6 +596,7 @@ public class Queries {
                 "m.Code as MandalCode, m.Name as MandalName, m.Id as MandalId,\n" +
                 "d.Code as DistrictCode, d.Name as DistrictName, d.Id as DistrictId,\n" +
                 "s.Code as StateCode, s.Name as StateName, s.Id as StateId , p.DateofPlanting from Plot p\n" +
+                "inner join GeoBoundaries geo on geo.PlotCode = p.Code\n" +
                 "inner join Farmer f on f.code = p.FarmerCode\n" +
                 "inner join Address addr on p.AddressCode = addr.Code\n" +
                 "inner join Village v on addr.VillageId = v.Id\n" +
@@ -598,11 +604,11 @@ public class Queries {
                 "inner join District d on addr.DistrictId = d.Id\n" +
                 "inner join State s on addr.StateId = s.Id\n" +
                 "inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
-                "where p.IsActive = 1 and f.IsActive = 1 and p.FarmerCode='" + farmercode + "'" + statusType + " and fh.IsActive = 1  group by p.Code";
+                "where p.IsActive = 1 and geo.GeoCategoryTypeId = '206' and  f.IsActive = 1 and p.FarmerCode='" + farmercode + "'" + statusType + " and fh.IsActive = 1  group by p.Code";
     }
 
     public String getPlotDetailsForCC(final String farmercode, final int plotStatus) {
-        return getPlotDetailsForCC(farmercode, plotStatus, 0, false);
+        return getPlotDetailsForCC(farmercode, plotStatus, 0, false, false);
     }
 
     public String getComplaintsDataByPlot(String plotcode, String farmerCode) {
@@ -2136,6 +2142,53 @@ public class Queries {
     public String getplotgapfillingrefresh() {
         return "select * from PlotGapFillingDetails  where ServerUpdatedStatus = 0 AND PlotCode != 'null'";
     }
+
+
+    public String getviewmapsdata(String seachKey, int offset, int limit) {
+
+
+        return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
+                "s.Name as StateName,\n" +
+                "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
+                "from Farmer f \n" +
+                "left join Village v on f.VillageId = v.Id \n" +
+                "left join State s on f.StateId = s.Id \n" +
+                "left join FileRepository fileRep on f.Code = fileRep.FarmerCode" + " and fileRep.ModuleTypeId = 193" + "\n" +
+                "inner join Plot p on p.FarmerCode = f.Code  \n"+
+                "inner join FarmerHistory fh on fh.FarmerCode = f.Code and fh.PlotCode=p.Code \n" +
+                "inner join GeoBoundaries geo on geo.PlotCode = p.Code \n" +
+        " and fh.StatusTypeId in ('81','82','83','85','86','88','89','259','308','387')" + "\n" +
+                "and fh.IsActive = '1'" + "\n" +
+                "where  f.IsActive = 1 AND geo.GeoCategoryTypeId = '206' AND p.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+                "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%' )group by f.Code limit " + limit + " offset " + offset + ";";
+    }
+
+
+    public String getplotslist() {
+        return "select p.Code from Plot p\n" +
+                "inner join GeoBoundaries geo on geo.PlotCode = p.Code\n" +
+                "inner join Farmer f on f.code = p.FarmerCode\n" +
+                "inner join Address addr on p.AddressCode = addr.Code\n" +
+                "inner join Village v on addr.VillageId = v.Id\n" +
+                "inner join Mandal m on addr.MandalId = m.Id\n" +
+                "inner join District d on addr.DistrictId = d.Id\n" +
+                "inner join State s on addr.StateId = s.Id\n" +
+                "inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
+                "where p.IsActive = 1 and geo.GeoCategoryTypeId = '206' and  f.IsActive = 1 and fh.StatusTypeId IN ('81','82','83','85','86','88','89','259','308','387') and fh.IsActive = 1  group by p.Code";
+    }
+    public String getLatlongs(List<String> plotCodes) {
+        // Constructing the query to handle multiple plot codes
+        StringBuilder queryBuilder = new StringBuilder("SELECT PlotCode, Latitude, Longitude FROM GeoBoundaries WHERE GeoCategoryTypeId = 206 AND PlotCode IN (");
+        for (int i = 0; i < plotCodes.size(); i++) {
+            queryBuilder.append("'").append(plotCodes.get(i)).append("'");
+            if (i < plotCodes.size() - 1) {
+                queryBuilder.append(",");
+            }
+        }
+        queryBuilder.append(")");
+        return queryBuilder.toString();
+    }
+
 
 }
 

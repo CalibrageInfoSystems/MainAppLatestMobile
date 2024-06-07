@@ -43,11 +43,13 @@ public class CCDataAccessHandler {
         Cursor cursor = null;
         String query = null;
         if (CommonUtils.isFromCropMaintenance()||CommonUtils.isComplaint() || CommonUtils.isFromHarvesting() || CommonUtils.isFromPlantationAudit()) {
-            query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus, 89, true);
+            query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus, 89, true, false);
         } else  if (CommonUtils.isFromFollowUp()) {
             query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus);
-        } else if (CommonUtils.isPlotSplitFarmerPlots()) {
+        } else if (CommonUtils.isPlotSplitFarmerPlots()  ) {
             query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus);
+        } else if ( CommonUtils.isFromviewonmaps() ) {
+            query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus, 82, false, true);
         }else if(CommonUtils.isFromConversion()){
             query = Queries.getInstance().getPlotDetailsForConversion(farmerCode.trim(), plotStatus);
             Log.v(LOG_TAG, "@@@conversion "+query);
