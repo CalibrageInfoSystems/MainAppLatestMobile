@@ -62,7 +62,7 @@ public class  SearchFarmerScreen extends OilPalmBaseActivity implements Recycler
     public static  boolean FarmerImage = false ;
     private boolean isSearch = false;
     List<BasicFarmerDetails> farmerDetails;
-
+    String selectedVillageIds;
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -145,8 +145,11 @@ public class  SearchFarmerScreen extends OilPalmBaseActivity implements Recycler
         getAllUsers();
 
         CommonUtils.currentActivity = this;
+        Log.e("Farmerlist Size , " ,mFarmersList.size()+"");
     }
     private void initUI() {
+
+
         farmlandLVMembers = (RecyclerView) findViewById(R.id.lv_farmerlanddetails);
 
         mEtSearch = (EditText) findViewById(R.id.et_search);
@@ -167,6 +170,14 @@ public class  SearchFarmerScreen extends OilPalmBaseActivity implements Recycler
         farmerDetailsRecyclerAdapter.setRecyclerItemClickListener(this);
         mEtSearch.addTextChangedListener(mTextWatcher);
         farmlandLVMembers.addOnScrollListener(recyclerViewOnScrollListener);
+        Intent intent = getIntent();
+        CommonConstants.SelectedvillageIds = intent.getStringExtra("selectedVillageIds");
+
+
+        // Log or print the selectedVillageIds to verify
+        Log.v("SearchFarmerScreen", "Selected Village IDs: " + CommonConstants.SelectedvillageIds);
+      //  Toast.makeText(this, "Selected Village IDs: " + selectedVillageIds, Toast.LENGTH_LONG).show();
+
     }
 
     public void doSearch(String searchQuery) {
@@ -247,6 +258,7 @@ public class  SearchFarmerScreen extends OilPalmBaseActivity implements Recycler
     }
 
     public void moveToNextFlow(final int position) {
+        Log.e("Farmerlist Size , " ,mFarmersList.size()+"");
         DataManager.getInstance().addData(DataManager.IS_FARMER_DATA_UPDATED, false);
         DataManager.getInstance().addData(DataManager.IS_PLOTS_DATA_UPDATED, false);
         CommonUiUtils.resetPrevRegData();
@@ -284,7 +296,9 @@ public class  SearchFarmerScreen extends OilPalmBaseActivity implements Recycler
             FragmentManager fm = getSupportFragmentManager();
             DisplayPlotsFragment displayPlotsFragment = DisplayPlotsFragment.newInstance(mFarmersList.get(position));
             displayPlotsFragment.show(fm, "displayPlotsFragment");
-        } else {
+        }
+
+        else {
             startActivity(new Intent(this, RegistrationFlowScreen.class));
         }
     }

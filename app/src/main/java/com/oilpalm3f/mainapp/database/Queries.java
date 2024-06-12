@@ -206,7 +206,9 @@ public class Queries {
     public String getStatesMasterQuery() {
         return "select Id, Code, Name from State";
     }
-
+    public String getStatesMasterQuery2() {
+        return "select Code,Id, Name from State";
+    }
     public String getStatesQuery() {
         return "SELECT s.Id," +
                 "  s.Code," +
@@ -221,16 +223,23 @@ public class Queries {
     public String getDistrictQuery(final String stateId) {
         return "select Id, Code, Name from District where StateId IN (Select Id from State where Id = '" + stateId + "'" + ")";
     }
+    public String getDistrictQuery2(final String stateIds) {
+        return "SELECT Id, Code, Name FROM District WHERE StateId IN (Select Id from State where Id IN  (" + stateIds  + "))";
+    }
 
     public String getMandalsQuery(final String DistrictId) {
         return "select Id, Code, Name from Mandal where DistrictId IN (Select Id from District where Id = '" + DistrictId + "'" + ")";
     }
-
+    public String getMandalsQuery2(final String DistrictIds) {
+        return "select Id, Code, Name from Mandal where DistrictId IN (Select Id from District where Id  IN (" + DistrictIds  + "))";
+    }
     public String getVillagesQuery(final String mandalId) {
         return "select Id, Code, Name from Village where MandalId IN (Select Id from Mandal where Id = '" + mandalId + "'" + ")";
     }
 
-
+    public String getVillagesQuery2(final String mandalIds) {
+        return "select Id, Code, Name from Village where MandalId IN (Select Id from Mandal where Id IN(" + mandalIds +  "))";
+    }
 
     public String getUOM() {
         return "select Id,Name from UOM";
@@ -568,12 +577,10 @@ public class Queries {
 
     }
 
-    public String getPlotDetailsForCC(final String farmercode, final int plotStatus, final int multiStatus, boolean fromCm, boolean isFromVIewonMap) {
+    public String getPlotDetailsForCC(final String farmercode, final int plotStatus, final int multiStatus, boolean fromCm) {
         String statusType = "";
         if (fromCm) {
             statusType = "and fh.StatusTypeId IN ('" + plotStatus + "','" + multiStatus + "','308' )";
-        }else if (isFromVIewonMap) {
-            statusType = "and fh.StatusTypeId IN ('" + plotStatus + "','" + multiStatus + "','83','85','86','88','89','259','308','387')";
         }
         else {
             statusType = "and fh.StatusTypeId = '" + plotStatus + "'";
@@ -607,8 +614,29 @@ public class Queries {
                 "where p.IsActive = 1 and geo.GeoCategoryTypeId = '206' and  f.IsActive = 1 and p.FarmerCode='" + farmercode + "'" + statusType + " and fh.IsActive = 1  group by p.Code";
     }
 
+    public String getPlotDetailsForviewonmap(final String farmercode, final int plotStatus, final int multiStatus, String villageids) {
+        String statusType = "";
+
+            statusType = "and fh.StatusTypeId IN ('" + plotStatus + "','" + multiStatus + "','83','85','86','88','89','259','308','387')";
+
+        return "select p.Code, p.TotalPalmArea, p.TotalPlotArea, p.GPSPlotArea, p.SurveyNumber, addr.Landmark,\n" +
+                "v.Code AS VillageCode, v.Name as VillageName, v.Id as VillageId,\n" +
+                "m.Code as MandalCode, m.Name as MandalName, m.Id as MandalId,\n" +
+                "d.Code as DistrictCode, d.Name as DistrictName, d.Id as DistrictId,\n" +
+                "s.Code as StateCode, s.Name as StateName, s.Id as StateId , p.DateofPlanting from Plot p\n" +
+                "inner join GeoBoundaries geo on geo.PlotCode = p.Code\n" +
+                "inner join Farmer f on f.code = p.FarmerCode\n" +
+                "inner join Address addr on p.AddressCode = addr.Code\n" +
+                "inner join Village v on addr.VillageId = v.Id\n" +
+                "inner join Mandal m on addr.MandalId = m.Id\n" +
+                "inner join District d on addr.DistrictId = d.Id\n" +
+                "inner join State s on addr.StateId = s.Id\n" +
+                "inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
+                "where p.IsActive = 1  AND geo.GeoCategoryTypeId in (206,384) AND addr.VillageId in (" + villageids + ") and  f.IsActive = 1 and p.FarmerCode='" + farmercode + "'" + statusType + " and fh.IsActive = 1  group by p.Code";
+    }
+
     public String getPlotDetailsForCC(final String farmercode, final int plotStatus) {
-        return getPlotDetailsForCC(farmercode, plotStatus, 0, false, false);
+        return getPlotDetailsForCC(farmercode, plotStatus, 0, false);
     }
 
     public String getComplaintsDataByPlot(String plotcode, String farmerCode) {
@@ -2144,38 +2172,50 @@ public class Queries {
     }
 
 
-    public String getviewmapsdata(String seachKey, int offset, int limit) {
-
-
+    public String getviewmapsdata(String seachKey, int offset, int limit, String villageids) {
         return "select f.Code, f.FirstName, f.MiddleName, f.LastName, f.GuardianName,\n" +
                 "s.Name as StateName,\n" +
                 "f.ContactNumber, f.ContactNumber, v.Name, fileRep.FileLocation, fileRep.FileName, fileRep.FileExtension \n" +
                 "from Farmer f \n" +
-                "left join Village v on f.VillageId = v.Id \n" +
                 "left join State s on f.StateId = s.Id \n" +
                 "left join FileRepository fileRep on f.Code = fileRep.FarmerCode" + " and fileRep.ModuleTypeId = 193" + "\n" +
                 "inner join Plot p on p.FarmerCode = f.Code  \n"+
                 "inner join FarmerHistory fh on fh.FarmerCode = f.Code and fh.PlotCode=p.Code \n" +
                 "inner join GeoBoundaries geo on geo.PlotCode = p.Code \n" +
-        " and fh.StatusTypeId in ('81','82','83','85','86','88','89','259','308','387')" + "\n" +
+                "inner join Address ad on ad.Code = p.AddressCode \n" +
+                "left join Village v on f.VillageId = v.Id AND ad.VillageId = v.Id \n" +
+                " and fh.StatusTypeId in ('81','82','83','85','86','88','89','259','308','387')" + "\n" +
                 "and fh.IsActive = '1'" + "\n" +
-                "where  f.IsActive = 1 AND geo.GeoCategoryTypeId = '206' AND p.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+                "where  f.IsActive = 1 AND geo.GeoCategoryTypeId in (206,384) AND ad.VillageId in (" + villageids + ") AND p.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
                 "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%' )group by f.Code limit " + limit + " offset " + offset + ";";
+
     }
 
 
-    public String getplotslist() {
+    public String getplotslist( String villageids) {
+//        return "select p.Code from Plot p\n" +
+//                "    inner join GeoBoundaries geo on geo.PlotCode = p.Code\n" +
+//                "    inner join Farmer f on f.code = p.FarmerCode\n" +
+//                "    inner join Address addr on p.AddressCode = addr.Code\n" +
+//                "    inner join Village v on addr.VillageId = v.Id\n" +
+//                "    inner join Mandal m on addr.MandalId = m.Id\n" +
+//                "    inner join District d on addr.DistrictId = d.Id\n" +
+//                "    inner join State s on addr.StateId = s.Id\n" +
+//                "    inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
+//                "    where p.IsActive = 1 and geo.GeoCategoryTypeId = '206' and  f.IsActive = 1 and fh.StatusTypeId IN ('81','82','83','85','86','88','89','259','308','387') and fh.IsActive = 1 and  addr.VillageId in (5) group by p.Code";
         return "select p.Code from Plot p\n" +
-                "inner join GeoBoundaries geo on geo.PlotCode = p.Code\n" +
-                "inner join Farmer f on f.code = p.FarmerCode\n" +
-                "inner join Address addr on p.AddressCode = addr.Code\n" +
-                "inner join Village v on addr.VillageId = v.Id\n" +
-                "inner join Mandal m on addr.MandalId = m.Id\n" +
-                "inner join District d on addr.DistrictId = d.Id\n" +
-                "inner join State s on addr.StateId = s.Id\n" +
-                "inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
-                "where p.IsActive = 1 and geo.GeoCategoryTypeId = '206' and  f.IsActive = 1 and fh.StatusTypeId IN ('81','82','83','85','86','88','89','259','308','387') and fh.IsActive = 1  group by p.Code";
+                "    inner join GeoBoundaries geo on geo.PlotCode = p.Code\n" +
+                "    inner join Farmer f on f.code = p.FarmerCode\n" +
+                "    inner join Address addr on p.AddressCode = addr.Code\n" +
+                "    inner join Village v on addr.VillageId = v.Id\n" +
+                "    inner join Mandal m on addr.MandalId = m.Id\n" +
+                "    inner join District d on addr.DistrictId = d.Id\n" +
+                "    inner join State s on addr.StateId = s.Id\n" +
+                "    inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
+                "    where p.IsActive = 1 and geo.GeoCategoryTypeId = '206' and  f.IsActive = 1 and fh.StatusTypeId IN ('81','82','83','85','86','88','89','259','308','387') and fh.IsActive = 1 and  addr.VillageId in (" + villageids + ") group by p.Code";
     }
+
+
     public String getLatlongs(List<String> plotCodes) {
         // Constructing the query to handle multiple plot codes
         StringBuilder queryBuilder = new StringBuilder("SELECT PlotCode, Latitude, Longitude FROM GeoBoundaries WHERE GeoCategoryTypeId = 206 AND PlotCode IN (");
@@ -2190,6 +2230,42 @@ public class Queries {
     }
 
 
+    public String getplotinfo(String plotCode) {
+        return " SELECT  F.Code AS 'FarmerCode',             \n" +
+                "         f.FirstName || ' ' || (CASE WHEN f.MiddleName = 'null' THEN '' ELSE f.MiddleName || ' ' END) || f.LastName  AS FarmerName,\n" +
+                "         P.Code AS 'PlotCode',            \n" +
+                "      P.DateOfPlanting,            \n" +
+                "      TCD.[Desc] AS 'Status',            \n" +
+                "      ROUND(P.TotalPlotArea,2) AS 'TotalPlotArea',            \n" +
+                "      ROUND(P.TotalPalmArea,2) AS 'TotalPalmArea',            \n" +
+                "      ROUND(P.GPSPlotArea,2) AS 'GPSPlotArea',            \n" +
+                "      ROUND(P.LeftOutArea, 2) AS 'LeftOutArea',            \n" +
+                "      ROUND((P.TotalPalmArea - P.GPSPlotArea), 2) AS 'PlotDifference',            \n" +
+                "      A.VillageId,            \n" +
+                "      V.Code AS VillageCode,            \n" +
+                "      V.Name AS VillageName,            \n" +
+                "      A.MandalId,            \n" +
+                "      M.Code AS MandalCode,            \n" +
+                "      M.Name AS MandalName,            \n" +
+                "      A.DistrictId,            \n" +
+                "      D.Code AS DistrictCode,            \n" +
+                "      D.Name AS DistrictName,            \n" +
+                "      A.StateId,            \n" +
+                "      S.Code AS StateCode,            \n" +
+                "      S.Name AS StateName                    \n" +
+                "     FROM [Plot] P              \n" +
+                "     INNER JOIN [Farmer] F  ON P.FarmerCode = F.Code --AND F.IsActive =  1                \n" +
+                "     INNER JOIN [FarmerHistory] FH  ON FH.FarmerCode=p.FarmerCode AND FH.PlotCode=P.Code AND FH.IsActive=1            \n" +
+                "     INNER JOIN [TypeCdDmt] TCD  ON TCD.TypeCdId=FH.StatusTypeId            \n" +
+                "     INNER JOIN [Address] A  ON A.Code = P.AddressCode            \n" +
+                "     INNER JOIN [Village] V  ON V.Id = A.VillageId            \n" +
+                "     INNER JOIN [Mandal] M  ON M.Id = V.MandalId            \n" +
+                "     INNER JOIN [District] D  ON D.Id = M.DistrictId            \n" +
+                "     INNER JOIN [State] S  ON S.Id = D.StateId            \n" +
+                "     INNER JOIN [UserVillageXref] UVX  ON UVX.VillageId=A.VillageId            \n" +
+                "     INNER JOIN [VillageClusterXref]  VCX ON VCX.VillageId=A.VillageId            \n" +
+                "     INNER JOIN [Cluster] C  ON C.Id=VCX.ClusterId  where p.Code ='" + plotCode + "'";
+    }
 }
 
 

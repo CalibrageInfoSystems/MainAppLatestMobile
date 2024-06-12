@@ -4,19 +4,24 @@ package com.oilpalm3f.mainapp;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -39,8 +44,14 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.oilpalm3f.mainapp.common.CommonConstants;
 import com.oilpalm3f.mainapp.database.DataAccessHandler;
 import com.oilpalm3f.mainapp.database.Queries;
+
+import com.oilpalm3f.mainapp.dbmodels.PlotInfo;
+import com.oilpalm3f.mainapp.dbmodels.SoilResource;
+import com.oilpalm3f.mainapp.ui.HomeScreen;
+import com.oilpalm3f.mainapp.uihelper.ProgressBar;
 //import com.karumi.dexter.Dexter;
 //import com.karumi.dexter.PermissionToken;
 //import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -48,8 +59,13 @@ import com.oilpalm3f.mainapp.database.Queries;
 //import com.karumi.dexter.listener.PermissionRequest;
 //import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,18 +75,26 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
 
     FusedLocationProviderClient fusedLocationProviderClient;
     SupportMapFragment smf;
-
     private GoogleMap mMap;
+    private android.widget.ProgressBar progressBar;
+
     float polylineWidth = 10f;
     ArrayList<LatLng> arrayList = new ArrayList<>();
     private DataAccessHandler dataAccessHandler;
     private LinkedHashMap LatlongDataMap;
-    String selectedPlotCode;
+    String selectedPlotCode ,Selectedids;
+    private PlotInfo plotinfo;
+    private DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private  DateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
+    SearchView searchView;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewmaps);
+
+        // Initialize ProgressBar
+        progressBar = findViewById(R.id.progress_bar);
 
         // Ensure the correct fragment is used
         smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
@@ -78,12 +102,16 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         dataAccessHandler = new DataAccessHandler(this);
         selectedPlotCode = getIntent().getStringExtra("plotcode");
-        Log.e("======selectedPlotCode",selectedPlotCode);
+    //    Selectedids = getIntent().getStringExtra("Villageids");
+        Log.e("======selectedPlotCode", selectedPlotCode);
+        Log.e("Selectedids", CommonConstants.SelectedvillageIds);
+        plotinfo = (PlotInfo) dataAccessHandler.getplotinfoData(Queries.getInstance().getplotinfo(selectedPlotCode), 0);
+        Log.e("======selectedplotinfo", plotinfo.getFarmerName());
+
         if (smf != null) {
             smf.getMapAsync(this);
         }
         getmylocation();
-
     }
 
     private void getmylocation() {
@@ -92,6 +120,9 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
             return;
         }
 
+        // Show the progress bar
+        progressBar.setVisibility(View.VISIBLE);
+        ProgressBar.showProgressBar(this, "Please wait...");
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -100,144 +131,188 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                     smf.getMapAsync(new OnMapReadyCallback() {
                         @Override
                         public void onMapReady(@NonNull GoogleMap googleMap) {
-//                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-//                            for (LatLng point : arrayList) {
-//                                googleMap.moveCamera(CameraUpdateFactory.newLatLng(point));
-//                            }
-//                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-//                            drawPolyline(googleMap);
-                            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-//                        googleMap.setOnInfoWindowClickListener(this);
+                            mMap = googleMap;
+                            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                            mMap.getUiSettings().setZoomControlsEnabled(true);
 
+                            if (ActivityCompat.checkSelfPermission(ViewmapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ViewmapsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                return;
+                            }
+                            mMap.setMyLocationEnabled(true);
+                            mMap.setMinZoomPreference(18.0f);
                             LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18.0f));
 
-                            //   LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            //     MarkerOptions markerOptions = new MarkerOptions().position(currentLocation).title("You are here....!");
                             MarkerOptions markerOptions = new MarkerOptions()
                                     .position(currentLocation)
-                                    .title("Your are here")
+                                    .title("You are here")
                                     .icon(bitmapDescriptorFromVector(ViewmapsActivity.this, R.drawable.male_2));
-                            //     for (int i = 0; i < arrayList.size(); i++) {
-                            //    googleMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title("Marker"));
-                            //  googleMap.animateCamera(CameraUpdateFactory.zoomTo(19.0f));
-                            //   googleMap.moveCamera(CameraUpdateFactory.newLatLng(arrayList.get(i)));
-                            //  }
                             googleMap.addMarker(markerOptions);
-                            // googleMap.addMarker(markerOptions);
-                           // List<Plot_maps> plots = getPlots();
 
-                          //  String[] plotCodes = {"APT02923262001", "APT30523355001",};
-                            List<String> plotCodes=  dataAccessHandler.getSingleListData(Queries.getInstance().getplotslist());
-                            Log.e("======plotCodes",plotCodes.size()+"");
+                            List<String> plotCodes = dataAccessHandler.getSingleListData(Queries.getInstance().getplotslist(CommonConstants.SelectedvillageIds));
+                            Log.e("======plotCodes", plotCodes.size() + "");
                             List<Plot_maps> plots = getPlots(selectedPlotCode, plotCodes);
-                            // Draw each plot on the map
+
                             for (Plot_maps plot : plots) {
                                 drawPlot(googleMap, plot);
                             }
 
+                            for (Plot_maps plot : plots) {
+                                if (plot.isHighlighted()) {
+                                    LatLng centroid = calculateCentroid(plot.getCoordinates());
+                                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centroid, 18.0f));
+                                    break;
+                                }
+                            }
 
-                            //  googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
-                            //  drawPolyline(googleMap);
-                            //  drawPolylineAndPolygon(googleMap);
-
+                            // Hide the progress bar after drawing the plots
+                            ProgressBar.hideProgressBar();
                         }
                     });
+                } else {
+                    // Hide the progress bar if location is null
+                    ProgressBar.hideProgressBar();
                 }
             }
         });
-
     }
-
-
-
 
     private void drawPlot(GoogleMap googleMap, Plot_maps plot) {
         if (googleMap == null || plot == null || plot.getCoordinates() == null || plot.getCoordinates().isEmpty()) {
             return;
         }
 
-        // Create a list to store the LatLng points
         List<LatLng> latLngList = new ArrayList<>();
         for (LatLng coordinate : plot.getCoordinates()) {
             latLngList.add(new com.google.android.gms.maps.model.LatLng(coordinate.latitude, coordinate.longitude));
         }
 
-        // Add the first point again to close the polyline loop
         latLngList.add(latLngList.get(0));
 
-        // Define a dashed pattern
         List<PatternItem> pattern = Arrays.asList(
-                new Dash(10), new Gap(5)  // Adjust the length and gap as needed
+                new Dash(10), new Gap(5)
         );
 
-        // Determine the colors based on whether the plot is highlighted
         int polylineColor;
         int polygonFillColor;
 
         if (plot.isHighlighted()) {
             polylineColor = Color.WHITE;
-            polygonFillColor = Color.argb(100, 0, 255, 0); // Semi-transparent green
+            polygonFillColor = Color.argb(100, 0, 255, 0);
         } else {
             polylineColor = Color.WHITE;
-            polygonFillColor = Color.argb(150, 0, 0, 0); // Semi-transparent black
-
+            polygonFillColor = Color.argb(150, 0, 0, 0);
         }
 
-        // Create and add the polyline with the dashed pattern
         PolylineOptions polylineOptions = new PolylineOptions()
                 .addAll(latLngList)
-                .color(polylineColor)  // Set the polyline color
-                .width(5)  // Set the polyline width
-                .pattern(pattern);  // Set the pattern to dashed
+                .color(polylineColor)
+                .width(5)
+                .pattern(pattern);
 
         googleMap.addPolyline(polylineOptions);
 
-        // Create and add the polygon with the determined fill color
         PolygonOptions polygonOptions = new PolygonOptions()
                 .addAll(latLngList)
-                .strokeColor(Color.TRANSPARENT)  // Set the border color of the polygon
-                .strokeWidth(5)  // Set the border width
-                .fillColor(polygonFillColor);  // Set the fill color with transparency
+                .strokeColor(Color.TRANSPARENT)
+                .strokeWidth(5)
+                .fillColor(polygonFillColor);
+
+        googleMap.addPolygon(polygonOptions);
 
         LatLng centroid = calculateCentroid(latLngList);
-        googleMap.addMarker(new MarkerOptions().position(centroid).infoWindowAnchor(0.5f, 0.6f));
+
+        Marker marker;
+        if (plot.isHighlighted()) {
+            marker = googleMap.addMarker(new MarkerOptions()
+                    .position(centroid)
+                    .title(selectedPlotCode)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .infoWindowAnchor(0.5f, 0.6f));
+            marker.setTag(true);
+        } else {
+            marker = googleMap.addMarker(new MarkerOptions()
+                    .position(centroid)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .anchor(0.5f, 0.5f)
+                    .alpha(0.5f));
+            marker.setTag(false);
+        }
 
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
-                // Use the default InfoWindow frame
                 return null;
             }
 
             @Override
             public View getInfoContents(Marker marker) {
-                View infoWindow = getLayoutInflater().inflate(R.layout.close_crop_item, null);
-                try {
-                    if (marker.isInfoWindowShown()) {
-                        marker.hideInfoWindow();
-                    } else {
-                        TextView title = infoWindow.findViewById(R.id.Cropcode);
-                        TextView snippet = infoWindow.findViewById(R.id.plotid);
+                View infoWindow = getLayoutInflater().inflate(R.layout.plotinfo, null);
 
-                        title.setText(marker.getTitle());
-                        snippet.setText("This is a custom popup!");
+                TextView landarea = infoWindow.findViewById(R.id.landarea);
+                TextView plotid = infoWindow.findViewById(R.id.plotid);
+                TextView plotdiff = infoWindow.findViewById(R.id.plotdiff);
+                TextView farmername = infoWindow.findViewById(R.id.farmername);
+                TextView Districtname = infoWindow.findViewById(R.id.Districtname);
+                TextView villagename = infoWindow.findViewById(R.id.villagename);
+                TextView gpsarea = infoWindow.findViewById(R.id.gpsarea);
+                TextView mandalname = infoWindow.findViewById(R.id.mandalname);
+                TextView palmarea = infoWindow.findViewById(R.id.palmarea);
+                TextView arealeftout = infoWindow.findViewById(R.id.arealeftout);
+                TextView statename = infoWindow.findViewById(R.id.statename);
+                TextView dateofplantation = infoWindow.findViewById(R.id.dateofplantation);
+                TextView status = infoWindow.findViewById(R.id.status);
+                gpsarea.setText(Html.fromHtml("<font color='#000000'>Plot Area as per GPS (in Ha):</font> <b>" + plotinfo.getGpsPlotArea() + "</b>"));
 
-                        // marker.showInfoWindow();
+               // gpsarea.setText(Html.fromHtml("<b>Plot Area as per GPS (in Ha):</b> " + plotinfo.getGpsPlotArea()));
+                farmername.setText(Html.fromHtml("Farmer Name: <b>" + plotinfo.getFarmerName() + "</b>"));
+                arealeftout.setText(Html.fromHtml("Area Left Out (in Ha): <b>" + plotinfo.getLeftOutArea() + "</b>"));
+                villagename.setText(Html.fromHtml("Village Name: <b>" + plotinfo.getVillageName() + "</b>"));
+                Districtname.setText(Html.fromHtml("District Name: <b>" + plotinfo.getDistrictName() + "</b>"));
+                palmarea.setText(Html.fromHtml("Palm Area (in Ha): <b>" + plotinfo.getTotalPalmArea() + "</b>"));
+                mandalname.setText(Html.fromHtml("Mandal Name: <b>" + plotinfo.getMandalName() + "</b>"));
+                statename.setText(Html.fromHtml("State Name: <b>" + plotinfo.getStateName() + "</b>"));
+                landarea.setText(Html.fromHtml("Land Area (in Ha): <b>" + plotinfo.getTotalPlotArea() + "</b>"));
+                plotid.setText(Html.fromHtml("Plot Code: <b>" + plotinfo.getPlotCode() + "</b>"));
+                status.setText(Html.fromHtml("Status: <b>" + plotinfo.getStatus() + "</b>"));
+                plotdiff.setText(Html.fromHtml("Plot Difference (in Ha): <b>" + plotinfo.getPlotDifference() + "</b>"));
+
+
+                if (plotinfo.getDateOfPlanting() != null) {
+                    String dateofPlanting = plotinfo.getDateOfPlanting().replace("T", " ");
+                    Date date = null;
+                    try {
+                        date = inputFormat.parse(dateofPlanting);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                } catch (NullPointerException e) {
-                    // Log.e(TAG, "onClick: NullPointerException: " + e.getMessage() );
+                    String outputDate = outputFormat.format(date);
+                    dateofplantation.setText(Html.fromHtml("Date of Planting:<b>" + outputDate + "</b>"));
                 }
-
-                // Inflate the custom layout
                 return infoWindow;
             }
         });
 
-        googleMap.addPolygon(polygonOptions);
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Boolean isClickable = (Boolean) marker.getTag();
+                return isClickable == null || !isClickable;
+            }
+        });
     }
 
+    private LatLng calculateCentroid(List<LatLng> latLngList) {
+        double latitude = 0;
+        double longitude = 0;
+        int count = latLngList.size();
 
+        for (LatLng latLng : latLngList) {
+            latitude += latLng.latitude;
+            longitude += latLng.longitude;
+        }
+
+        return new LatLng(latitude / count, longitude / count);
+    }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
@@ -247,31 +322,17 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
-    private LatLng calculateCentroid(List<LatLng> latLngList) {
-        double latitudeSum = 0;
-        double longitudeSum = 0;
-        int n = latLngList.size();
 
-        for (LatLng latLng : latLngList) {
-            latitudeSum += latLng.latitude;
-            longitudeSum += latLng.longitude;
-        }
-
-        return new LatLng(latitudeSum / n, longitudeSum / n);
-    }
     private List<Plot_maps> getPlots(String selectedPlotCode, List<String> plotCodes) {
         List<Plot_maps> plots = new ArrayList<>();
         LinkedHashMap<String, List<LatLng>> latlongDataMap;
 
         try {
-            // Execute the query to get latitude and longitude data
             String query = Queries.getInstance().getLatlongs(plotCodes);
             latlongDataMap = dataAccessHandler.getGenericDataa(query);
 
-            // Log the raw data map
             Log.d("getPlots", "Raw data map: " + latlongDataMap);
 
-            // Check if the result is not empty
             if (latlongDataMap != null && !latlongDataMap.isEmpty()) {
                 for (Map.Entry<String, List<LatLng>> entry : latlongDataMap.entrySet()) {
                     String plotCode = entry.getKey();
@@ -282,68 +343,49 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                         plot.addCoordinate(coordinate);
                     }
 
-                    // Check if the current plot is the selected one
                     if (plotCode.equals(selectedPlotCode)) {
-                        plot.setHighlighted(true);  // Custom method to set the plot as highlighted
+                        plot.setHighlighted(true);
                     } else {
-                        plot.setHighlighted(false);  // Custom method to set the plot as shaded out
+                        plot.setHighlighted(false);
                     }
 
                     plots.add(plot);
-                    Log.d("getPlots", "New plot added with coordinates: " + plot.getCoordinates());
+                //    Log.d("getPlots", "New plot added with coordinates: " + plot.getCoordinates());
                 }
             } else {
-                Log.e("getPlots", "latlongDataMap is null or empty.");
+             //   Log.e("getPlots", "latlongDataMap is null or empty.");
             }
         } catch (Exception e) {
-            Log.e("getPlots", "Exception occurred: " + e.getMessage(), e);
+          //  Log.e("getPlots", "Exception occurred: " + e.getMessage(), e);
         }
 
         Log.d("getPlots", "Total plots: " + plots.size());
         return plots;
     }
 
-//    private List<Plot_maps> getPlots() {
-//        List<Plot_maps> plots = new ArrayList<>();
-//         LinkedHashMap LatlongDataMap;
-//        LatlongDataMap = dataAccessHandler.getGenericData(Queries.getInstance().getlatlongs());
-//        // Example data for multiple plots
-//        double[][][] plotData = {
-//                {
-//                        {17.456467, 78.386942}, {17.456453, 78.387367}, {17.456438, 78.387822},
-//                        {17.456605, 78.388034}, {17.457112, 78.387974}, {17.457379, 78.387875},
-//                        {17.457358, 78.387503}, {17.457372, 78.386965}, {17.457387, 78.386472},
-//                        {17.456931, 78.386388}, {17.456453, 78.386927},
-//                },
-//                {
-//                        {17.454617, 78.3866588}, {17.45395154, 78.38611736}, {17.45328097, 78.38603959},
-//                        {17.45274825, 78.38598421}, {17.4525477, 78.38647058}, {17.45251001, 78.38700861},
-//                        {17.45242317, 78.38780234}, {17.45236059, 78.38848883}, {17.45275582, 78.38884636},
-//                        {17.45324637, 78.38889032}, {17.45378583, 78.38896504}, {17.45402878, 78.38833395},
-//                        {17.45418307, 78.38759149}, {17.45439311, 78.38698147}
-//                }
-//                // Add more plot data as needed
-//        };
-//
-//        for (double[][] plot : plotData) {
-//            Plot_maps newPlot = new Plot_maps();
-//            for (double[] coordinate : plot) {
-//                newPlot.addCoordinate(new LatLng(coordinate[0], coordinate[1]));
-//            }
-//            plots.add(newPlot);
-//        }
-//
-//        return plots;
-//    }
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+     //   ProgressBar.showProgressBar(this, "Please wait...");
+        // Show the progress bar
+        progressBar.setVisibility(View.VISIBLE);
+
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                // Hide the progress bar once the map is fully loaded
+                ProgressBar.hideProgressBar();
+            }
+        });
+
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
                 // Handle map click
             }
         });
+
+        // Continue with your other map-related operations...
     }
 
     @Override
@@ -360,7 +402,12 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
     public void onStopTrackingTouch(SeekBar seekBar) {
         // Handle stop tracking touch
     }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ViewmapsActivity.this, HomeScreen.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
+    }
+
 }
-
-
-

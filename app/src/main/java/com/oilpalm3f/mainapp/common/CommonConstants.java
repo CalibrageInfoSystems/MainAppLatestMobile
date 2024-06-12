@@ -36,6 +36,7 @@ public class CommonConstants {
     public static String branchTypeId = "";
     public static String castCode = "";
     public static String villageName = "";
+    public static String SelectedvillageIds = "";
     public static String districtCodePlot = "";
     public static String mandalCodePlot = "";
     public static String villageCodePlot = "";

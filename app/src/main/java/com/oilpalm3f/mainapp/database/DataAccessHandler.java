@@ -79,6 +79,7 @@ import com.oilpalm3f.mainapp.dbmodels.PlotCurrentCrop;
 import com.oilpalm3f.mainapp.dbmodels.PlotFFBDetails;
 import com.oilpalm3f.mainapp.dbmodels.PlotGapFillingDetails;
 import com.oilpalm3f.mainapp.dbmodels.PlotGradingDetails;
+import com.oilpalm3f.mainapp.dbmodels.PlotInfo;
 import com.oilpalm3f.mainapp.dbmodels.PlotIrrigationTypeXref;
 import com.oilpalm3f.mainapp.dbmodels.PlotLandlord;
 import com.oilpalm3f.mainapp.dbmodels.RecommndFertilizer;
@@ -1122,7 +1123,7 @@ f
         } else if (CommonUtils.isPlotSplitFarmerPlots()) {
             query = Queries.getInstance().getFilterBasedFarmersCropRetake(key, offset, limit);
         } else if (CommonUtils.isFromviewonmaps()) {
-            query = Queries.getInstance().getviewmapsdata(key, offset, limit);
+            query = Queries.getInstance().getviewmapsdata(key, offset, limit,CommonConstants.SelectedvillageIds);
         }
         else if (CommonUtils.isVisitRequests()) {
             query = Queries.getInstance().getVisitRequestFarmers(key, offset, limit);
@@ -1391,7 +1392,7 @@ f
         Cursor cursor = null;
         String query = null;
         if (CommonUtils.isFromCropMaintenance() || CommonUtils.isComplaint()) {
-            query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus, 89, true, false);
+            query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus, 89, true);
         } else if (CommonUtils.isFromFollowUp()) {
             query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus);
         } else if (CommonUtils.isPlotSplitFarmerPlots()) {
@@ -5160,5 +5161,49 @@ f
         return mGenericData;
     }
 
+    public T getplotinfoData(final String query, final int type) {
+        PlotInfo plotinformation = null;
+        List<PlotInfo> plotinfoList = new ArrayList<>();
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "@@@ farmer details query " + query);
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    plotinformation = new PlotInfo();
+                    plotinformation.setFarmerCode(cursor.getString(0));
+                    plotinformation.setFarmerName(cursor.getString(1));
+                    plotinformation.setPlotCode(cursor.getString(2));
+                    plotinformation.setDateOfPlanting(cursor.getString(3));
+                    plotinformation.setStatus(cursor.getString(4));
+                    plotinformation.setTotalPlotArea(cursor.getDouble(5));
+                    plotinformation.setTotalPalmArea(cursor.getDouble(6));
+                    plotinformation.setGpsPlotArea(cursor.getDouble(7));
+                    plotinformation.setLeftOutArea(cursor.getDouble(8));
+                    plotinformation.setPlotDifference(cursor.getDouble(9));
+                    plotinformation.setVillageId(cursor.getInt(10));
+                    plotinformation.setVillageCode(cursor.getString(11));
+                    plotinformation.setVillageName(cursor.getString(12));
+                    plotinformation.setMandalId(cursor.getInt(13));
+                    plotinformation.setMandalCode(cursor.getString(14));
+                    plotinformation.setMandalName(cursor.getString(15));
+                    plotinformation.setDistrictId(cursor.getInt(16));
+                    plotinformation.setDistrictCode(cursor.getString(17));
+                    plotinformation.setDistrictName(cursor.getString(18));
+                    plotinformation.setStateId(cursor.getInt(19));
+                    plotinformation.setStateCode(cursor.getString(20));
+                    plotinformation.setStateName(cursor.getString(21));
+
+                    if (type == 1) {
+                        plotinfoList.add(plotinformation);
+                    }
+
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "@@@ getting user details " + e.getMessage());
+        }
+        return (T) ((type == 0) ? plotinformation : plotinfoList);
+    }
 
 }

@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ViewmapsActivity">
-
+<!--    <SearchView-->
+<!--        android:id="@+id/idSearchView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:paddingTop="10dp"-->
+<!--        android:layout_margin="5dp"-->
+<!--        android:background="#BFBFBF"-->
+<!--        android:elevation="5dp"-->
+<!--        app:iconifiedByDefault="false"-->
+<!--        app:queryHint="Search Here" />-->
 
     <fragment
         android:id="@+id/google_map"
@@ -14,6 +23,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
 
 <!--    <fragment-->
 <!--        android:id="@+id/google_map"-->

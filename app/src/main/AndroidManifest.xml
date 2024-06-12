@@ -28,7 +28,6 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-
     <application
         android:name=".Oil3FPalmMainApplication"
         android:allowBackup="true"
@@ -39,6 +38,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".FiltermapsActivity"
+            android:exported="false" />
         <activity
             android:name=".ViewmapsActivity"
             android:exported="false" />
@@ -181,11 +183,10 @@
             android:name=".ui.NotificationsScreen"
             android:label="@string/title_activity_notifications_screen"
             android:theme="@style/AppTheme" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAT94-GIaas6lpXUI4iMqYnWvZe1Q1WPEw">
-
-        </meta-data>
+            android:value="AIzaSyAT94-GIaas6lpXUI4iMqYnWvZe1Q1WPEw"></meta-data>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="b74338756d04c8e32dc9d352bd2ecaf33835f06f" />

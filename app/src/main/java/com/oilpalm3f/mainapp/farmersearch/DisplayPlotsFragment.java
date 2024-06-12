@@ -73,7 +73,11 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
     public static String plotCode = "";
     LocationManager lm;
 
+    private static final String ARG_BASIC_FARMER_DETAILS = "basicFarmerDetails";
+    private static final String ARG_SELECTED_VILLAGE_IDS = "selectedVillageIds";
 
+    private BasicFarmerDetails basicFarmerDetails;
+    private String selectedVillageIds;
     //Gets location of the Plot
     public static LocationProvider getLocationProvider(Context context, boolean showDialog) {
         if (mLocationProvider == null) {
@@ -104,7 +108,14 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
     public DisplayPlotsFragment() {
         // Required empty public constructor
     }
-
+//    public static DisplayPlotsFragment newInstance(BasicFarmerDetails basicFarmerDetails, String selectedVillageIds) {
+//        DisplayPlotsFragment fragment = new DisplayPlotsFragment();
+//        Bundle args = new Bundle();
+//        args.putSerializable(ARG_BASIC_FARMER_DETAILS, basicFarmerDetails); // Assuming BasicFarmerDetails implements Serializable
+//        args.putString(ARG_SELECTED_VILLAGE_IDS, selectedVillageIds);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
     public static DisplayPlotsFragment newInstance(BasicFarmerDetails basicFarmerDetails) {
         DisplayPlotsFragment fragment = new DisplayPlotsFragment();
         Bundle args = new Bundle();
@@ -135,7 +146,11 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
                 UiUtils.showCustomToastMessage("Please Turn On GPS", getActivity(), 1);
             }
         }
-
+//        if (getArguments() != null) {
+//            basicFarmerDetails = (BasicFarmerDetails) getArguments().getSerializable(ARG_BASIC_FARMER_DETAILS);
+//            selectedVillageIds = getArguments().getString(ARG_SELECTED_VILLAGE_IDS);
+//            android.util.Log.v(LOG_TAG, "@@@ selectedVillageIds " + "== " + selectedVillageIds.toString());
+//        }
 
         farmer = (BasicFarmerDetails) getArguments().getSerializable("basicFarmerDetails");
 
@@ -387,7 +402,8 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
                     getActivity().finish();
                 }
                 else if (CommonUtils.isFromviewonmaps()) {
-                    Log.v(LOG_TAG, "@@@@ PlotCode isFromviewonmaps " + CommonConstants.PLOT_CODE);
+                    Log.v(LOG_TAG, "@@@@ PlotCode isFromviewonmaps " +  CommonConstants.PLOT_CODE);
+                    Log.v(LOG_TAG, "@@@@ PlotCode isFromviewonmaps selectedVillageIds " + selectedVillageIds);
                     Intent intent = new Intent(getActivity(), ViewmapsActivity.class);
                     intent.putExtra("plotcode", CommonConstants.PLOT_CODE);
                     startActivity(intent);

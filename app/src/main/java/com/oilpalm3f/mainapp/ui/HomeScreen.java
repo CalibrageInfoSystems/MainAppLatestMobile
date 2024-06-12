@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.github.pavlospt.CircleView;
+import com.oilpalm3f.mainapp.FiltermapsActivity;
 import com.oilpalm3f.mainapp.R;
 import com.oilpalm3f.mainapp.activitylogdetails.LogBookScreenActivity;
 import com.oilpalm3f.mainapp.alerts.AlertType;
@@ -166,12 +167,16 @@ public class HomeScreen extends AppCompatActivity {
             startActivity(new Intent(HomeScreen.this, RefreshSyncActivity.class));
         });
 
+//        mapsLayout.setOnClickListener(view -> {
+//            resetPrevRegData();
+//            CommonConstants.REGISTRATION_SCREEN_FROM = CommonConstants.REGISTRATION_SCREEN_FROM_Viewonmaps;
+//            startActivity(new Intent(HomeScreen.this, SearchFarmerScreen.class));
+//        });
         mapsLayout.setOnClickListener(view -> {
             resetPrevRegData();
             CommonConstants.REGISTRATION_SCREEN_FROM = CommonConstants.REGISTRATION_SCREEN_FROM_Viewonmaps;
-            startActivity(new Intent(HomeScreen.this, SearchFarmerScreen.class));
+            startActivity(new Intent(HomeScreen.this, FiltermapsActivity.class));
         });
-
 //        transportServiceLayout.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
