@@ -350,13 +350,13 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                     }
 
                     plots.add(plot);
-                //    Log.d("getPlots", "New plot added with coordinates: " + plot.getCoordinates());
+               Log.d("getPlots", "New plot added with coordinates: " + plot.getCoordinates());
                 }
             } else {
-             //   Log.e("getPlots", "latlongDataMap is null or empty.");
+               Log.e("getPlots", "latlongDataMap is null or empty.");
             }
         } catch (Exception e) {
-          //  Log.e("getPlots", "Exception occurred: " + e.getMessage(), e);
+         Log.e("getPlots", "Exception occurred: " + e.getMessage(), e);
         }
 
         Log.d("getPlots", "Total plots: " + plots.size());

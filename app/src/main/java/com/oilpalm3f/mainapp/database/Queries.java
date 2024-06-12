@@ -2212,10 +2212,26 @@ public class Queries {
                 "    inner join District d on addr.DistrictId = d.Id\n" +
                 "    inner join State s on addr.StateId = s.Id\n" +
                 "    inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
-                "    where p.IsActive = 1 and geo.GeoCategoryTypeId = '206' and  f.IsActive = 1 and fh.StatusTypeId IN ('81','82','83','85','86','88','89','259','308','387') and fh.IsActive = 1 and  addr.VillageId in (" + villageids + ") group by p.Code";
+                "    where p.IsActive = 1 and geo.GeoCategoryTypeId in (206,384) and  f.IsActive = 1 and fh.StatusTypeId IN ('81','82','83','85','86','88','89','259','308','387') and fh.IsActive = 1 and  addr.VillageId in (" + villageids + ") group by p.Code";
     }
 
-
+//    public String getLatlongs(List<String> plotCodes) {
+//        // Constructing the query to handle multiple plot codes
+//        StringBuilder queryBuilder = new StringBuilder("SELECT  P.Code, G.Latitude,G.Longitude FROM Plot P  INNER JOIN FarmerHistory Fh On P.code= Fh.PlotCode AND Fh.IsActive=1\n" +
+//                "    INNER JOIN GeoBoundaries G ON G.PlotCode=P.Code  WHERE  GeoCategoryTypeId = Case When(Fh.StatusTypeId in (387,81,82,83) AND Fh.IsActive=1)\n" +
+//                "    Then 384\n" +
+//                "    Else\n" +
+//                "206\n" +
+//                "    End  And Fh.IsActive=1 AND FH.PlotCode IN (");
+//        for (int i = 0; i < plotCodes.size(); i++) {
+//            queryBuilder.append("'").append(plotCodes.get(i)).append("'");
+//            if (i < plotCodes.size() - 1) {
+//                queryBuilder.append(",");
+//            }
+//        }
+//        queryBuilder.append(")");
+//        return queryBuilder.toString();
+//    }
     public String getLatlongs(List<String> plotCodes) {
         // Constructing the query to handle multiple plot codes
         StringBuilder queryBuilder = new StringBuilder("SELECT PlotCode, Latitude, Longitude FROM GeoBoundaries WHERE GeoCategoryTypeId = 206 AND PlotCode IN (");

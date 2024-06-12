@@ -94,6 +94,8 @@ public class MultipleSelectionSpinner extends AppCompatSpinner implements Dialog
     @Override
     public boolean performClick() {
         if (_items == null || _items.length == 0) {
+            simple_adapter.clear();
+            simple_adapter.add("Tap to select");
             Toast.makeText(getContext(), "Items are not available", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -103,7 +105,6 @@ public class MultipleSelectionSpinner extends AppCompatSpinner implements Dialog
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Check if any item is selected
                 boolean anySelected = false;
                 for (boolean selected : mSelection) {
                     if (selected) {
@@ -113,12 +114,15 @@ public class MultipleSelectionSpinner extends AppCompatSpinner implements Dialog
                 }
 
                 if (!anySelected) {
-                    Toast.makeText(getContext(), "Please select at least one item", Toast.LENGTH_SHORT).show();
-                    return;
+                    // Manually add "Tap to select" when no items are selected
+                    simple_adapter.clear();
+                    simple_adapter.add("Tap to select");
+                }
+                else {
+                    simple_adapter.clear();
+                    simple_adapter.add(buildSelectedItemString());
                 }
 
-                simple_adapter.clear();
-                simple_adapter.add(buildSelectedItemString());
                 if (listener != null) {
                     listener.onItemSelected(MultipleSelectionSpinner.this, -1, getSelectedItemsWithIds(), true);
                 }

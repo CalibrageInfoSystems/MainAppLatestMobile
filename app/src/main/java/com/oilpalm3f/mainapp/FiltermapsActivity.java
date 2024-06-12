@@ -50,7 +50,7 @@ import java.util.Map;
             actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("Geo Map location");
-
+       // Disable village spinner initially
             CommonUtils.currentActivity = FiltermapsActivity.this;
             dataAccessHandler = new DataAccessHandler(FiltermapsActivity.this);
             parentPanel = (RelativeLayout) findViewById(R.id.parentPanel);
@@ -59,7 +59,9 @@ import java.util.Map;
             multiSelectionSpinner_district = (MultipleSelectionSpinner) findViewById(R.id.spinner_district);
             multiSelectionSpinner_mandal = (MultipleSelectionSpinner) findViewById(R.id.spinner_Mandal);
             multiSelectionSpinner_village = (MultipleSelectionSpinner) findViewById(R.id.spinner_vilage);
-
+            multiSelectionSpinner_district.setEnabled(false); // Disable district spinner initially
+            multiSelectionSpinner_mandal.setEnabled(false); // Disable mandal spinner initially
+            multiSelectionSpinner_village.setEnabled(false);
             populateSpinnerData();
 
             multiSelectionSpinner_state.setOnItemSelectedListener(new MultipleSelectionSpinner.OnItemSelectedListener() {
@@ -79,11 +81,15 @@ import java.util.Map;
                     if (selectedStateIds.length() > 0) {
                         districtDataMap = dataAccessHandler.getPairData(Queries.getInstance().getDistrictQuery2(selectedStateIds.toString()));
                         updateDistrictSpinner();
+                        multiSelectionSpinner_district.setEnabled(true); // Enable district spinner after selecting a state
                     } else {
                         if (districtDataMap != null) {
                             districtDataMap.clear();
                         }
                         updateDistrictSpinner();
+                        multiSelectionSpinner_district.setEnabled(false); // Disable district spinner if no state is selected
+                        multiSelectionSpinner_mandal.setEnabled(false); // Disable mandal spinner if no state is selected
+                        multiSelectionSpinner_village.setEnabled(false); // Disable village spinner if no state is selected
                     }
                 }
             });
@@ -105,11 +111,14 @@ import java.util.Map;
                     if (selectedDistrictIds.length() > 0) {
                         mandalDataMap = dataAccessHandler.getPairData(Queries.getInstance().getMandalsQuery2(selectedDistrictIds.toString()));
                         updateMandalSpinner();
+                        multiSelectionSpinner_mandal.setEnabled(true);
                     } else {
                         if (mandalDataMap != null) {
                             mandalDataMap.clear();
                         }
                         updateMandalSpinner();
+                        multiSelectionSpinner_mandal.setEnabled(false); // Disable mandal spinner if no state is selected
+                        multiSelectionSpinner_village.setEnabled(false); // Disable village spinner if no state is selected
                     }
                 }
             });
@@ -131,11 +140,13 @@ import java.util.Map;
                     if (selectedMandalIds.length() > 0) {
                         villagesDataMap = dataAccessHandler.getPairData(Queries.getInstance().getVillagesQuery2(selectedMandalIds.toString()));
                         updateVillagesSpinner();
+                        multiSelectionSpinner_village.setEnabled(true); // Disable village spinner if no state is selected
                     } else {
                         if (villagesDataMap != null) {
                             villagesDataMap.clear();
                         }
                         updateVillagesSpinner();
+                        multiSelectionSpinner_village.setEnabled(false); // Disable village spinner if no state is selected
                     }
                 }
             });
