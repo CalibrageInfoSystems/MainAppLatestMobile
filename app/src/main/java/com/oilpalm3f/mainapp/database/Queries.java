@@ -2183,7 +2183,7 @@ public class Queries {
                 "inner join FarmerHistory fh on fh.FarmerCode = f.Code and fh.PlotCode=p.Code \n" +
                 "inner join GeoBoundaries geo on geo.PlotCode = p.Code \n" +
                 "inner join Address ad on ad.Code = p.AddressCode \n" +
-                "left join Village v on f.VillageId = v.Id AND ad.VillageId = v.Id \n" +
+                "inner join Village v on f.VillageId = v.Id AND ad.VillageId = v.Id \n" +
                 " and fh.StatusTypeId in ('81','82','83','85','86','88','89','259','308','387')" + "\n" +
                 "and fh.IsActive = '1'" + "\n" +
                 "where  f.IsActive = 1 AND geo.GeoCategoryTypeId in (206,384) AND ad.VillageId in (" + villageids + ") AND p.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
