@@ -114,6 +114,17 @@
                 android:layout_marginTop="10dp"
                 android:textSize="16dp"/>
 
+            <TextView
+                android:id="@+id/lastest_harvestDate"
+                style="@style/header_h1_text_title_list_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="Plot LatestDate"
+                android:layout_marginTop="10dp"
+                android:textSize="16dp"/>
+
 
         </LinearLayout>
 

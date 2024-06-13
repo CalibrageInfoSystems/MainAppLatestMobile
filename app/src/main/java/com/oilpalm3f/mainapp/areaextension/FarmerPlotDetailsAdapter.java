@@ -98,29 +98,70 @@ public class FarmerPlotDetailsAdapter extends SelectableAdapter<FarmerPlotDetail
 
         dataAccessHandler = new DataAccessHandler(context);
 
+//        String visitCount = dataAccessHandler.getOnlyTwoValueFromDb(Queries.getInstance().getVisitCount(plotdetailsObj.getPlotID()));
+//
+//        String count = visitCount.split("@")[0];
+//
+//        String date = visitCount.split("@")[1];
+//
+//
+//        if (CommonUtils.isFromCropMaintenance() || CommonUtils.isFromHarvesting()) {
+//
+////            if (!count.equals("0")) {
+////                holder.vist_count.setText("Plot Visit Count : " + count);
+////            } else {
+////                holder.vist_count.setVisibility(View.GONE);
+////                // holder.lastest_vistDate.setVisibility(View.GONE);
+////            }
+//
+//            if (!TextUtils.isEmpty(date))
+//                holder.lastest_vistDate.setText("Last Visit Date : " + date.split("T")[0]);
+//
+//        } else {
+//            //holder.vist_count.setVisibility(View.GONE);
+//            holder.lastest_vistDate.setVisibility(View.GONE);
+//        }
+
+
         String visitCount = dataAccessHandler.getOnlyTwoValueFromDb(Queries.getInstance().getVisitCount(plotdetailsObj.getPlotID()));
+        String harvestvisitCount = dataAccessHandler.getOnlyTwoValueFromDb(Queries.getInstance().getHarvestVisitCount(plotdetailsObj.getPlotID()));
 
         String count = visitCount.split("@")[0];
-
         String date = visitCount.split("@")[1];
-
+        String harvestcount = harvestvisitCount.split("@")[0];
+        String lastharvestdate = harvestvisitCount.split("@")[1];
 
         if (CommonUtils.isFromCropMaintenance() || CommonUtils.isFromHarvesting()) {
+            // Handling last visit date
+            if (!TextUtils.isEmpty(date)) {
+                String[] dateTimeParts = date.split("T");
+                if (dateTimeParts.length == 2) {
+                    holder.lastest_vistDate.setText("Last CM Visit Date : " + dateTimeParts[0] + " " + dateTimeParts[1]);
+                } else {
+                    holder.lastest_vistDate.setText("Last CM Visit Date : " + date);
+                }
+            } else {
+                holder.lastest_vistDate.setText("Last CM Visit Date : " + "Not Visited");
+            }
 
-//            if (!count.equals("0")) {
-//                holder.vist_count.setText("Plot Visit Count : " + count);
-//            } else {
-//                holder.vist_count.setVisibility(View.GONE);
-//                // holder.lastest_vistDate.setVisibility(View.GONE);
-//            }
-
-            if (!TextUtils.isEmpty(date))
-                holder.lastest_vistDate.setText("Last Visit Date : " + date.split("T")[0]);
-
-        } else {
+            // Handling last harvest date
+            if (!TextUtils.isEmpty(lastharvestdate)) {
+                String[] dateTimeParts = lastharvestdate.split("T");
+                if (dateTimeParts.length == 2) {
+                    holder.lastest_harvestDate.setText("Last Harvesting Date : " + dateTimeParts[0] + " " + dateTimeParts[1]);
+                } else {
+                    holder.lastest_harvestDate.setText("Last Harvesting Date : " + lastharvestdate);
+                }
+            } else {
+                holder.lastest_harvestDate.setText("Last Harvesting Date : " + "Not Visited");
+            }
+        }
+        else {
             //holder.vist_count.setVisibility(View.GONE);
             holder.lastest_vistDate.setVisibility(View.GONE);
+            holder.lastest_harvestDate.setVisibility(View.GONE);
         }
+
 
 
         holder.convertView.setOnClickListener(v -> {
@@ -178,7 +219,7 @@ public class FarmerPlotDetailsAdapter extends SelectableAdapter<FarmerPlotDetail
         private TextView tvplotarea;
         private TextView tvplotvillage;
         private TextView tvplotsurveynumber, tvPlotDop;
-        private TextView vist_count, lastest_vistDate;
+        private TextView vist_count, lastest_vistDate, lastest_harvestDate;
         private ImageView arrowImage;
         private View convertView;
         private ImageButton ivb_plot_location_cropcollection;
@@ -195,6 +236,7 @@ public class FarmerPlotDetailsAdapter extends SelectableAdapter<FarmerPlotDetail
             arrowImage = view.findViewById(R.id.arrow_right);
             vist_count = view.findViewById(R.id.vistCount);
             lastest_vistDate = view.findViewById(R.id.lastest_vistDate);
+            lastest_harvestDate = view.findViewById(R.id.lastest_harvestDate);
             ivb_plot_location_cropcollection = view.findViewById(R.id.ivb_plot_location_cropcollection);
         }
     }

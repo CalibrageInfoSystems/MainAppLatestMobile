@@ -18,12 +18,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.oilpalm3f.mainapp.R;
@@ -31,8 +31,10 @@ import com.oilpalm3f.mainapp.cloudhelper.ApplicationThread;
 import com.oilpalm3f.mainapp.database.DataAccessHandler;
 import com.oilpalm3f.mainapp.database.Queries;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class HarvestingFragment extends Fragment {
@@ -91,15 +93,15 @@ public class HarvestingFragment extends Fragment {
             offset = 0;
             isSearch = true;
             searchKey = searchQuery.trim();
-            notvisitedplotslist(offset);
+            notvisitedplotslist(offset, from_date, to_date);
         } else {
             searchKey = "";
             isSearch = false;
-            notvisitedplotslist(offset);
+            notvisitedplotslist(offset, from_date, to_date);
         }
     }
 
-    private void notvisitedplotslist(final int offset) {
+    private void notvisitedplotslist(final int offset, String from_date, String to_date) {
         //ProgressBar.showProgressBar(this, "Please wait...");
 
         if (searchProgressBar != null) {
@@ -109,7 +111,7 @@ public class HarvestingFragment extends Fragment {
             @Override
             public void run() {
 
-                notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,from_date,to_date, searchKey), 1);
+                notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlistforHarvestingVist(LIMIT, offset,from_date, to_date, searchKey), 1);
                 Collections.reverse(notVisitedplotsInfoList);
 
                 ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
@@ -169,7 +171,11 @@ public class HarvestingFragment extends Fragment {
         });
 
         searchEditText.addTextChangedListener(mTextWatcher);
-        notvisitedplotslist(offset);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        from_date = sdf.format(new Date());
+        to_date = sdf.format(new Date());
+        Log.e("==From & todates",from_date + to_date);
+        notvisitedplotslist(offset,from_date,to_date);
         return view;
     }
 
@@ -182,7 +188,7 @@ public class HarvestingFragment extends Fragment {
             from_date = intent.getStringExtra("fromdate");
             offset = offset + LIMIT;
             com.oilpalm3f.mainapp.uihelper.ProgressBar.showProgressBar(getActivity(), "Please wait...");
-            notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,from_date,to_date, searchKey), 1);
+            notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlistforHarvestingVist(LIMIT, offset,from_date,to_date, searchKey), 1);
             Collections.reverse(notVisitedplotsInfoList);
 
             ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {

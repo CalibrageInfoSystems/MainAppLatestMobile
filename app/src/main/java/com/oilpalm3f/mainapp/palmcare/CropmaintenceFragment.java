@@ -34,8 +34,10 @@ import com.oilpalm3f.mainapp.database.DataAccessHandler;
 import com.oilpalm3f.mainapp.database.Queries;
 import com.oilpalm3f.mainapp.uihelper.ProgressBar;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 
@@ -96,15 +98,15 @@ public class CropmaintenceFragment extends Fragment {
             offset = 0;
             isSearch = true;
             searchKey = searchQuery.trim();
-            notvisitedplotslist(offset);
+            notvisitedplotslist(offset,from_date,to_date);
         } else {
             searchKey = "";
             isSearch = false;
-            notvisitedplotslist(offset);
+            notvisitedplotslist(offset,from_date,to_date);
         }
     }
 
-    private void notvisitedplotslist(final int offset) {
+    private void notvisitedplotslist(final int offset,String from_date,String to_date) {
         //ProgressBar.showProgressBar(this, "Please wait...");
 
         if (searchProgressBar != null) {
@@ -114,7 +116,7 @@ public class CropmaintenceFragment extends Fragment {
             @Override
             public void run() {
 
-                notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,from_date,to_date, searchKey), 1);
+                notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlistforCMVisits(LIMIT, offset,from_date,to_date, searchKey), 1);
                 Collections.reverse(notVisitedplotsInfoList);
 
                 ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
@@ -173,7 +175,11 @@ public class CropmaintenceFragment extends Fragment {
         });
 
         searchEditText.addTextChangedListener(mTextWatcher);
-        notvisitedplotslist(offset);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        from_date = sdf.format(new Date());
+        to_date = sdf.format(new Date());
+        Log.e("==From & todates",from_date + to_date);
+        notvisitedplotslist(offset,from_date,to_date);
         return view;
     }
 
@@ -186,7 +192,7 @@ public class CropmaintenceFragment extends Fragment {
             from_date = intent.getStringExtra("fromdate");
             offset = offset + LIMIT;
 ProgressBar.showProgressBar(getActivity(), "Please wait...");
-            notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlist(LIMIT, offset,from_date,to_date, searchKey), 1);
+            notVisitedplotsInfoList = (List<NotVisitedPlotsInfo>) dataAccessHandler.getNotvisitedplotInfo(Queries.getInstance().getnotvisitedpoltlistforCMVisits(LIMIT, offset,from_date,to_date, searchKey), 1);
             Collections.reverse(notVisitedplotsInfoList);
 
             ApplicationThread.uiPost(LOG_TAG, "", new Runnable() {
