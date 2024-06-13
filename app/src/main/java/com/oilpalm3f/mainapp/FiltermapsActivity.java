@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
+import com.androidquery.util.Common;
 import com.oilpalm3f.mainapp.common.CommonConstants;
 import com.oilpalm3f.mainapp.common.CommonUtils;
 import com.oilpalm3f.mainapp.common.MultipleSelectionSpinner;
@@ -269,7 +270,7 @@ public class FiltermapsActivity extends AppCompatActivity {
     }
 
     private void populateSpinnerData() {
-        stateDataMap = dataAccessHandler.getPairData(Queries.getInstance().getStatesMasterQuery());
+        stateDataMap = dataAccessHandler.getPairData(Queries.getInstance().getStatesMasterQuery2(CommonConstants.USER_ID));
         List<String> stateNames = new ArrayList<>();
         List<Integer> stateIds = new ArrayList<>();
         stateNames.add("Select All");
