@@ -5139,7 +5139,7 @@ f
             genericDataQuery = mDatabase.rawQuery(query, null);
             if (genericDataQuery.moveToFirst()) {
                 do {
-                    String plotCode = genericDataQuery.getString(genericDataQuery.getColumnIndex("PlotCode"));
+                    String plotCode = genericDataQuery.getString(genericDataQuery.getColumnIndex("Code"));
                     double latitude = genericDataQuery.getDouble(genericDataQuery.getColumnIndex("Latitude"));
                     double longitude = genericDataQuery.getDouble(genericDataQuery.getColumnIndex("Longitude"));
                     LatLng latLng = new LatLng(latitude, longitude);

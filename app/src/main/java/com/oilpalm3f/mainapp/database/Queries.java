@@ -206,8 +206,19 @@ public class Queries {
     public String getStatesMasterQuery() {
         return "select Id, Code, Name from State";
     }
-    public String getStatesMasterQuery2() {
-        return "select Code,Id, Name from State";
+
+    public String getStatesMasterQuery2(String userId) {
+        return "SELECT DISTINCT  S.Id, S.Code AS StateCode,\n" +
+                "    S.Name AS StateName\n" +
+                "FROM \n" +
+                "    UserVillageXref UVX\n" +
+                "    INNER JOIN Village V ON UVX.VillageId = V.Id\n" +
+                "    INNER JOIN Mandal M ON V.MandalId = M.Id\n" +
+                "    INNER JOIN District D ON M.DistrictId = D.Id\n" +
+                "    INNER JOIN State S ON D.StateId = S.Id\n" +
+                "WHERE \n" +
+                "    UVX.UserId = '" + userId + "'  ORDER BY \n" +
+                "    S.Name  ;";
     }
     public String getStatesQuery() {
         return "SELECT s.Id," +
@@ -224,21 +235,56 @@ public class Queries {
         return "select Id, Code, Name from District where StateId IN (Select Id from State where Id = '" + stateId + "'" + ")";
     }
     public String getDistrictQuery2(final String stateIds) {
-        return "SELECT Id, Code, Name FROM District WHERE StateId IN (Select Id from State where Id IN  (" + stateIds  + "))";
-    }
+        return "SELECT DISTINCT \n" +
+                "    D.Id AS DistrictId,\n" +
+                "    D.Code AS DistrictCode,\n" +
+                "    D.Name AS DistrictName\n" +
+                "FROM \n" +
+                "    UserVillageXref UVX\n" +
+                "    INNER JOIN Village V ON UVX.VillageId = V.Id\n" +
+                "    INNER JOIN Mandal M ON V.MandalId = M.Id\n" +
+                "    INNER JOIN District D ON M.DistrictId = D.Id\n" +
+                "    INNER JOIN State S ON D.StateId = S.Id\n" +
+                "WHERE \n" +
+                "   D.StateId IN (Select S.Id from State where S.Id IN  (" + stateIds  + ")) ORDER BY \n" +
+                "    D.Name;";}
 
     public String getMandalsQuery(final String DistrictId) {
         return "select Id, Code, Name from Mandal where DistrictId IN (Select Id from District where Id = '" + DistrictId + "'" + ")";
     }
     public String getMandalsQuery2(final String DistrictIds) {
-        return "select Id, Code, Name from Mandal where DistrictId IN (Select Id from District where Id  IN (" + DistrictIds  + "))";
+        return "\tSELECT DISTINCT \n" +
+                "    M.Id AS MandalId,\n" +
+                "    M.Code AS MandalCode,\n" +
+                "    M.Name AS MandalName\n" +
+                "FROM \n" +
+                "    UserVillageXref UVX\n" +
+                "    INNER JOIN Village V ON UVX.VillageId = V.Id\n" +
+                "    INNER JOIN Mandal M ON V.MandalId = M.Id\n" +
+                "    INNER JOIN District D ON M.DistrictId = D.Id\n" +
+                "WHERE M.DistrictId IN (Select D.Id from District where D.Id  IN (" + DistrictIds  + ")) ORDER BY \n" +
+                "    M.Name;" ;
+
+      //  return "select Id, Code, Name from Mandal where DistrictId IN (Select Id from District where Id  IN (" + DistrictIds  + "))";
     }
     public String getVillagesQuery(final String mandalId) {
         return "select Id, Code, Name from Village where MandalId IN (Select Id from Mandal where Id = '" + mandalId + "'" + ")";
     }
 
     public String getVillagesQuery2(final String mandalIds) {
-        return "select Id, Code, Name from Village where MandalId IN (Select Id from Mandal where Id IN(" + mandalIds +  "))";
+        return "SELECT DISTINCT \n" +
+                "    V.Id AS VillageId,\n" +
+                "    V.Code AS VillageCode,\n" +
+                "    V.Name AS VillageName\n" +
+                "FROM \n" +
+                "    UserVillageXref UVX\n" +
+                "    INNER JOIN Village V ON UVX.VillageId = V.Id\n" +
+                "    INNER JOIN Mandal M ON V.MandalId = M.Id\n" +
+                "WHERE \n" +
+                " V.MandalId IN (Select M.Id from Mandal where M.Id IN(" + mandalIds +  "))" +
+                "ORDER BY \n" +
+                "    V.Name;\n";
+       // return "select Id, Code, Name from Village where MandalId IN (Select Id from Mandal where Id IN(" + mandalIds +  "))";
     }
 
     public String getUOM() {
@@ -2183,7 +2229,8 @@ public class Queries {
                 "inner join FarmerHistory fh on fh.FarmerCode = f.Code and fh.PlotCode=p.Code \n" +
                 "inner join GeoBoundaries geo on geo.PlotCode = p.Code \n" +
                 "inner join Address ad on ad.Code = p.AddressCode \n" +
-                "inner join Village v on f.VillageId = v.Id AND ad.VillageId = v.Id \n" +
+                "inner join Village v on f.VillageId = v.Id  \n" +
+                "inner join Village pv On ad.VillageId = pv.Id \n" +
                 " and fh.StatusTypeId in ('81','82','83','85','86','88','89','259','308','387')" + "\n" +
                 "and fh.IsActive = '1'" + "\n" +
                 "where  f.IsActive = 1 AND geo.GeoCategoryTypeId in (206,384) AND ad.VillageId in (" + villageids + ") AND p.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
@@ -2215,14 +2262,27 @@ public class Queries {
                 "    where p.IsActive = 1 and geo.GeoCategoryTypeId in (206,384) and  f.IsActive = 1 and fh.StatusTypeId IN ('81','82','83','85','86','88','89','259','308','387') and fh.IsActive = 1 and  addr.VillageId in (" + villageids + ") group by p.Code";
     }
 
+    public String getLatlongs(List<String> plotCodes) {
+        // Constructing the query to handle multiple plot codes
+        StringBuilder queryBuilder = new StringBuilder("SELECT  P.Code, G.Latitude,G.Longitude FROM Plot P  INNER JOIN FarmerHistory Fh On P.code= Fh.PlotCode AND Fh.IsActive=1\n" +
+                "    INNER JOIN GeoBoundaries G ON G.PlotCode=P.Code  WHERE  GeoCategoryTypeId = Case When(Fh.StatusTypeId in (387,81,82,83) AND Fh.IsActive=1)\n" +
+                "    Then 384\n" +
+                "    Else\n" +
+                "206\n" +
+                "    End  And Fh.IsActive=1 AND FH.PlotCode IN (");
+        for (int i = 0; i < plotCodes.size(); i++) {
+            queryBuilder.append("'").append(plotCodes.get(i)).append("'");
+            if (i < plotCodes.size() - 1) {
+                queryBuilder.append(",");
+            }
+        }
+        queryBuilder.append(") ORDER BY \n" +
+                "    G.Id;" ) ;
+        return queryBuilder.toString();
+    }
 //    public String getLatlongs(List<String> plotCodes) {
 //        // Constructing the query to handle multiple plot codes
-//        StringBuilder queryBuilder = new StringBuilder("SELECT  P.Code, G.Latitude,G.Longitude FROM Plot P  INNER JOIN FarmerHistory Fh On P.code= Fh.PlotCode AND Fh.IsActive=1\n" +
-//                "    INNER JOIN GeoBoundaries G ON G.PlotCode=P.Code  WHERE  GeoCategoryTypeId = Case When(Fh.StatusTypeId in (387,81,82,83) AND Fh.IsActive=1)\n" +
-//                "    Then 384\n" +
-//                "    Else\n" +
-//                "206\n" +
-//                "    End  And Fh.IsActive=1 AND FH.PlotCode IN (");
+//        StringBuilder queryBuilder = new StringBuilder("SELECT PlotCode, Latitude, Longitude FROM GeoBoundaries WHERE GeoCategoryTypeId = 206 AND PlotCode IN (");
 //        for (int i = 0; i < plotCodes.size(); i++) {
 //            queryBuilder.append("'").append(plotCodes.get(i)).append("'");
 //            if (i < plotCodes.size() - 1) {
@@ -2232,18 +2292,6 @@ public class Queries {
 //        queryBuilder.append(")");
 //        return queryBuilder.toString();
 //    }
-    public String getLatlongs(List<String> plotCodes) {
-        // Constructing the query to handle multiple plot codes
-        StringBuilder queryBuilder = new StringBuilder("SELECT PlotCode, Latitude, Longitude FROM GeoBoundaries WHERE GeoCategoryTypeId = 206 AND PlotCode IN (");
-        for (int i = 0; i < plotCodes.size(); i++) {
-            queryBuilder.append("'").append(plotCodes.get(i)).append("'");
-            if (i < plotCodes.size() - 1) {
-                queryBuilder.append(",");
-            }
-        }
-        queryBuilder.append(")");
-        return queryBuilder.toString();
-    }
 
 
     public String getplotinfo(String plotCode) {

@@ -102,6 +102,7 @@ public class MultipleSelectionSpinner extends AppCompatSpinner implements Dialog
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMultiChoiceItems(_items, mSelection, this);
+        builder.setCancelable(false);
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -194,13 +195,6 @@ public class MultipleSelectionSpinner extends AppCompatSpinner implements Dialog
         throw new RuntimeException("setAdapter is not supported by MultipleSelectionSpinner.");
     }
 
-    public void setItems(String[] items) {
-        _items = items;
-        mSelection = new boolean[_items.length];
-        simple_adapter.clear();
-        simple_adapter.add("Tap to select");
-        Arrays.fill(mSelection, false);
-    }
 
     public void setItems(List<String> items, List<Integer> ids) {
         _items = items.toArray(new String[0]);

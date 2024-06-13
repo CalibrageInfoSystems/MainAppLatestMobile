@@ -9,11 +9,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -145,7 +147,7 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                             MarkerOptions markerOptions = new MarkerOptions()
                                     .position(currentLocation)
                                     .title("You are here")
-                                    .icon(bitmapDescriptorFromVector(ViewmapsActivity.this, R.drawable.male_2));
+                                    .icon(bitmapDescriptorFromVector(ViewmapsActivity.this, R.drawable.humen));
                             googleMap.addMarker(markerOptions);
 
                             List<String> plotCodes = dataAccessHandler.getSingleListData(Queries.getInstance().getplotslist(CommonConstants.SelectedvillageIds));
@@ -226,13 +228,13 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
             marker = googleMap.addMarker(new MarkerOptions()
                     .position(centroid)
                     .title(selectedPlotCode)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                     .infoWindowAnchor(0.5f, 0.6f));
             marker.setTag(true);
         } else {
             marker = googleMap.addMarker(new MarkerOptions()
                     .position(centroid)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                     .anchor(0.5f, 0.5f)
                     .alpha(0.5f));
             marker.setTag(false);
@@ -277,7 +279,7 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                 plotdiff.setText(Html.fromHtml("Plot Difference (in Ha): <b>" + plotinfo.getPlotDifference() + "</b>"));
 
 
-                if (plotinfo.getDateOfPlanting() != null) {
+                if (plotinfo.getDateOfPlanting() != null && !plotinfo.getDateOfPlanting().equalsIgnoreCase("null")) {
                     String dateofPlanting = plotinfo.getDateOfPlanting().replace("T", " ");
                     Date date = null;
                     try {
@@ -287,7 +289,11 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                     String outputDate = outputFormat.format(date);
                     dateofplantation.setText(Html.fromHtml("Date of Planting:<b>" + outputDate + "</b>"));
+                } else {
+                    // Handle the case when dateOfPlanting is null or "null"
+                    dateofplantation.setText(Html.fromHtml("Date of Planting:<b>Not available</b>"));
                 }
+
                 return infoWindow;
             }
         });
@@ -330,8 +336,8 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
         try {
             String query = Queries.getInstance().getLatlongs(plotCodes);
             latlongDataMap = dataAccessHandler.getGenericDataa(query);
-
-            Log.d("getPlots", "Raw data map: " + latlongDataMap);
+            Log.e("======plotCodes", plotCodes.size() + "");
+            Log.d("getPlots", "Raw data map: " + latlongDataMap.size());
 
             if (latlongDataMap != null && !latlongDataMap.isEmpty()) {
                 for (Map.Entry<String, List<LatLng>> entry : latlongDataMap.entrySet()) {
@@ -350,7 +356,7 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                     }
 
                     plots.add(plot);
-               Log.d("getPlots", "New plot added with coordinates: " + plot.getCoordinates());
+            //   Log.d("getPlots", "New plot added with coordinates: " + plot.getCoordinates());
                 }
             } else {
                Log.e("getPlots", "latlongDataMap is null or empty.");
