@@ -11,6 +11,7 @@ import java.util.List;
 public class Plot_maps {
     private List<LatLng> coordinates;
     private boolean isHighlighted;
+    private String plotCode; // Add plotCode attribute
 
     public Plot_maps() {
         coordinates = new ArrayList<>();
@@ -32,13 +33,20 @@ public class Plot_maps {
         return isHighlighted;
     }
 
+    public String getPlotCode() { // Add getter for plotCode
+        return plotCode;
+    }
+
+    public void setPlotCode(String plotCode) { // Add setter for plotCode
+        this.plotCode = plotCode;
+    }
+
     @Override
     public String toString() {
         return "Plot_maps{" +
                 "coordinates=" + coordinates +
                 ", isHighlighted=" + isHighlighted +
+                ", plotCode='" + plotCode + '\'' + // Include plotCode in toString
                 '}';
     }
 }
-
-

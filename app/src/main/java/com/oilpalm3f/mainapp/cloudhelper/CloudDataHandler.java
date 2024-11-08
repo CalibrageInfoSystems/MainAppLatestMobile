@@ -279,6 +279,7 @@ public class CloudDataHandler {
                                 Log.v(LOG_TAG, "@@@@ Tables Data " + masterDataMap.size());
 
                                 getKraData(onComplete, masterDataMap);
+                                //onComplete.execute(success, null, msg);
 
 
                             } catch (Exception e) {

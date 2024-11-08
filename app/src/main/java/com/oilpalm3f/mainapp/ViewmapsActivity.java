@@ -104,11 +104,11 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         dataAccessHandler = new DataAccessHandler(this);
         selectedPlotCode = getIntent().getStringExtra("plotcode");
-    //    Selectedids = getIntent().getStringExtra("Villageids");
+        //    Selectedids = getIntent().getStringExtra("Villageids");
         Log.e("======selectedPlotCode", selectedPlotCode);
         Log.e("Selectedids", CommonConstants.SelectedvillageIds);
-        plotinfo = (PlotInfo) dataAccessHandler.getplotinfoData(Queries.getInstance().getplotinfo(selectedPlotCode), 0);
-        Log.e("======selectedplotinfo", plotinfo.getFarmerName());
+//        plotinfo = (PlotInfo) dataAccessHandler.getplotinfoData(Queries.getInstance().getplotinfo(selectedPlotCode), 0);
+//        Log.e("======selectedplotinfo", plotinfo.getFarmerName());
 
         if (smf != null) {
             smf.getMapAsync(this);
@@ -149,6 +149,8 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                                     .title("You are here")
                                     .icon(bitmapDescriptorFromVector(ViewmapsActivity.this, R.drawable.humen));
                             googleMap.addMarker(markerOptions);
+                            Marker nonClickableMarker1 = googleMap.addMarker(markerOptions);
+                            nonClickableMarker1.setTag("non_clickable_marker");
 
                             List<String> plotCodes = dataAccessHandler.getSingleListData(Queries.getInstance().getplotslist(CommonConstants.SelectedvillageIds));
                             Log.e("======plotCodes", plotCodes.size() + "");
@@ -168,6 +170,63 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
 
                             // Hide the progress bar after drawing the plots
                             ProgressBar.hideProgressBar();
+
+                            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                @Override
+                                public boolean onMarkerClick(Marker marker) {
+
+                                    // Log the marker's tag
+                                    Log.d("MarkerClick", "Marker Tag: " + marker.getTag());
+
+                                    if ("non_clickable_marker".equals(marker.getTag())) {
+                                        return true; // Consumes the click event
+                                    } else {
+                                        // Retrieve the plotCode from the marker's tag
+                                        String plotCode = (String) marker.getTag();
+
+                                        if (plotCode != null) {
+                                            plotinfo = (PlotInfo) dataAccessHandler.getplotinfoData(Queries.getInstance().getplotinfo(plotCode), 0);
+
+                                            if (plotinfo != null) {
+                                                Log.d("MarkerClick", "Plot Code: " + plotinfo.getPlotCode());
+                                                marker.showInfoWindow();
+                                                return false; // Show info window
+                                            } else {
+                                                Log.e("MarkerClick", "No plot information found for plotCode: " + plotCode);
+                                            }
+                                        } else {
+                                            Log.e("MarkerClick", "Plot code is null");
+                                        }
+
+                                        return true; // Consumes the click event in case of an error
+                                    }
+                                }
+                            });
+
+//                            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//                                @Override
+//                                public boolean onMarkerClick(Marker marker) {
+//
+//                                    Log.d("MarkerClick", "Marker Tag: " + marker.getTag());
+//
+//                                    if ("non_clickable_marker".equals(marker.getTag())) {
+//                                        return true;
+//                                    } else {
+//                                        // Retrieve the plotCode from the marker's tag
+//                                        String plotCode = (String) marker.getTag();
+//
+//                                        // Print the plotCode to the log
+//                                        Log.d("MarkerClick", "Plot Code: " + plotCode);
+//                                        plotinfo = (PlotInfo) dataAccessHandler.getplotinfoData(Queries.getInstance().getplotinfo(plotCode), 0);
+//                                        Log.e("plotinfo:198 ", plotinfo.getPlotCode());
+//                                        // Show the info window
+//                                        marker.showInfoWindow();
+//
+//                                        return false; // Returning false ensures the default behavior of showing the info window
+//                                    }
+//                                }
+//                            });
+
                         }
                     });
                 } else {
@@ -176,9 +235,82 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                 }
             }
         });
+
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    smf.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(@NonNull GoogleMap googleMap) {
+                            mMap = googleMap;
+                            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
+                            mMap.getUiSettings().setZoomControlsEnabled(true);
+                            mMap.getUiSettings().setZoomGesturesEnabled(true);
+
+                            // Check location permissions and enable MyLocation
+                            if (ActivityCompat.checkSelfPermission(ViewmapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                                    ActivityCompat.checkSelfPermission(ViewmapsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                return;
+                            }
+                            mMap.setMyLocationEnabled(true);
+
+                            // Set the camera to the current location with initial zoom level
+                            LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18.0f));
+
+                            // Adjust the zoom preferences
+                            mMap.setMinZoomPreference(10.0f);  // Allows zooming out
+                            mMap.setMaxZoomPreference(20.0f);  // Adjust max zoom level as needed
+
+                            // Add a marker at the current location
+                            MarkerOptions markerOptions = new MarkerOptions()
+                                    .position(currentLocation)
+                                    .title("You are here")
+                                    .icon(bitmapDescriptorFromVector(ViewmapsActivity.this, R.drawable.humen));
+                            googleMap.addMarker(markerOptions);
+                            Marker nonClickableMarker2 = googleMap.addMarker(markerOptions);
+                            nonClickableMarker2.setTag("non_clickable_marker");
+
+                            // Draw the plots
+                            List<String> plotCodes = dataAccessHandler.getSingleListData(Queries.getInstance().getplotslist(CommonConstants.SelectedvillageIds));
+                            Log.e("======plotCodes", plotCodes.size() + "");
+                            List<Plot_maps> plots = getPlots(selectedPlotCode, plotCodes);
+
+//                            for (Plot_maps plot : plots) {
+                            for (Plot_maps plot : plots) {
+                                drawPlot(googleMap, plot);
+                            }
+
+                            for (Plot_maps plot : plots) {
+                                if (plot.isHighlighted()) {
+                                    LatLng centroid = calculateCentroid(plot.getCoordinates());
+                                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centroid, 18.0f));
+                                    break;
+                                }
+                            }
+
+
+
+
+                            // Hide the progress bar after drawing the plots
+                            ProgressBar.hideProgressBar();
+                        }
+                    });
+                } else {
+                    // Hide the progress bar if location is null
+                    ProgressBar.hideProgressBar();
+                }
+            }
+        });
+
+
     }
 
+
     private void drawPlot(GoogleMap googleMap, Plot_maps plot) {
+        Log.e("======plotCode182", plot.getPlotCode() + "");
         if (googleMap == null || plot == null || plot.getCoordinates() == null || plot.getCoordinates().isEmpty()) {
             return;
         }
@@ -227,18 +359,19 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
         if (plot.isHighlighted()) {
             marker = googleMap.addMarker(new MarkerOptions()
                     .position(centroid)
-                    .title(selectedPlotCode)
-                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                    .title(plot.getPlotCode())
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                     .infoWindowAnchor(0.5f, 0.6f));
-            marker.setTag(true);
         } else {
             marker = googleMap.addMarker(new MarkerOptions()
                     .position(centroid)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                     .anchor(0.5f, 0.5f)
                     .alpha(0.5f));
-            marker.setTag(false);
         }
+
+        // Set the plotCode as the tag for the marker
+        marker.setTag(plot.getPlotCode());
 
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
@@ -263,9 +396,8 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                 TextView statename = infoWindow.findViewById(R.id.statename);
                 TextView dateofplantation = infoWindow.findViewById(R.id.dateofplantation);
                 TextView status = infoWindow.findViewById(R.id.status);
-                gpsarea.setText(Html.fromHtml("<font color='#000000'>Plot Area as per GPS (in Ha):</font> <b>" + plotinfo.getGpsPlotArea() + "</b>"));
 
-               // gpsarea.setText(Html.fromHtml("<b>Plot Area as per GPS (in Ha):</b> " + plotinfo.getGpsPlotArea()));
+                gpsarea.setText(Html.fromHtml("<font color='#000000'>Plot Area as per GPS (in Ha):</font> <b>" + plotinfo.getGpsPlotArea() + "</b>"));
                 farmername.setText(Html.fromHtml("Farmer Name: <b>" + plotinfo.getFarmerName() + "</b>"));
                 arealeftout.setText(Html.fromHtml("Area Left Out (in Ha): <b>" + plotinfo.getLeftOutArea() + "</b>"));
                 villagename.setText(Html.fromHtml("Village Name: <b>" + plotinfo.getVillageName() + "</b>"));
@@ -278,31 +410,14 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                 status.setText(Html.fromHtml("Status: <b>" + plotinfo.getStatus() + "</b>"));
                 plotdiff.setText(Html.fromHtml("Plot Difference (in Ha): <b>" + plotinfo.getPlotDifference() + "</b>"));
 
-
                 if (plotinfo.getDateOfPlanting() != null && !plotinfo.getDateOfPlanting().equalsIgnoreCase("null")) {
-                    String dateofPlanting = plotinfo.getDateOfPlanting().replace("T", " ");
-                    Date date = null;
-                    try {
-                        date = inputFormat.parse(dateofPlanting);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    String outputDate = outputFormat.format(date);
-                    dateofplantation.setText(Html.fromHtml("Date of Planting:<b>" + outputDate + "</b>"));
+                    dateofplantation.setVisibility(View.VISIBLE);
+                    dateofplantation.setText(Html.fromHtml("Date of Plantation: <b>" + plotinfo.getDateOfPlanting() + "</b>"));
                 } else {
-                    // Handle the case when dateOfPlanting is null or "null"
-                    dateofplantation.setText(Html.fromHtml("Date of Planting:<b>Not available</b>"));
+                    dateofplantation.setVisibility(View.GONE);
                 }
 
                 return infoWindow;
-            }
-        });
-
-        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                Boolean isClickable = (Boolean) marker.getTag();
-                return isClickable == null || !isClickable;
             }
         });
     }
@@ -345,6 +460,8 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                     List<LatLng> coordinates = entry.getValue();
                     Plot_maps plot = new Plot_maps();
 
+                    plot.setPlotCode(plotCode); // Correctly set the plotCode
+
                     for (LatLng coordinate : coordinates) {
                         plot.addCoordinate(coordinate);
                     }
@@ -356,23 +473,23 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
                     }
 
                     plots.add(plot);
-            //   Log.d("getPlots", "New plot added with coordinates: " + plot.getCoordinates());
                 }
             } else {
-               Log.e("getPlots", "latlongDataMap is null or empty.");
+                Log.e("getPlots", "latlongDataMap is null or empty.");
             }
         } catch (Exception e) {
-         Log.e("getPlots", "Exception occurred: " + e.getMessage(), e);
+            Log.e("getPlots", "Exception occurred: " + e.getMessage(), e);
         }
 
         Log.d("getPlots", "Total plots: " + plots.size());
         return plots;
     }
 
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-     //   ProgressBar.showProgressBar(this, "Please wait...");
+        //   ProgressBar.showProgressBar(this, "Please wait...");
         // Show the progress bar
         progressBar.setVisibility(View.VISIBLE);
 
@@ -410,7 +527,7 @@ public class ViewmapsActivity extends AppCompatActivity implements OnMapReadyCal
     }
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(ViewmapsActivity.this, HomeScreen.class);
+        Intent intent = new Intent(ViewmapsActivity.this, FiltermapsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();

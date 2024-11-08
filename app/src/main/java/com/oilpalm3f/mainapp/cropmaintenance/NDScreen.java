@@ -567,10 +567,10 @@ public class NDScreen extends Fragment implements View.OnClickListener, PalmDeta
                     }
 
                     break;
-                case R.id.percOfTreeSpin:
-
-
-                    break;
+//                case R.id.percOfTreeSpin:
+//
+//
+//                    break;
             }
 //            {
 //

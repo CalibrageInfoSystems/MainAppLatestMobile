@@ -1926,34 +1926,34 @@ public class FertilizerFragment extends Fragment implements View.OnClickListener
 //            }
 
             Integer dosage1 = getDosageForFertilizerId(mFertilizerModelArray, 58);
-            if(dosage1 != null){
+
+            if(dosage1 != 0 ){
                 dosageGivenEdt5.setText(String.valueOf(dosage1));}
 
             Integer dosage2 = getDosageForFertilizerId(mFertilizerModelArray, 59);
-            if(dosage2 != null){
+            if(dosage2 != 0){
                 dosageGivenEdt.setText(String.valueOf(dosage2));}
 
             Integer dosage3 = getDosageForFertilizerId(mFertilizerModelArray, 60);
-            if(dosage3 != null){
+            if(dosage3 != 0){
                 dosageGivenEdt2.setText(String.valueOf(dosage3));}
 
             Integer dosage4 = getDosageForFertilizerId(mFertilizerModelArray, 61);
-            if(dosage4 != null){
+            if(dosage4 != 0){
                 dosageGivenEdt1.setText(String.valueOf(dosage4));}
 
             Integer dosage5 = getDosageForFertilizerId(mFertilizerModelArray, 63);
-            if(dosage5 != null){
+            if(dosage5 != 0){
                 dosageGivenEdt3.setText(String.valueOf(dosage5));}
 
             Integer dosage6 = getDosageForFertilizerId(mFertilizerModelArray, 64);
-            if(dosage6 != null) {
+            if(dosage6 != 0) {
                 dosageGivenEdt4.setText(String.valueOf(dosage6));
             }
             Integer dosage7 = getDosageForFertilizerId(mFertilizerModelArray, 229);
-            if(dosage7 != null){
-                dosageGivenEdt6.setText(String.valueOf(dosage7));}
-
-
+            if(dosage7 != 0){
+                dosageGivenEdt6.setText(String.valueOf(dosage7));
+            }
         }
     }
 

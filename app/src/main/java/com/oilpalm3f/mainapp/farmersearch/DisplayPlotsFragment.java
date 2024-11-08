@@ -229,7 +229,7 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
             plotStatus = 258;
         }
         else if (CommonUtils.isFromviewonmaps()) {
-            plotStatus = 81;
+            plotStatus = 85;
 //
         }
         else {
@@ -296,7 +296,10 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
                 }
             }
 
-
+            if (CommonUtils.isFromviewonmaps()){
+                moveToNextScreen();
+                return;
+            }
 
             if (TextUtils.isEmpty(plotArea)) {
                 UiUtils.showCustomToastMessage("Plot area not found", getActivity(), 1);
@@ -330,9 +333,10 @@ public class DisplayPlotsFragment extends DialogFragment implements FarmerPlotDe
 
                 } else {
 
+
               moveToNextScreen();
-//
-//                    getLocationDetails();
+
+                    //getLocationDetails();
 //                    if (CommonUtils.isFromConversion()) {
 //                        if ((IsRetakeGeoTagRequired == 1)) {
 //                            ReTakeGeoTagLL.setVisibility(View.VISIBLE);

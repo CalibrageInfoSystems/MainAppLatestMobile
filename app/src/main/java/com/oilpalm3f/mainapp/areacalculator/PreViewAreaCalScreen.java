@@ -325,6 +325,12 @@ public class PreViewAreaCalScreen extends OilPalmBaseActivity {
                     }
 
                     geoBoundaries.add(geoBoundary);
+                    Log.d("Addedtothelistlat", geoBoundaries.get(0).getLatitude() +"" );
+                    Log.d("Addedtothelistlong", geoBoundaries.get(0).getLongitude() +"" );
+
+                    Log.d("Addedtothelistboundarylat", geoBoundary.getLatitude() +"" );
+                    Log.d("Addedtothelistboundarylong", geoBoundary.getLongitude() +"" );
+
 
                     // Add the coordinate key to the set
                     coordinateSet.add(coordinateKey);

@@ -489,7 +489,7 @@ public class HarvestingActivity extends OilPalmBaseActivity {
                                 map.put("FFBQualityLong", Double.parseDouble(longstalk.getText().toString()));
                                 map.put("FFBQualityMedium", Double.parseDouble(mediumstalk.getText().toString()));
                                 map.put("FFBQualityShort", Double.parseDouble(shortstalk.getText().toString()));
-                                map.put("FFBQualityOptimum", Double.parseDouble(optimum.getText().toString()));
+                                    map.put("FFBQualityOptimum", Double.parseDouble(optimum.getText().toString()));
 
                                 int farmeravailable = 0;
 

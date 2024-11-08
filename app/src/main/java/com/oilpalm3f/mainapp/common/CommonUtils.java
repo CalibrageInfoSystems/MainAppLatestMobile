@@ -876,19 +876,27 @@ public class CommonUtils {
             deviceId = mTelephony.getDeviceId();
         }
 
- // return deviceId;
+  //return deviceId;
 
         //return "351558072968326";// KA User(AnandGoud)
-       return "358525086163783"; //AR & CH State User(Roja)
+       //return "358525086163783"; //AR & CH State User(Roja)
       //return "351558072434071"; //NikHil
       //return "87846711fe3fac40"; //Assam User
      // return "8c36dbcb47dcef24"; //Live Data issue
-       // return "351558072360896";//Arun
+        return "351558072360896";//Arun
+        //return "64f99459df5aef74";// Arun UAT user
         //return "04eef79c34f0aec6";//Live Registration not working
         //return "351558072736715";//Srihari sir Live
         //return "351558072998505";//SrihariTEST UAT
     //    return "60d90ac7141aa139";//ArunUAT
         //return "97f872887b58f047";
+       // return "ddb73c1d8326bad9";//Ithihasreddy UAT
+        //return "5e6391a0e40c6654";//tab341 Veeresh Kumar
+        //return "5f06586e79500496";//tab478 GeoBoundaries and HOP Images not sycned.
+        //return "bd3bdf0fc0752c9f";//tab084 ActivityLogs and Pests not synced.
+        //return "453308234f82c388";//Srihari sir, farmer not coming in view on Maps
+        //return "df53ec09ad884b2d";//Tab290: images and geo boundaries pending
+        //return "17ad79e9c631131e";//Tab295: Plots not opening
         // return telephonyManager.getDeviceId();
     }
 

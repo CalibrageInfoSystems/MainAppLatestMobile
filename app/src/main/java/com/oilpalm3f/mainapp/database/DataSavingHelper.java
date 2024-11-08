@@ -155,6 +155,7 @@ public class DataSavingHelper {
                     savePlotAddress(context, oncomplete);
                 }
             }
+           
         }
     }
 
@@ -1481,6 +1482,7 @@ public class DataSavingHelper {
         }
         if (isGeoTagTaken == true){
             geoBoundaries = (GeoBoundaries) DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_TAG);
+
         if (geoBoundaries != null && geoBoundaries.getLatitude() != 0 && geoBoundaries.getLongitude() != 0) {
             geoBoundaries.setCreatedbyuserid(Integer.parseInt(CommonConstants.USER_ID));
             geoBoundaries.setCreateddate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
@@ -1587,6 +1589,7 @@ public class DataSavingHelper {
                         Log.v(LOG_TAG, "@@@ saveConversionPotential data saved successfully");
                         DataManager.getInstance().deleteData(DataManager.PLOT_FOLLOWUP);
                         saveReferralsData(context, oncomplete);
+                        saveGeoTagData(context, oncomplete);
                     } else {
                         Log.e(LOG_TAG, "@@@ saveConversionPotential data saving failed due to " + msg);
                         oncomplete.execute(false, "data saving failed saveConversionPotential", "");
@@ -1597,6 +1600,7 @@ public class DataSavingHelper {
         } else {
             if (CommonUtils.isFromFollowUp()) {
                 saveReferralsData(context, oncomplete);
+
             } else if (isFromCropMaintenance() || CommonUtils.isVisitRequests()){
                 oncomplete.execute(true, "data saving failed for saveConversionPotential", "");
 
@@ -2068,6 +2072,8 @@ public class DataSavingHelper {
         List<GeoBoundaries> savedGeoBoundaries = (List<GeoBoundaries>) DataManager.getInstance().getDataFromManager(DataManager.PLOT_GEO_BOUNDARIES);
         if (null != savedGeoBoundaries && !savedGeoBoundaries.isEmpty()) {
             for (GeoBoundaries gpsCoordinate : savedGeoBoundaries) {
+                Log.d("beforeinsertlat", gpsCoordinate.getLatitude() + "");
+                Log.d("beforeinsertlong", gpsCoordinate.getLongitude() + "");
                 gpsCoordinate.setCreatedbyuserid(Integer.parseInt(CommonConstants.USER_ID));
                 gpsCoordinate.setCreateddate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                 gpsCoordinate.setUpdatedbyuserid(Integer.parseInt(CommonConstants.USER_ID));

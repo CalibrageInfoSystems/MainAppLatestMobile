@@ -135,60 +135,7 @@ public class MultipleSelectionSpinner extends AppCompatSpinner implements Dialog
         return true;
     }
 
-//    @Override
-//    public boolean performClick() {
-////        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-////        builder.setMultiChoiceItems(_items, mSelection, this);
-////        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-////            @Override
-////            public void onClick(DialogInterface dialog, int which) {
-////                simple_adapter.clear();
-////                simple_adapter.add(buildSelectedItemString());
-////                if (listener != null) {
-////                    listener.onItemSelected(MultipleSelectionSpinner.this, which, getSelectedItemsWithIds(), true);
-////                }
-////
-////            }
-////        });
-////        dialog = builder.show();
-////        return true;
-//        if (_items == null || _items.length == 0) {
-//            //     Toast.makeText(getContext(), "Items are not available", Toast.LENGTH_SHORT).show();
-//            return true;
-//        }
-//
-//        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//        builder.setMultiChoiceItems(_items, mSelection, this);
-//        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                if (_items == null || _items.length == 0) {
-//                    return;
-//                }
-//
-//                simple_adapter.clear();
-//                simple_adapter.add(buildSelectedItemString());
-////                simple_adapter.clear();
-////                simple_adapter.add(buildSelectedItemString());
-////                if (listener != null) {
-////                    listener.onItemSelected(MultipleSelectionSpinner.this, which, getSelectedItemsWithIds(), true);
-////                }
-//                if (_items == null || _items.length == 0) {
-//          Toast.makeText(getContext(), "Items are not available", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    simple_adapter.clear();
-//                    simple_adapter.add(buildSelectedItemString());
-//                    if (listener != null) {
-//                        listener.onItemSelected(MultipleSelectionSpinner.this, -1, getSelectedItemsWithIds(), true);
-//                    }
-//                    dialog.dismiss();
-//                }
-//
-//            }
-//        });
-//        dialog = builder.show();
-//        return true;
-//    }
+
 
     @Override
     public void setAdapter(SpinnerAdapter adapter) {
@@ -327,4 +274,75 @@ public class MultipleSelectionSpinner extends AppCompatSpinner implements Dialog
     public interface OnItemSelectedListener {
         void onItemSelected(View view, int position, LinkedHashMap<String, Integer> selectedItemsWithIds, boolean isSelected);
     }
+
+    //    public void clearItems() {
+//        _items = new String[0]; // Clear the items array
+//        mIds = new int[0]; // Clear the IDs array
+//        mSelection = new boolean[0]; // Clear the selection array
+//        simple_adapter.clear(); // Clear the adapter
+//        simple_adapter.add("Tap to select"); // Reset the spinner to its initial state
+//    }
+    public void clearItems() {
+        if (mSelection != null) {
+            Arrays.fill(mSelection, false); // Clear the selection array by setting all values to false
+        }
+        simple_adapter.clear(); // Clear the adapter
+        simple_adapter.add("Tap to select"); // Reset the spinner to its initial state
+    }
+
+
 }
+//    @Override
+//    public boolean performClick() {
+////        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+////        builder.setMultiChoiceItems(_items, mSelection, this);
+////        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+////            @Override
+////            public void onClick(DialogInterface dialog, int which) {
+////                simple_adapter.clear();
+////                simple_adapter.add(buildSelectedItemString());
+////                if (listener != null) {
+////                    listener.onItemSelected(MultipleSelectionSpinner.this, which, getSelectedItemsWithIds(), true);
+////                }
+////
+////            }
+////        });
+////        dialog = builder.show();
+////        return true;
+//        if (_items == null || _items.length == 0) {
+//            //     Toast.makeText(getContext(), "Items are not available", Toast.LENGTH_SHORT).show();
+//            return true;
+//        }
+//
+//        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder.setMultiChoiceItems(_items, mSelection, this);
+//        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                if (_items == null || _items.length == 0) {
+//                    return;
+//                }
+//
+//                simple_adapter.clear();
+//                simple_adapter.add(buildSelectedItemString());
+////                simple_adapter.clear();
+////                simple_adapter.add(buildSelectedItemString());
+////                if (listener != null) {
+////                    listener.onItemSelected(MultipleSelectionSpinner.this, which, getSelectedItemsWithIds(), true);
+////                }
+//                if (_items == null || _items.length == 0) {
+//          Toast.makeText(getContext(), "Items are not available", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    simple_adapter.clear();
+//                    simple_adapter.add(buildSelectedItemString());
+//                    if (listener != null) {
+//                        listener.onItemSelected(MultipleSelectionSpinner.this, -1, getSelectedItemsWithIds(), true);
+//                    }
+//                    dialog.dismiss();
+//                }
+//
+//            }
+//        });
+//        dialog = builder.show();
+//        return true;
+//    }

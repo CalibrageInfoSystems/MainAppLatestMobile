@@ -764,6 +764,7 @@ public class PersonalDetailsFragment extends Fragment implements RecyclerItemCli
         savedFarmerData.setLastname(f_l_nameString);
         savedFarmerData.setEducationtypeid(educationdetailsSpin.getSelectedItemPosition());
         savedFarmerData.setGuardianname(husbandName.getText().toString());
+        Log.d("SavemotherString", motherString + "");
         if (TextUtils.isEmpty(motherString)){
             savedFarmerData.setMothername("");
         }else {
@@ -1121,7 +1122,7 @@ public class PersonalDetailsFragment extends Fragment implements RecyclerItemCli
         f_l_nameString = farmer_last_name.getText().toString();
         CommonConstants.farmerLastName = f_l_nameString;
         husbandString = husbandName.getText().toString();
-        // motherString = motherName.getText().toString();
+         motherString = motherName.getText().toString();
         if (motherName.getText().toString() == null || motherName.getText().toString().trim().isEmpty()) {
 
             motherString = "";
@@ -1129,6 +1130,10 @@ public class PersonalDetailsFragment extends Fragment implements RecyclerItemCli
 
             motherString = motherString;
         }
+
+        Log.d("motherString", motherString + "");
+        Log.d("mothername", motherName.getText().toString() + "");
+
         ageString = age.getText().toString();
         emailStr = emailAddress.getText().toString();
 

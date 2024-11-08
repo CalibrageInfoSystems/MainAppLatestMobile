@@ -2,6 +2,7 @@ package com.oilpalm3f.mainapp.datasync.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
@@ -16,7 +17,6 @@ import com.oilpalm3f.mainapp.cloudhelper.HttpClient;
 import com.oilpalm3f.mainapp.cloudhelper.Log;
 import com.oilpalm3f.mainapp.common.CommonConstants;
 import com.oilpalm3f.mainapp.common.CommonUtils;
-import com.oilpalm3f.mainapp.dbmodels.BasicHarvestorDetails;
 import com.oilpalm3f.mainapp.dbmodels.Collection;
 import com.oilpalm3f.mainapp.database.DataAccessHandler;
 import com.oilpalm3f.mainapp.database.DatabaseKeys;
@@ -26,7 +26,6 @@ import com.oilpalm3f.mainapp.datasync.ui.RefreshSyncActivity;
 import com.oilpalm3f.mainapp.dbmodels.ActivityLog;
 import com.oilpalm3f.mainapp.dbmodels.Address;
 import com.oilpalm3f.mainapp.dbmodels.AdvancedDetails;
-import com.oilpalm3f.mainapp.dbmodels.Alerts;
 import com.oilpalm3f.mainapp.dbmodels.CollectionPlotXref;
 import com.oilpalm3f.mainapp.dbmodels.ComplaintRepository;
 import com.oilpalm3f.mainapp.dbmodels.ComplaintRepositoryRefresh;
@@ -82,7 +81,6 @@ import com.oilpalm3f.mainapp.dbmodels.Weed;
 import com.oilpalm3f.mainapp.dbmodels.DataCountModel;
 import com.oilpalm3f.mainapp.dbmodels.WhiteFlyAssessment;
 import com.oilpalm3f.mainapp.dbmodels.YieldAssessment;
-import com.oilpalm3f.mainapp.helper.PrefUtil;
 import com.oilpalm3f.mainapp.uihelper.ProgressBar;
 import com.oilpalm3f.mainapp.uihelper.ProgressDialogFragment;
 import com.oilpalm3f.mainapp.utils.UiUtils;
@@ -92,6 +90,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -100,6 +99,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -1093,6 +1093,12 @@ public class DataSyncHelper {
         final DataAccessHandler dataAccessHandler = new DataAccessHandler(context);
         List<LocationTracker> gpsTrackingList = (List<LocationTracker>) dataAccessHandler.getGpsTrackingData(Queries.getInstance().getGpsTrackingRefresh(), 1);
         if (null != gpsTrackingList && !gpsTrackingList.isEmpty()) {
+
+            for (LocationTracker tracker : gpsTrackingList) {
+                String address = getAddressFromLatLong(context, tracker.getLatitude(), tracker.getLongitude());
+                tracker.setAddress(address);
+            }
+
             Type listType = new TypeToken<List>() {
             }.getType();
             Gson gson = null;
@@ -1120,6 +1126,21 @@ public class DataSyncHelper {
             );
 
         }
+    }
+
+    public static String getAddressFromLatLong(Context context, double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<android.location.Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                android.location.Address address = addresses.get(0);
+                return address.getAddressLine(0);
+                //return address.getLocality();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Unknown Location";
     }
 
     //to get alerts data

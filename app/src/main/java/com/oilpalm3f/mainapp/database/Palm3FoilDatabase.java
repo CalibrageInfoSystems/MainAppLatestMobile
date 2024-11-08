@@ -221,7 +221,7 @@ public class Palm3FoilDatabase extends SQLiteOpenHelper {
             contentValues.put("UserId",CreatedByUserId);
             contentValues.put(DatabaseKeys.LATITUDE,Latitude);
             contentValues.put(DatabaseKeys.LONGITUDE,Longitude);
-            contentValues.put("Address", "Testin");
+            contentValues.put("Address", "Testing");
             contentValues.put("LogDate",UpdatedDate);
             contentValues.put("ServerUpdatedStatus",0);
 

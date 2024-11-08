@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.androidquery.util.Common;
 import com.oilpalm3f.mainapp.common.CommonConstants;
 import com.oilpalm3f.mainapp.common.CommonUtils;
+
 import com.oilpalm3f.mainapp.common.MultipleSelectionSpinner;
 import com.oilpalm3f.mainapp.database.DataAccessHandler;
 import com.oilpalm3f.mainapp.database.Queries;
@@ -44,6 +45,21 @@ public class FiltermapsActivity extends AppCompatActivity {
 
     private LinkedHashMap<String, Pair> stateDataMap = null, districtDataMap, mandalDataMap, villagesDataMap;
 
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        clearDependentData();
+        //selectedStateIds.setLength(0);
+        multiSelectionSpinner_state.clearSelection();
+        multiSelectionSpinner_state.clearItems();
+//        multiSelectionSpinner_district.clearSelection();
+//        multiSelectionSpinner_mandal.clearSelection();
+//        multiSelectionSpinner_village.clearSelection();
+    }
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +85,14 @@ public class FiltermapsActivity extends AppCompatActivity {
         multiSelectionSpinner_village.setEnabled(false);
         populateSpinnerData();
         toolbar.setNavigationOnClickListener(v -> onBackPressed()); // Navigate back when toolbar back arrow is clicked
+
+
+//        multiSelectionSpinner_state.clearSelection();
+//
+//        multiSelectionSpinner_district.clearSelection();
+//        multiSelectionSpinner_mandal.clearSelection();
+//        multiSelectionSpinner_village.clearSelection();
+     //   multiSelectionSpinner_state.clearItems();
 
         multiSelectionSpinner_state.setOnItemSelectedListener(new MultipleSelectionSpinner.OnItemSelectedListener() {
             @Override

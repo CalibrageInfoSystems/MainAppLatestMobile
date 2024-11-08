@@ -5206,4 +5206,57 @@ f
         return (T) ((type == 0) ? plotinformation : plotinfoList);
     }
 
+//    public ArrayList<PlotInfo> getplotinfoDataa(final String query) {
+//        ArrayList<PlotInfo> plotinformation = new ArrayList<>();
+//        Cursor cursor = null;
+//        Log.v(LOG_TAG, "Query for getting farmers " + query);
+//        try {
+//            cursor = mDatabase.rawQuery(query, null);
+//            if (cursor != null && cursor.moveToFirst()) {
+//                do {
+//                    PlotInfo plotinfoss = new PlotInfo(null, null,null,null,null,0.0,0.0,0.0,0.0,0.0,0,null,null,0,null,null,0,null,null,0,null,null);
+//
+//                    plotinfoss = new PlotInfo(null, null,null,null,null,0.0,0.0,0.0,0.0,0.0,0,null,null,0,null,null,0,null,null,0,null,null);
+//                    plotinfoss.setFarmerCode(cursor.getString(0));
+//                    plotinfoss.setFarmerName(cursor.getString(1));
+//                    plotinfoss.setPlotCode(cursor.getString(2));
+//                    plotinfoss.setDateOfPlanting(cursor.getString(3));
+//                    plotinfoss.setStatus(cursor.getString(4));
+//                    plotinfoss.setTotalPlotArea(cursor.getDouble(5));
+//                    plotinfoss.setTotalPalmArea(cursor.getDouble(6));
+//                    plotinfoss.setGpsPlotArea(cursor.getDouble(7));
+//                    plotinfoss.setLeftOutArea(cursor.getDouble(8));
+//                    plotinfoss.setPlotDifference(cursor.getDouble(9));
+//                    plotinfoss.setVillageId(cursor.getInt(10));
+//                    plotinfoss.setVillageCode(cursor.getString(11));
+//                    plotinfoss.setVillageName(cursor.getString(12));
+//                    plotinfoss.setMandalId(cursor.getInt(13));
+//                    plotinfoss.setMandalCode(cursor.getString(14));
+//                    plotinfoss.setMandalName(cursor.getString(15));
+//                    plotinfoss.setDistrictId(cursor.getInt(16));
+//                    plotinfoss.setDistrictCode(cursor.getString(17));
+//                    plotinfoss.setDistrictName(cursor.getString(18));
+//                    plotinfoss.setStateId(cursor.getInt(19));
+//                    plotinfoss.setStateCode(cursor.getString(20));
+//                    plotinfoss.setStateName(cursor.getString(21));
+//
+//
+//                    plotinformation.add(plotinfoss);
+//                } while (cursor.moveToNext());
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Log.v(LOG_TAG, "getting failed fromLocalDb" + e);
+//        } finally {
+//            if (cursor != null) {
+//                cursor.close();
+//            }
+//            closeDataBase();
+//
+//
+//        }
+//        return plotinformation;
+//    }
+
+
 }

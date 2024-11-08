@@ -1,12 +1,14 @@
 package com.oilpalm3f.mainapp.areacalculator;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,9 +31,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oilpalm3f.mainapp.R;
+import com.oilpalm3f.mainapp.common.CommonUiUtils;
 import com.oilpalm3f.mainapp.common.CommonUtils;
 import com.oilpalm3f.mainapp.uihelper.ProgressBar;
 
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -47,13 +52,14 @@ public class FieldCalculatorActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
     public static List<GPSCoordinate> firstFourCoordinates = new ArrayList<>();
     public static ArrayList<GPSCoordinate> recordedBoundries = new ArrayList<>();
-    public static List<GPSCoordinate> totalBoundries = new ArrayList<>();
+    public static ArrayList<GPSCoordinate> totalBoundries = new ArrayList<>();
     private AreaView measureView;
     private Button startStopButton, saveBtn, resetBtn;
     private Context c;
     private LocationManager locationManager;
     private LinkedHashMap<String, String> latLongMap = new LinkedHashMap<>();
     private Button recordBtn;
+    private TextView count;
     private RecyclerView recordsList;
 
     private BroadcastReceiver locationReceiver = new BroadcastReceiver() {
@@ -65,6 +71,8 @@ public class FieldCalculatorActivity extends AppCompatActivity {
                 if (null != firstFourCoordinates && firstFourCoordinates.size() <= 4) {
                     firstFourCoordinates.add(new GPSCoordinate(intent.getExtras().getDouble("latitude"), intent.getExtras().getDouble("longitude"), 0));
                 }
+
+
                 totalBoundries.add(new GPSCoordinate(intent.getExtras().getDouble("latitude"), intent.getExtras().getDouble("longitude"), 0));
             }
         }
@@ -83,10 +91,52 @@ public class FieldCalculatorActivity extends AppCompatActivity {
             initViews();
         }
 
+
+//        try {
+//            // Access the 'textPaint' field from the AreaView class
+//            Field textPaintField = measureView.getClass().getDeclaredField("textPaint");
+//            textPaintField.setAccessible(true);  // Allow access to the private field
+//
+//            // Get the Paint object
+//            Paint textPaint = (Paint) textPaintField.get(measureView);
+//
+//            // Access its properties
+//            int color = textPaint.getColor();  // Get the color
+//            float textSize = textPaint.getTextSize();  // Get the text size
+//            boolean isAntiAlias = textPaint.isAntiAlias();  // Check if anti-aliasing is enabled
+//
+//            // Print the details
+//            System.out.println("textPaint Color: " + color);
+//            System.out.println("textPaint Text Size: " + textSize);
+//            System.out.println("textPaint AntiAlias: " + isAntiAlias);
+//
+//        } catch (NoSuchFieldException | IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+        try {
+            // Access the 'textPaint' field from the AreaView class
+            Field textPaintField = measureView.getClass().getDeclaredField("textPaint");
+            textPaintField.setAccessible(true);  // Allow access to the private field
+
+            // Get the Paint object
+            Paint textPaint = (Paint) textPaintField.get(measureView);
+
+            // Set the color to white
+            textPaint.setColor(0xFFFFFFFF);  // White color
+            textPaint.setTextSize(30.0F);
+
+            // Optionally print the updated color
+            System.out.println(String.format("Updated textPaint Color: #%08X", textPaint.getColor()));
+
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         LocalBroadcastManager.getInstance(this).registerReceiver(locationReceiver, new IntentFilter("location_receiver"));
 
     }
 
+    @SuppressLint("MissingInflatedId")
     public void initViews() {
 
         setContentView(R.layout.activity_field_caluculator);
@@ -96,25 +146,62 @@ public class FieldCalculatorActivity extends AppCompatActivity {
         saveBtn = (Button) findViewById(R.id.saveBtn);
         resetBtn = (Button) findViewById(R.id.reset);
         recordsList = (RecyclerView) findViewById(R.id.gpsRecords);
+        count = findViewById(R.id.count);
         recordsList.setLayoutManager(new LinearLayoutManager(FieldCalculatorActivity.this, LinearLayoutManager.VERTICAL, false));
 
-        recordBtn.setOnClickListener(view -> {
+//        recordBtn.setOnClickListener(view -> {
+//
+//            if (measureView.isRunning()) {
+//                GPSCoordinate pointsToRecord = null;
+//                if (null != recordedBoundries && recordedBoundries.size() > 0) {
+//                    double distance = CommonUtils.distance(recordedBoundries.get(recordedBoundries.size() - 1).latitude,
+//                            recordedBoundries.get(recordedBoundries.size() - 1).longitude, AreaView.latitude, AreaView.longitude, 'M');
+//                    Log.d("distancefrompttopt", distance + "");
+//                    if (distance >= 200){
+//                        pointsToRecord = new GPSCoordinate(AreaView.latitude, AreaView.longitude, distance);
+//                    }else{
+//                        Toast.makeText(FieldCalculatorActivity.this, "Coordinates will be added only after 200m of distance from the previous point", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                } else {
+//                    pointsToRecord = new GPSCoordinate(AreaView.latitude, AreaView.longitude, 0.0);
+//                }
+//
+//                recordedBoundries.add(pointsToRecord);
+//                recordsList.setAdapter(new RecordedCoordinatesAdapter(FieldCalculatorActivity.this, recordedBoundries));
+//            }
+//
+//        });
 
+        recordBtn.setOnClickListener(view -> {
             if (measureView.isRunning()) {
-                GPSCoordinate pointsToRecord;
-                if (null != recordedBoundries && recordedBoundries.size() > 0) {
-                    double distance = CommonUtils.distance(recordedBoundries.get(recordedBoundries.size() - 1).latitude,
-                            recordedBoundries.get(recordedBoundries.size() - 1).longitude, AreaView.latitude, AreaView.longitude, 'M');
-                    pointsToRecord = new GPSCoordinate(AreaView.latitude, AreaView.longitude, distance);
+                GPSCoordinate pointsToRecord = null;
+                if (recordedBoundries.size() > 0) {
+                    double distance = CommonUtils.distance(
+                            recordedBoundries.get(recordedBoundries.size() - 1).latitude,
+                            recordedBoundries.get(recordedBoundries.size() - 1).longitude,
+                            AreaView.latitude, AreaView.longitude, 'M'
+                    );
+                    Log.d("distancefrompttopt", distance + "");
+                        pointsToRecord = new GPSCoordinate(AreaView.latitude, AreaView.longitude, distance);
+                        recordedBoundries.add(pointsToRecord);
+                        Log.d("RecordedPoint", pointsToRecord.latitude +","+ pointsToRecord.longitude + "");
                 } else {
                     pointsToRecord = new GPSCoordinate(AreaView.latitude, AreaView.longitude, 0.0);
+                    recordedBoundries.add(pointsToRecord);
+                    Log.d("InitialRecordedPoint", pointsToRecord.latitude +","+ pointsToRecord.longitude + "");
                 }
 
-                recordedBoundries.add(pointsToRecord);
-                recordsList.setAdapter(new RecordedCoordinatesAdapter(FieldCalculatorActivity.this, recordedBoundries));
-            }
+                // Update the RecyclerView adapter only if pointsToRecord is not null
+                if (pointsToRecord != null) {
+                    recordsList.setAdapter(new RecordedCoordinatesAdapter(FieldCalculatorActivity.this, recordedBoundries));
+                }
 
+                Log.d("RecordedPointsSize",recordedBoundries.size() + "");
+                count.setText("Count: " + recordedBoundries.size());
+            }
         });
+
         resetBtn.setOnClickListener(view -> {
             measureView.reset();
             measureView.invalidate();
@@ -124,6 +211,7 @@ public class FieldCalculatorActivity extends AppCompatActivity {
         });
 
         saveBtn.setOnClickListener(view -> {
+            Log.d("recorderPointssizee", recordedBoundries.size() + "");
            double measuredArea = Math.round(100 * measureView.getArea()) / (double) 100;
             if (measureView.isRunning()) {
                 Toast.makeText(FieldCalculatorActivity.this, "Please stop area measuring and save", Toast.LENGTH_SHORT).show();
@@ -134,16 +222,45 @@ public class FieldCalculatorActivity extends AppCompatActivity {
                 return;
             }
             if (measuredArea > 0) {
-                displayAreaAreaDialog();
+                Log.d("recorderPointssize", recordedBoundries.size() + "");
+                if (recordedBoundries.size() > 3){
+                    displayAreaAreaDialog();
+                }else{
+                    Toast.makeText(FieldCalculatorActivity.this, "Minimum of 4 Points has to be recorded to Calculate the GPS Area", Toast.LENGTH_SHORT).show();
+                }
+
             } else {
                 Toast.makeText(FieldCalculatorActivity.this, "Area is not measured", Toast.LENGTH_SHORT).show();
             }
-
-
-
-
-       //    saveLatLongData();
         });
+//        saveBtn.setOnClickListener(view -> {
+//            Log.d("recorderPointssizee", recordedBoundries.size() + "");
+//            double measuredArea = Math.round(100 * measureView.getArea()) / (double) 100;
+//            if (measureView.isRunning()) {
+//                Toast.makeText(FieldCalculatorActivity.this, "Please stop area measuring and save", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            if (!measureView.isReadyToStart()) {
+//                Toast.makeText(FieldCalculatorActivity.this, "GPS signal not received", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            if (measuredArea > 0) {
+//                Log.d("recorderPointssize", recordedBoundries.size() + "");
+//                if (recordedBoundries.size() >= 4) {
+//                    if (isValidPolygon(recordedBoundries)) {
+//                        displayAreaAreaDialog();
+//                    } else {
+//                        Toast.makeText(FieldCalculatorActivity.this, "The polygon is not valid. Please check the points.", Toast.LENGTH_SHORT).show();
+//                    }
+//                } else {
+//                    Toast.makeText(FieldCalculatorActivity.this, "At least 4 points must be recorded to calculate the GPS area.", Toast.LENGTH_SHORT).show();
+//                }
+//            } else {
+//                Toast.makeText(FieldCalculatorActivity.this, "Area is not measured", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
 
         if (!locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
             displayGpsDialog();
@@ -286,6 +403,72 @@ public class FieldCalculatorActivity extends AppCompatActivity {
 
     }
 
+    private boolean isValidPolygon(List<GPSCoordinate> coordinates) {
+        if (coordinates.size() < 4) return false;
+
+        // Ensure the polygon is closed
+        if (!coordinates.get(0).equals(coordinates.get(coordinates.size() - 1))) {
+            coordinates.add(coordinates.get(0));
+        }
+
+        int n = coordinates.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n - 1; j++) {
+                if (i != j && doIntersect(coordinates.get(i), coordinates.get(i + 1),
+                        coordinates.get(j), coordinates.get(j + 1))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // Method to check if two line segments intersect
+    private boolean doIntersect(GPSCoordinate p1, GPSCoordinate q1, GPSCoordinate p2, GPSCoordinate q2) {
+        // Find the four orientations needed for the general and special cases
+        int o1 = orientation(p1, q1, p2);
+        int o2 = orientation(p1, q1, q2);
+        int o3 = orientation(p2, q2, p1);
+        int o4 = orientation(p2, q2, q1);
+
+        // General case
+        if (o1 != o2 && o3 != o4) {
+            return true;
+        }
+
+        // Special cases
+        // p1, q1 and p2 are collinear and p2 lies on segment p1q1
+        if (o1 == 0 && onSegment(p1, p2, q1)) return true;
+
+        // p1, q1 and q2 are collinear and q2 lies on segment p1q1
+        if (o2 == 0 && onSegment(p1, q2, q1)) return true;
+
+        // p2, q2 and p1 are collinear and p1 lies on segment p2q2
+        if (o3 == 0 && onSegment(p2, p1, q2)) return true;
+
+        // p2, q2 and q1 are collinear and q1 lies on segment p2q2
+        if (o4 == 0 && onSegment(p2, q1, q2)) return true;
+
+        return false;
+    }
+
+    // Utility function to find the orientation of the ordered triplet (p, q, r)
+    private int orientation(GPSCoordinate p, GPSCoordinate q, GPSCoordinate r) {
+        double val = (q.longitude - p.longitude) * (r.latitude - q.latitude) -
+                (q.latitude - p.latitude) * (r.longitude - q.longitude);
+
+        if (val == 0) return 0;  // Collinear
+        return (val > 0) ? 1 : 2; // Clockwise or counterclockwise
+    }
+
+    // Function to check if a point q lies on line segment 'pr'
+    private boolean onSegment(GPSCoordinate p, GPSCoordinate q, GPSCoordinate r) {
+        if (q.longitude <= Math.max(p.longitude, r.longitude) && q.longitude >= Math.min(p.longitude, r.longitude) &&
+                q.latitude <= Math.max(p.latitude, r.latitude) && q.latitude >= Math.min(p.latitude, r.latitude))
+            return true;
+        return false;
+    }
+
     @Override
     public void onBackPressed() {
         totalBoundries.clear();
@@ -318,14 +501,15 @@ public class FieldCalculatorActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RecordedCoordinatesAdapter.MyHolder holder, int position) {
-            holder.latitude.setText("" + gpsCoordinates.get(position).latitude);
-            holder.longitude.setText("" + gpsCoordinates.get(position).longitude);
-            if (gpsCoordinates != null && gpsCoordinates.size() > 1) {
-                holder.distance.setText("" + gpsCoordinates.get(position).altitude + " Meters");
 
-            } else {
-                holder.distance.setText("0 " + "Meters");
-            }
+                holder.latitude.setText("" + gpsCoordinates.get(position).latitude);
+                holder.longitude.setText("" + gpsCoordinates.get(position).longitude);
+                if (gpsCoordinates != null && gpsCoordinates.size() > 1) {
+                    holder.distance.setText("" + gpsCoordinates.get(position).altitude + " Meters");
+
+                } else {
+                    holder.distance.setText("0 " + "Meters");
+                }
         }
 
         @Override

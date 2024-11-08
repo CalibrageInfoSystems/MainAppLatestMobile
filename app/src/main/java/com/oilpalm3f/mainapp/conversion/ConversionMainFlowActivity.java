@@ -191,6 +191,8 @@ public class ConversionMainFlowActivity extends OilPalmBaseActivity implements U
                 }else {
                     startActivity(new Intent(ConversionMainFlowActivity.this, PreViewAreaCalScreen.class));
                 }
+
+                //startActivity(new Intent(ConversionMainFlowActivity.this, PreViewAreaCalScreen.class));
                 break;
             case R.id.interCropDetailsBtn:
                 InterCropDetailsFragment interCropDetailsFragment = new InterCropDetailsFragment();
@@ -274,10 +276,10 @@ public class ConversionMainFlowActivity extends OilPalmBaseActivity implements U
         if (null != DataManager.getInstance().getDataFromManager(DataManager.FARMER_BANK_DETAILS)) {
             conversionbankdetailsBtn.setBackgroundColor(getResources().getColor(R.color.green_dark));
         }
-
-        if (null != DataManager.getInstance().getDataFromManager(DataManager.PLOT_INTER_CROP_DATA)) {
+        {
             cropModelList = (List<CropModel>) DataManager.getInstance().getDataFromManager(DataManager.PLOT_INTER_CROP_DATA);
         }
+        if (null != DataManager.getInstance().getDataFromManager(DataManager.PLOT_INTER_CROP_DATA))
         if (null != DataManager.getInstance().getDataFromManager(DataManager.PLOT_INTER_CROP_DATA) && !cropModelList.isEmpty()) {
             interCropBtn.setBackgroundColor(getResources().getColor(R.color.gray));
         } else {

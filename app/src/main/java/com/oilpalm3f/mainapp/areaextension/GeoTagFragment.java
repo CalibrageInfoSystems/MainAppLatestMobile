@@ -129,6 +129,7 @@ public class GeoTagFragment extends Fragment {
         farmerSaveBtn.setOnClickListener(v -> {
             if (farmerSaveBtn.getText().toString().equalsIgnoreCase("Save") && currentLatitude != 0 && currentLongitude != 0) {
                 CommonConstants.isGeoTagTaken = true;
+                Log.d("Geotagtaken", CommonConstants.isGeoTagTaken + "");
                 setGeoTagData();
             } else {
 

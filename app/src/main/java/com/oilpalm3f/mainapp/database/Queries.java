@@ -649,7 +649,6 @@ public class Queries {
                 "m.Code as MandalCode, m.Name as MandalName, m.Id as MandalId,\n" +
                 "d.Code as DistrictCode, d.Name as DistrictName, d.Id as DistrictId,\n" +
                 "s.Code as StateCode, s.Name as StateName, s.Id as StateId , p.DateofPlanting from Plot p\n" +
-                "inner join GeoBoundaries geo on geo.PlotCode = p.Code\n" +
                 "inner join Farmer f on f.code = p.FarmerCode\n" +
                 "inner join Address addr on p.AddressCode = addr.Code\n" +
                 "inner join Village v on addr.VillageId = v.Id\n" +
@@ -657,13 +656,13 @@ public class Queries {
                 "inner join District d on addr.DistrictId = d.Id\n" +
                 "inner join State s on addr.StateId = s.Id\n" +
                 "inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
-                "where p.IsActive = 1 and geo.GeoCategoryTypeId = '206' and  f.IsActive = 1 and p.FarmerCode='" + farmercode + "'" + statusType + " and fh.IsActive = 1  group by p.Code";
+                "where p.IsActive = 1 and  f.IsActive = 1 and p.FarmerCode='" + farmercode + "'" + statusType + " and fh.IsActive = 1  group by p.Code";
     }
 
     public String getPlotDetailsForviewonmap(final String farmercode, final int plotStatus, final int multiStatus, String villageids) {
         String statusType = "";
 
-            statusType = "and fh.StatusTypeId IN ('" + plotStatus + "','" + multiStatus + "','83','85','86','88','89','259','308','387')";
+            statusType = "and fh.StatusTypeId IN ('" + plotStatus + "','" + multiStatus + "','89','258','259')";
 
         return "select p.Code, p.TotalPalmArea, p.TotalPlotArea, p.GPSPlotArea, p.SurveyNumber, addr.Landmark,\n" +
                 "v.Code AS VillageCode, v.Name as VillageName, v.Id as VillageId,\n" +
@@ -678,7 +677,7 @@ public class Queries {
                 "inner join District d on addr.DistrictId = d.Id\n" +
                 "inner join State s on addr.StateId = s.Id\n" +
                 "inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
-                "where p.IsActive = 1  AND geo.GeoCategoryTypeId in (206,384) AND addr.VillageId in (" + villageids + ") and  f.IsActive = 1 and p.FarmerCode='" + farmercode + "'" + statusType + " and fh.IsActive = 1  group by p.Code";
+                "where p.IsActive = 1  AND geo.GeoCategoryTypeId in (206) AND addr.VillageId in (" + villageids + ") and  f.IsActive = 1 and p.FarmerCode='" + farmercode + "'" + statusType + " and fh.IsActive = 1  group by p.Code";
     }
 
     public String getPlotDetailsForCC(final String farmercode, final int plotStatus) {
@@ -1579,9 +1578,10 @@ public class Queries {
         return "select Latitude, Longitude from GeoBoundaries where PlotCode = '" + CommonConstants.PLOT_CODE + "'" + "  and GeoCategoryTypeId = '207'";
     }
 
-    public String queryVerifyFalogDistance() {
+    public String queryVerifyFalogDistance(String date) {
 
-        return "select Latitude, Longitude from LocationTracker ORDER BY Id DESC LIMIT 1";
+//        return "select Latitude, Longitude from LocationTracker ORDER BY Id DESC LIMIT 1";
+        return "SELECT Latitude, Longitude FROM LocationTracker WHERE DATE(LogDate) = '" + date + "' ORDER BY Id DESC LIMIT 1";
     }
 
     public String onlyValueFromDb(String tableName, String columnName, String whereCondition) {
@@ -2231,9 +2231,9 @@ public class Queries {
                 "inner join Address ad on ad.Code = p.AddressCode \n" +
                 "inner join Village v on f.VillageId = v.Id  \n" +
                 "inner join Village pv On ad.VillageId = pv.Id \n" +
-                " and fh.StatusTypeId in ('81','82','83','85','86','88','89','259','308','387')" + "\n" +
+                " and fh.StatusTypeId in ('85','88','89','258','259')" + "\n" +
                 "and fh.IsActive = '1'" + "\n" +
-                "where  f.IsActive = 1 AND geo.GeoCategoryTypeId in (206,384) AND ad.VillageId in (" + villageids + ") AND p.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
+                "where  f.IsActive = 1 AND geo.GeoCategoryTypeId in (206) AND ad.VillageId in (" + villageids + ") AND p.IsActive = 1 AND ( f.FirstName like '%" + seachKey + "%' or f.MiddleName like '%" + seachKey + "%' or f.LastName like '%" + seachKey + "%' or f.Code like '%" + seachKey + "%' \n" +
                 "or f.ContactNumber like '%" + seachKey + "%' or f.GuardianName like '%" + seachKey + "%' )group by f.Code limit " + limit + " offset " + offset + ";";
 
     }
@@ -2259,7 +2259,7 @@ public class Queries {
                 "    inner join District d on addr.DistrictId = d.Id\n" +
                 "    inner join State s on addr.StateId = s.Id\n" +
                 "    inner join FarmerHistory fh on fh.PlotCode = p.Code and fh.FarmerCode = p.FarmerCode \n" +
-                "    where p.IsActive = 1 and geo.GeoCategoryTypeId in (206,384) and  f.IsActive = 1 and fh.StatusTypeId IN ('81','82','83','85','86','88','89','259','308','387') and fh.IsActive = 1 and  addr.VillageId in (" + villageids + ") group by p.Code";
+                "    where p.IsActive = 1 and geo.GeoCategoryTypeId in (206) and  f.IsActive = 1 and fh.StatusTypeId IN ('85','88','89','258','259') and fh.IsActive = 1 and  addr.VillageId in (" + villageids + ") group by p.Code";
     }
 
     public String getLatlongs(List<String> plotCodes) {
@@ -2378,7 +2378,7 @@ public class Queries {
                 "SELECT PlotCode, MAX(CreatedDate) AS MaxDate FROM HarvestorVisitHistory\n" +
         "GROUP BY PlotCode) MaxHV ON HV.PlotCode = MaxHV.PlotCode AND HV.CreatedDate = MaxHV.MaxDate\n" +
         "INNER JOIN UserInfo UI ON HV.CreatedByUserId = UI.ID) HVR ON HVR.PlotCode = P.Code\n" +
-        "WHERE F.IsActive = 1 AND P.IsActive = 1 AND FH.StatusTypeId IN (88, 89, 308) AND\n" +
+        "WHERE F.IsActive = 1 AND P.IsActive = 1 AND FH.StatusTypeId IN (89) AND\n" +
                 "(F.FirstName LIKE '%" + seachKey + "%' OR F.MiddleName LIKE '%" + seachKey + "%' OR  F.LastName LIKE '%" + seachKey + "%' OR F.Code LIKE '%" + seachKey + "%' OR  F.ContactNumber LIKE '%" + seachKey + "%' OR P.Code LIKE '%" + seachKey + "%')\n" +
         "AND NOT EXISTS (\n" +
                 "SELECT 1 FROM HarvestorVisitHistory HV\n" +
@@ -2498,8 +2498,3 @@ public class Queries {
     }
 
 }
-
-
-
-
-

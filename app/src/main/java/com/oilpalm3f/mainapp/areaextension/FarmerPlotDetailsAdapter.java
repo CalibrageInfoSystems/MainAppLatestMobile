@@ -25,6 +25,9 @@ import com.oilpalm3f.mainapp.dbmodels.PlotDetailsObj;
 import com.oilpalm3f.mainapp.uihelper.SelectableAdapter;
 import com.oilpalm3f.mainapp.utils.UiUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -126,41 +129,124 @@ public class FarmerPlotDetailsAdapter extends SelectableAdapter<FarmerPlotDetail
         String visitCount = dataAccessHandler.getOnlyTwoValueFromDb(Queries.getInstance().getVisitCount(plotdetailsObj.getPlotID()));
         String harvestvisitCount = dataAccessHandler.getOnlyTwoValueFromDb(Queries.getInstance().getHarvestVisitCount(plotdetailsObj.getPlotID()));
 
+
         String count = visitCount.split("@")[0];
-        String date = visitCount.split("@")[1];
+        String cmlastvisitdate = visitCount.split("@")[1];
+        Log.d("CMdate", cmlastvisitdate + "");
         String harvestcount = harvestvisitCount.split("@")[0];
         String lastharvestdate = harvestvisitCount.split("@")[1];
+        Log.d("Harvestdate", lastharvestdate + "");
+
+        SimpleDateFormat inputFormat1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss" );
+        SimpleDateFormat inputFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss");
 
         if (CommonUtils.isFromCropMaintenance() || CommonUtils.isFromHarvesting()) {
             // Handling last visit date
-            if (!TextUtils.isEmpty(date)) {
-                String[] dateTimeParts = date.split("T");
-                if (dateTimeParts.length == 2) {
-                    holder.lastest_vistDate.setText("Last CM Visit Date : " + dateTimeParts[0] + " " + dateTimeParts[1]);
-                } else {
-                    holder.lastest_vistDate.setText("Last CM Visit Date : " + date);
-                }
+            if (TextUtils.isEmpty(cmlastvisitdate) || cmlastvisitdate.equalsIgnoreCase("null")) {
+                holder.lastest_vistDate.setText("Last CM Visit Date : Not Visited");
             } else {
-                holder.lastest_vistDate.setText("Last CM Visit Date : " + "Not Visited");
+                String formattedDate = formatDate(cmlastvisitdate, inputFormat1, inputFormat2, outputFormat);
+                Log.d("formattedCMDate", formattedDate + "");
+                if (!TextUtils.isEmpty(formattedDate)) {
+                    String[] dateTimeParts = formattedDate.split("T");
+                    if (dateTimeParts.length == 2) {
+                        holder.lastest_vistDate.setText("Last CM Visit Date : " + dateTimeParts[0] + " " + dateTimeParts[1]);
+                    } else {
+                        holder.lastest_vistDate.setText("Last CM Visit Date : " + formattedDate);
+                    }
+                } else {
+                    holder.lastest_vistDate.setText("Last CM Visit Date : Not Visited");
+                }
             }
 
             // Handling last harvest date
-            if (!TextUtils.isEmpty(lastharvestdate)) {
-                String[] dateTimeParts = lastharvestdate.split("T");
-                if (dateTimeParts.length == 2) {
-                    holder.lastest_harvestDate.setText("Last Harvesting Date : " + dateTimeParts[0] + " " + dateTimeParts[1]);
-                } else {
-                    holder.lastest_harvestDate.setText("Last Harvesting Date : " + lastharvestdate);
-                }
+            if (TextUtils.isEmpty(lastharvestdate) || lastharvestdate.equalsIgnoreCase("null")) {
+                holder.lastest_harvestDate.setText("Last Harvesting Date : Not Visited");
             } else {
-                holder.lastest_harvestDate.setText("Last Harvesting Date : " + "Not Visited");
+                String formattedHarvestDate = formatDate(lastharvestdate, inputFormat1, inputFormat2, outputFormat);
+                Log.d("formattedHarvestingDate", formattedHarvestDate + "");
+                if (!TextUtils.isEmpty(formattedHarvestDate)) {
+                    String[] dateTimeParts = formattedHarvestDate.split("T");
+                    if (dateTimeParts.length == 2) {
+                        holder.lastest_harvestDate.setText("Last Harvesting Date : " + dateTimeParts[0] + " " + dateTimeParts[1]);
+                    } else {
+                        holder.lastest_harvestDate.setText("Last Harvesting Date : " + formattedHarvestDate);
+                    }
+                } else {
+                    holder.lastest_harvestDate.setText("Last Harvesting Date : Not Visited");
+                }
             }
-        }
-        else {
-            //holder.vist_count.setVisibility(View.GONE);
+        } else {
             holder.lastest_vistDate.setVisibility(View.GONE);
             holder.lastest_harvestDate.setVisibility(View.GONE);
         }
+
+//
+//        String count = visitCount.split("@")[0];
+//        String cmlastvisitdate = visitCount.split("@")[1];
+//        Log.d("CMdate", cmlastvisitdate + "");
+//        String harvestcount = harvestvisitCount.split("@")[0];
+//        String lastharvestdate = harvestvisitCount.split("@")[1];
+//        Log.d("Harvestdate", lastharvestdate + "" );
+//
+//        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+//        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss");
+//
+//        if (CommonUtils.isFromCropMaintenance() || CommonUtils.isFromHarvesting()) {
+//            // Handling last visit date
+//            if (TextUtils.isEmpty(cmlastvisitdate) ||  cmlastvisitdate.equalsIgnoreCase("null")) {
+//
+//                holder.lastest_vistDate.setText("Last CM Visit Date : " + "Not Visited");
+//
+//            } else {
+//                Date parsedDate = null;
+//                try {
+//                    parsedDate = inputFormat.parse(cmlastvisitdate);
+//                } catch (ParseException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                String formattedDate = outputFormat.format(parsedDate);
+//
+//                Log.d("formattedCMDate", formattedDate + "");
+//
+//                String[] dateTimeParts = formattedDate.split("T");
+//                if (dateTimeParts.length == 2) {
+//                    holder.lastest_vistDate.setText("Last CM Visit Date : " + dateTimeParts[0] + " " + dateTimeParts[1]);
+//                } else {
+//                    holder.lastest_vistDate.setText("Last CM Visit Date : " + formattedDate);
+//                }
+//            }
+//
+//            // Handling last harvest date
+//            if (TextUtils.isEmpty(lastharvestdate) || lastharvestdate.equalsIgnoreCase("null")) {
+//                holder.lastest_harvestDate.setText("Last Harvesting Date : " + "Not Visited");
+//
+//            } else {
+//                Date parsedDate = null;
+//                try {
+//                    parsedDate = inputFormat.parse(lastharvestdate);
+//                } catch (ParseException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                String formattedHarvestDate = outputFormat.format(parsedDate);
+//
+//                Log.d("formattedHarvestingDate", formattedHarvestDate + "");
+//
+//
+//                String[] dateTimeParts = formattedHarvestDate.split("T");
+//                if (dateTimeParts.length == 2) {
+//                    holder.lastest_harvestDate.setText("Last Harvesting Date : " + dateTimeParts[0] + " " + dateTimeParts[1]);
+//                } else {
+//                    holder.lastest_harvestDate.setText("Last Harvesting Date : " + formattedHarvestDate);
+//                }
+//            }
+//        }
+//        else {
+//            //holder.vist_count.setVisibility(View.GONE);
+//            holder.lastest_vistDate.setVisibility(View.GONE);
+//            holder.lastest_harvestDate.setVisibility(View.GONE);
+//        }
 
 
 
@@ -206,6 +292,25 @@ public class FarmerPlotDetailsAdapter extends SelectableAdapter<FarmerPlotDetail
             }
         });
 
+    }
+
+    private String formatDate(String dateStr, SimpleDateFormat inputFormat1, SimpleDateFormat inputFormat2, SimpleDateFormat outputFormat) {
+        Date date = null;
+        try {
+            if (dateStr.contains("T")) {
+                date = inputFormat1.parse(dateStr);
+            } else {
+                date = inputFormat2.parse(dateStr);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (date != null) {
+            return outputFormat.format(date);
+        } else {
+            return "";
+        }
     }
 
     @Override

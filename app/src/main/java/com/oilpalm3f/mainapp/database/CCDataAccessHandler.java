@@ -50,7 +50,7 @@ public class CCDataAccessHandler {
         } else if (CommonUtils.isPlotSplitFarmerPlots()  ) {
             query = Queries.getInstance().getPlotDetailsForCC(farmerCode.trim(), plotStatus);
         } else if ( CommonUtils.isFromviewonmaps() ) {
-            query = Queries.getInstance().getPlotDetailsForviewonmap(farmerCode.trim(), plotStatus, 82, CommonConstants.SelectedvillageIds);
+            query = Queries.getInstance().getPlotDetailsForviewonmap(farmerCode.trim(), plotStatus, 88, CommonConstants.SelectedvillageIds);
         }else if(CommonUtils.isFromConversion()){
             query = Queries.getInstance().getPlotDetailsForConversion(farmerCode.trim(), plotStatus);
             Log.v(LOG_TAG, "@@@conversion "+query);

@@ -44,6 +44,9 @@ import com.oilpalm3f.mainapp.utils.UiUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -77,6 +80,12 @@ public class FalogService extends Service implements LocationListener {
     public static final String TRACKING_LONGITUDE = "geo_longitude";
     public static final String TRACKING_LATITUDE = "geo_latitude";
     private DataAccessHandler dataAccessHandler = null;
+
+    Calendar calendar = Calendar.getInstance();
+
+    private static final float MAX_ACCURACY_THRESHOLD = 10.0f; // Adjust this threshold value as needed
+
+    private static final double MINIMUM_MOVEMENT_SPEED = 1.0; // Adjust this threshold value as needed
 
 
     @Override
@@ -265,72 +274,97 @@ public class FalogService extends Service implements LocationListener {
     }
 
 
-    //What should happen on location changed
     @Override
     public void onLocationChanged(Location location) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("appprefs", MODE_PRIVATE);
         boolean isFreshInstall = sharedPreferences.getBoolean(CommonConstants.IS_FRESH_INSTALL, true);
 
+        Date date = calendar.getTime();
+
+        // Creating a SimpleDateFormat object with the desired format
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        // Formatting the date to string
+        String formattedDate = sdf.format(date);
+
+        System.out.println("Formatted Date: " + formattedDate);
+
         if (location != null) {
-
-            String latlong[] = getLatLong(FalogService.this, false).split("@");
-
-//            Toast.makeText(getApplicationContext(), "location "+ String.valueOf(location.getLatitude()) + "/" + String.valueOf(location.getLongitude()), Toast.LENGTH_SHORT).show();
-
-            Log.d(LOG_TAG, "updateTracking location:" + String.valueOf(location.getLatitude()) + "/" + String.valueOf(location.getLongitude()));
-            latitude = Double.parseDouble(latlong[0]);
-            longitude = Double.parseDouble(latlong[1]);
-            CommonConstants.Current_Latitude = latitude;
-            CommonConstants.Current_Longitude = longitude;
-
-
-            CreatedDate = CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS_SSS);
-            UpdatedDate = CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS_SSS);
-            ServerUpdatedStatus = CommonConstants.ServerUpdatedStatus;
-            CreatedByUserId = USER_ID_TRACKING;
-            UpdatedByUserId = USER_ID_TRACKING;
-
-            IsActive = "1";
-
-            String selectedLatLong = dataAccessHandler.getFalogLatLongs(Queries.getInstance().queryVerifyFalogDistance());
-            if (!TextUtils.isEmpty(selectedLatLong)) {
-                Log.v(LOG_TAG, "@@@@ data " + selectedLatLong);
-                double actualDistance = 0;
-                String[] yieldDataArr = selectedLatLong.split("-");
-
-                if (yieldDataArr.length > 0 && !TextUtils.isEmpty(yieldDataArr[0]) && !TextUtils.isEmpty(yieldDataArr[1])) {
-
-                    actualDistance = CommonUtils.distance(latitude, longitude,
-                            Double.parseDouble(yieldDataArr[0]),
-                            Double.parseDouble(yieldDataArr[1]), 'm');
-
+            // Check if latitude and longitude are empty or null
+            String selectedLatLong = dataAccessHandler.getFalogLatLongs(Queries.getInstance().queryVerifyFalogDistance(formattedDate));
+            if (TextUtils.isEmpty(selectedLatLong)) {
+                // No latitude and longitude entries found in the table, force insertion of a new record
+                if (location.getAccuracy() <= MAX_ACCURACY_THRESHOLD){
+                    processLocationUpdate(location);
+                }else{
+                    Log.d(LOG_TAG, "Initial Location - Device is stationary or accuracy is not within the threshold, ignoring location update");
                 }
 
-                Log.v(LOG_TAG, "@@@@ actual distance " + actualDistance);
+            }
 
-                if (actualDistance >= 250) {
+            else {
 
-                    if(Integer.parseInt(CreatedByUserId) != 12345 && Integer.parseInt(UpdatedByUserId) != 12345) {
-                        palm3FoilDatabase.insertLatLong(latitude, longitude, IsActive, CreatedByUserId, CreatedDate, UpdatedByUserId, UpdatedDate, IMEINumber, ServerUpdatedStatus);
-                    }
+                Log.d("LocationHasSpeed", location.hasSpeed()  + "");
+                Log.d("LocationSpeed", location.getSpeed()  + "");
+                Log.d("LocationAccuracy", location.getAccuracy()  + "");
 
-                    DataSyncHelper.sendTrackingData(context, new ApplicationThread.OnComplete() {
-                        @Override
-                        public void execute(boolean success, Object result, String msg) {
-                            if (success) {
-                                Log.v(LOG_TAG, "sent success");
-                            } else {
-                                Log.e(LOG_TAG, "sent failed");
-                            }
-                        }
-                    });
+
+                // Check if the device is moving based on speed
+                if (location.hasSpeed() && location.getSpeed() >= MINIMUM_MOVEMENT_SPEED && location.getAccuracy() <= MAX_ACCURACY_THRESHOLD) {
+                    // Device is moving and accuracy is within the threshold, process the location update
+                    processLocationUpdate(location);
                 } else {
-
-//                    UiUtils.showCustomToastMessage("plz wiat for 250M", context, 0);
-
+                    // Device is either stationary or accuracy is not within the threshold, ignore the location update
+                    Log.d(LOG_TAG, "Device is stationary or accuracy is not within the threshold, ignoring location update");
                 }
-            } else {
-                if(Integer.parseInt(CreatedByUserId) != 12345 && Integer.parseInt(UpdatedByUserId) != 12345) {
+            }
+        }
+    }
+
+    private void processLocationUpdate(Location location) {
+
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        CommonConstants.Current_Latitude = latitude;
+        CommonConstants.Current_Longitude = longitude;
+
+        CreatedDate = CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS_SSS);
+        UpdatedDate = CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS_SSS);
+        ServerUpdatedStatus = CommonConstants.ServerUpdatedStatus;
+        CreatedByUserId = USER_ID_TRACKING + "";
+        UpdatedByUserId = USER_ID_TRACKING + "";
+
+        IsActive = "1";
+
+        Date date = calendar.getTime();
+
+        // Creating a SimpleDateFormat object with the desired format
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        // Formatting the date to string
+        String formattedDate = sdf.format(date);
+
+        System.out.println("Formatted Date: " + formattedDate);
+
+        String selectedLatLong = dataAccessHandler.getFalogLatLongs(Queries.getInstance().queryVerifyFalogDistance(formattedDate));
+        if (!TextUtils.isEmpty(selectedLatLong)) {
+            Log.v(LOG_TAG, "@@@@ data " + selectedLatLong);
+            double actualDistance = 0;
+            String[] yieldDataArr = selectedLatLong.split("-");
+
+            if (yieldDataArr.length > 0 && !TextUtils.isEmpty(yieldDataArr[0]) && !TextUtils.isEmpty(yieldDataArr[1])) {
+
+                actualDistance = CommonUtils.distance(latitude, longitude,
+                        Double.parseDouble(yieldDataArr[0]),
+                        Double.parseDouble(yieldDataArr[1]), 'm');
+
+            }
+
+            Log.v(LOG_TAG, "@@@@ actual distance " + actualDistance);
+
+            if (actualDistance >= 250) {
+
+                if (Integer.parseInt(CreatedByUserId) != 12345 && Integer.parseInt(UpdatedByUserId) != 12345) {
                     palm3FoilDatabase.insertLatLong(latitude, longitude, IsActive, CreatedByUserId, CreatedDate, UpdatedByUserId, UpdatedDate, IMEINumber, ServerUpdatedStatus);
                 }
 
@@ -338,19 +372,119 @@ public class FalogService extends Service implements LocationListener {
                     @Override
                     public void execute(boolean success, Object result, String msg) {
                         if (success) {
-                            com.oilpalm3f.mainapp.cloudhelper.Log.v(LOG_TAG, "sent success");
+                            Log.v(LOG_TAG, "sent success");
                         } else {
-                            com.oilpalm3f.mainapp.cloudhelper.Log.e(LOG_TAG, "sent failed");
+                            Log.e(LOG_TAG, "sent failed");
                         }
                     }
                 });
+            } else {
+                // Handle case where distance is less than 50
+            }
+        } else {
+            if (Integer.parseInt(CreatedByUserId) != 12345 && Integer.parseInt(UpdatedByUserId) != 12345) {
+                palm3FoilDatabase.insertLatLong(latitude, longitude, IsActive, CreatedByUserId, CreatedDate, UpdatedByUserId, UpdatedDate, IMEINumber, ServerUpdatedStatus);
             }
 
-
+            DataSyncHelper.sendTrackingData(context, new ApplicationThread.OnComplete() {
+                @Override
+                public void execute(boolean success, Object result, String msg) {
+                    if (success) {
+                        Log.v(LOG_TAG, "sent success");
+                    } else {
+                        Log.e(LOG_TAG, "sent failed");
+                    }
+                }
+            });
         }
-
-
     }
+
+    //What should happen on location changed
+//    @Override
+//    public void onLocationChanged(Location location) {
+//        SharedPreferences sharedPreferences = context.getSharedPreferences("appprefs", MODE_PRIVATE);
+//        boolean isFreshInstall = sharedPreferences.getBoolean(CommonConstants.IS_FRESH_INSTALL, true);
+//
+//        if (location != null) {
+//
+//            String latlong[] = getLatLong(FalogService.this, false).split("@");
+//
+////            Toast.makeText(getApplicationContext(), "location "+ String.valueOf(location.getLatitude()) + "/" + String.valueOf(location.getLongitude()), Toast.LENGTH_SHORT).show();
+//
+//            Log.d(LOG_TAG, "updateTracking location:" + String.valueOf(location.getLatitude()) + "/" + String.valueOf(location.getLongitude()));
+//            latitude = Double.parseDouble(latlong[0]);
+//            longitude = Double.parseDouble(latlong[1]);
+//            CommonConstants.Current_Latitude = latitude;
+//            CommonConstants.Current_Longitude = longitude;
+//
+//
+//            CreatedDate = CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS_SSS);
+//            UpdatedDate = CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS_SSS);
+//            ServerUpdatedStatus = CommonConstants.ServerUpdatedStatus;
+//            CreatedByUserId = USER_ID_TRACKING;
+//            UpdatedByUserId = USER_ID_TRACKING;
+//
+//            IsActive = "1";
+//
+//            String selectedLatLong = dataAccessHandler.getFalogLatLongs(Queries.getInstance().queryVerifyFalogDistance());
+//            if (!TextUtils.isEmpty(selectedLatLong)) {
+//                Log.v(LOG_TAG, "@@@@ data " + selectedLatLong);
+//                double actualDistance = 0;
+//                String[] yieldDataArr = selectedLatLong.split("-");
+//
+//                if (yieldDataArr.length > 0 && !TextUtils.isEmpty(yieldDataArr[0]) && !TextUtils.isEmpty(yieldDataArr[1])) {
+//
+//                    actualDistance = CommonUtils.distance(latitude, longitude,
+//                            Double.parseDouble(yieldDataArr[0]),
+//                            Double.parseDouble(yieldDataArr[1]), 'm');
+//
+//                }
+//
+//                Log.v(LOG_TAG, "@@@@ actual distance " + actualDistance);
+//
+//                if (actualDistance >= 250) {
+//
+//                    if(Integer.parseInt(CreatedByUserId) != 12345 && Integer.parseInt(UpdatedByUserId) != 12345) {
+//                        palm3FoilDatabase.insertLatLong(latitude, longitude, IsActive, CreatedByUserId, CreatedDate, UpdatedByUserId, UpdatedDate, IMEINumber, ServerUpdatedStatus);
+//                    }
+//
+//                    DataSyncHelper.sendTrackingData(context, new ApplicationThread.OnComplete() {
+//                        @Override
+//                        public void execute(boolean success, Object result, String msg) {
+//                            if (success) {
+//                                Log.v(LOG_TAG, "sent success");
+//                            } else {
+//                                Log.e(LOG_TAG, "sent failed");
+//                            }
+//                        }
+//                    });
+//                } else {
+//
+////                    UiUtils.showCustomToastMessage("plz wiat for 250M", context, 0);
+//
+//                }
+//            } else {
+//                if(Integer.parseInt(CreatedByUserId) != 12345 && Integer.parseInt(UpdatedByUserId) != 12345) {
+//                    palm3FoilDatabase.insertLatLong(latitude, longitude, IsActive, CreatedByUserId, CreatedDate, UpdatedByUserId, UpdatedDate, IMEINumber, ServerUpdatedStatus);
+//                }
+//
+//                DataSyncHelper.sendTrackingData(context, new ApplicationThread.OnComplete() {
+//                    @Override
+//                    public void execute(boolean success, Object result, String msg) {
+//                        if (success) {
+//                            com.oilpalm3f.mainapp.cloudhelper.Log.v(LOG_TAG, "sent success");
+//                        } else {
+//                            com.oilpalm3f.mainapp.cloudhelper.Log.e(LOG_TAG, "sent failed");
+//                        }
+//                    }
+//                });
+//            }
+//
+//
+//        }
+//
+//
+//    }
 
 
     @Override
