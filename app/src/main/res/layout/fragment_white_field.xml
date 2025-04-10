@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context="com.oilpalm3f.mainapp.cropmaintenance.WhiteFieldFragment">
+    tools:context="com.cis.palm360.cropmaintenance.WhiteFieldFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

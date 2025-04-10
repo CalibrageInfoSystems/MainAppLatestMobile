@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.oilpalm3f.mainapp.transportservice.TransportVendorFragment">
+    tools:context="com.cis.palm360.transportservice.TransportVendorFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

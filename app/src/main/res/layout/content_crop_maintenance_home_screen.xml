@@ -11,7 +11,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.oilpalm3f.mainapp.cropmaintenance.CropMaintenanceHomeScreen"
+    tools:context="com.cis.palm360.cropmaintenance.CropMaintenanceHomeScreen"
     tools:showIn="@layout/activity_crop_maintenance_home_screen">
 
     <ScrollView
@@ -56,7 +56,7 @@
             <Button
                 android:id="@+id/wspBtn"
                 style="@style/moduleBtnStyle"
-                android:text="@string/update_water_soil_power_details" />
+                android:text="@string/update_water_soil_power_detailss" />
 
             <Button
                 android:id="@+id/plantationBtn"
@@ -74,7 +74,7 @@
             <Button
                 android:id="@+id/fertilizer_detailsBtn"
                 style="@style/moduleBtnStyle"
-                android:text="@string/fertilizer_details" />
+                android:text="@string/fertilizer_detailss" />
 
             <Button
                 android:id="@+id/Recom_fertilizer_detailsBtn"
@@ -92,10 +92,16 @@
                 style="@style/moduleBtnStyle"
                 android:text="@string/pest_details" />
 
+
             <Button
                 android:id="@+id/diseaseBtn"
                 style="@style/moduleBtnStyle"
                 android:text="Disease Details*" />
+            <Button
+                android:id="@+id/ganodermaInfestation"
+                style="@style/moduleBtnStyle"
+                android:visibility="gone"
+                android:text="Ganoderma*" />
 
             <Button
                 android:id="@+id/weedManagementBtn"

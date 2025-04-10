@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/whitepure"
     android:orientation="vertical"
-    tools:context="com.oilpalm3f.mainapp.transportservice.TransportFarmerFragment">
+    tools:context="com.cis.palm360.transportservice.TransportFarmerFragment">
 
     <include
         android:id="@+id/toolbarlayout"

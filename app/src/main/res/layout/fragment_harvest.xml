@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context="com.oilpalm3f.mainapp.palmcare.HarvestingFragment">
+    tools:context="com.cis.palm360.palmcare.HarvestingFragment">
     <RelativeLayout
         android:id="@+id/rl_search"
         android:layout_width="match_parent"

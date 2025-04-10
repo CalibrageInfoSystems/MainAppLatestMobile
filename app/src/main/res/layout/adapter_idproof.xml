@@ -63,6 +63,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+
                 android:id="@+id/trashIcon"
                 android:src="@mipmap/garbage"
                 android:scaleType="fitXY"/>

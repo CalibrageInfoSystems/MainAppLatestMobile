@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:fitsSystemWindows="true"
-    tools:context="com.oilpalm3f.mainapp.areaextension.PlotDetailsFragment">
+    tools:context="com.cis.palm360.areaextension.PlotDetailsFragment">
 
     <include
         android:id="@+id/toolbarlayout"
@@ -19,7 +19,7 @@
         android:paddingTop="?attr/actionBarSize"
         android:visibility="visible">
 
-        <com.oilpalm3f.mainapp.uihelper.InteractiveScrollView
+        <com.cis.palm360.uihelper.InteractiveScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg" />
+                        style="@style/spinner_bg" />
 
                 </LinearLayout>
 
@@ -65,6 +65,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top_layout"
+
                     android:orientation="horizontal">
 
                     <TextView
@@ -83,8 +84,9 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginTop="5dp"
+
                         android:layout_weight="1"
+                        style="@style/spinner_bg"
                         android:background="@drawable/spinner_bg" />
                 </LinearLayout>
 
@@ -110,7 +112,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg">
+                        style="@style/spinner_bg">
 
                     </Spinner>
                 </LinearLayout>
@@ -134,7 +136,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg" />
+                        style="@style/spinner_bg"
+                      />
                 </LinearLayout>
 
                 <LinearLayout
@@ -156,7 +159,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg" />
+                        style="@style/spinner_bg" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -307,14 +310,27 @@
                         android:layout_weight="1"
                         android:text="@string/plot_area" />
 
+<!--                    <EditText-->
+<!--                        android:focusable="false"-->
+<!--                        android:editable="false"-->
+<!--                        android:id="@+id/plot_area_edt"-->
+<!--                        style="@style/editTxt_normal"-->
+<!--                        android:layout_width="0dp"-->
+<!--                       android:longClickable="false"-->
+<!--                    android:layout_height="50dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:inputType="numberDecimal"-->
+<!--                        android:maxLength="5">-->
+<!--                    </EditText>-->
+
+<!--&lt;!&ndash;                    </EditText>&ndash;&gt; //TODO ROja-->
                     <EditText
-                        android:focusable="false"
-                        android:editable="false"
+
                         android:id="@+id/plot_area_edt"
                         style="@style/editTxt_normal"
                         android:layout_width="0dp"
-                       android:longClickable="false"
-                    android:layout_height="50dp"
+                        android:longClickable="false"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:inputType="numberDecimal"
                         android:maxLength="5">
@@ -448,7 +464,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg" />
+                        style="@style/spinner_bg"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -470,7 +486,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg" />
+                        style="@style/spinner_bg"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -491,7 +507,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg" />
+                        style="@style/spinner_bg"/>
                 </LinearLayout>
 
                 <include layout="@layout/land_lord_details">
@@ -519,7 +535,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg" />
+                        style="@style/spinner_bg"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -602,7 +618,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg" />
+                        style="@style/spinner_bg"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -841,7 +857,7 @@
                 </LinearLayout>
 
             </LinearLayout>
-        </com.oilpalm3f.mainapp.uihelper.InteractiveScrollView>
+        </com.cis.palm360.uihelper.InteractiveScrollView>
 
         <ImageView
             android:id="@+id/bottomScroll"

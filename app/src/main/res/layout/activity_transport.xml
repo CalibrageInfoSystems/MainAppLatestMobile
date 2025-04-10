@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.oilpalm3f.mainapp.transportservice.TransportActivity">
+    tools:context="com.cis.palm360.transportservice.TransportActivity">
 
     <include
         android:id="@+id/toolbarlayout"

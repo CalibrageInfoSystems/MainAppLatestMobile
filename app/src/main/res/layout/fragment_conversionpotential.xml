@@ -13,7 +13,7 @@
         android:paddingTop="?attr/actionBarSize"
         android:visibility="visible">
 
-        <com.oilpalm3f.mainapp.uihelper.InteractiveScrollView
+        <com.cis.palm360.uihelper.InteractiveScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg"
+                     style="@style/spinner_bg"
                         android:entries="@array/yesOrNo_values">
 
                     </Spinner>
@@ -100,7 +100,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg"
+                        style="@style/spinner_bg"
                         android:entries="@array/conversionPotential_Score">
 
                     </Spinner>
@@ -343,7 +343,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-        </com.oilpalm3f.mainapp.uihelper.InteractiveScrollView>
+        </com.cis.palm360.uihelper.InteractiveScrollView>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

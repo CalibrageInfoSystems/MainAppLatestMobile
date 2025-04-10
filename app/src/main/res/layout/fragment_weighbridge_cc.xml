@@ -13,7 +13,7 @@
             android:id="@+id/collection_center_header"
             layout="@layout/collection_center_header_top"></include>
 
-        <com.oilpalm3f.mainapp.uihelper.InteractiveScrollView
+        <com.cis.palm360.uihelper.InteractiveScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -548,7 +548,7 @@
             </LinearLayout>
 
 
-        </com.oilpalm3f.mainapp.uihelper.InteractiveScrollView>
+        </com.cis.palm360.uihelper.InteractiveScrollView>
 
         <ImageView
             android:id="@+id/bottomScroll"

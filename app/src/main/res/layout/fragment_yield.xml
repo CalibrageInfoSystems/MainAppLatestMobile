@@ -6,7 +6,7 @@
     android:focusableInTouchMode="false"
     android:clickable="true"
     android:orientation="vertical"
-    tools:context="com.oilpalm3f.mainapp.cropmaintenance.YieldFragment">
+    tools:context="com.cis.palm360.cropmaintenance.YieldFragment">
     <include
         android:id="@+id/toolbarlayout"
         layout="@layout/toolbar_common">

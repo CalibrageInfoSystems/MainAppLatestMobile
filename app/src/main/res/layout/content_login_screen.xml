@@ -25,6 +25,7 @@
             style="@style/textbasic_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="Database Version:" />
 
         <TextView
@@ -33,134 +34,207 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:textColor="@color/white"
             android:text="1.1.1" />
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="13dp"
+        android:layout_marginBottom="-2dp"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+
+        <TextView
+            style="@style/textbasic_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Version:" />
+        <TextView
+            android:id="@+id/versionnumbertxt"
+            style="@style/textbasic_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"
+            android:text="1.1.1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_above="@+id/loginLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp">
+
+        <!-- Logo -->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logoLayout"
+            android:background="@drawable/palm_logo">
+        </RelativeLayout>
+
+        <!-- Text below the logo -->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="IMEI"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textColor="@color/gray"-->
+<!--              style="@style/textbasic_titlee"-->
+<!--            android:textStyle="bold"/>-->
+
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
+
             android:orientation="horizontal"
-            android:padding="15dp">
+           >
 
             <TextView
                 style="@style/textbasic_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Version:" />
+                android:text="IMEI :" />
 
             <TextView
-                android:id="@+id/versionnumbertxt"
+                android:id="@+id/imeiNumberTxt"
                 style="@style/textbasic_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
                 android:layout_marginLeft="10dp"
-                android:text="1.1.1" />
+                android:text="" />
 
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@mipmap/app_logo"
-        android:layout_above="@+id/loginLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="30dp"
-        android:visibility="gone">
+<!--    <RelativeLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/palm360_logo"-->
+<!--        android:layout_above="@+id/loginLayout"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_margin="30dp"-->
+<!--      >-->
 
-    </RelativeLayout>
+<!--    </RelativeLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="180dp"
         android:orientation="vertical"
-        android:id="@+id/loginLayout">
+        android:id="@+id/loginLayout"
+        android:padding="20dp">
 
-        <EditText
-            android:id="@+id/representative"
-            style="@style/editTxt_normal"
-            android:layout_width="450dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
-            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-/. "
-            android:hint="@string/representative_hint"
-            android:inputType="textCapSentences|textNoSuggestions"
-            android:maxLength="20"
-            android:maxLines="1"
-            android:visibility="gone" />
+        <!-- User Name Field (Vertical Alignment) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/userID"
-            android:focusable="false"
-            android:editable="false"
-            style="@style/editTxt_normal"
-            android:layout_width="450dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
-            android:hint="@string/userid_hint"
-            android:text=""
-            android:maxLines="1" />
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User Name"
+                style="@style/textbasic_title"
+                android:maxLines="1"
+                android:layout_marginBottom="5dp"/>
 
-        <EditText
-            android:id="@+id/passwordEdit"
-            style="@style/editTxt_normal"
-            android:layout_width="450dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
-            android:focusable="false"
-            android:editable="false"
-            android:hint="@string/password_hint"
-            android:inputType="textPassword"
-            android:text=""
-            android:maxLines="1" />
+            <EditText
+                android:id="@+id/userID"
+                android:focusable="false"
+                android:editable="false"
+                style="@style/editTxt_normal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="15dp"
+                android:hint="@string/userid_hint"
+                android:text=""
+                android:maxLines="1" />
+        </LinearLayout>
 
+        <!-- Password Field (Vertical Alignment) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/Password"
+                style="@style/textbasic_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Password"
+                android:maxLines="1"
+                android:layout_marginBottom="5dp"/>
+
+            <EditText
+                android:id="@+id/passwordEdit"
+                style="@style/editTxt_normal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="20dp"
+                android:focusable="false"
+                android:editable="false"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:text=""
+                android:maxLines="1" />
+        </LinearLayout>
+
+        <!-- Sign In Button -->
         <Button
             android:id="@+id/signInBtn"
             style="@style/basicBtnStyle"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
             android:text="@string/login_btn" />
 
     </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="14dp"
-        android:layout_marginRight="-14dp"
-        android:orientation="horizontal"
-        android:padding="15dp">
 
-        <TextView
-            style="@style/textbasic_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="IMEI Number:" />
 
-        <TextView
-            android:id="@+id/imeiNumberTxt"
-            style="@style/textbasic_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="1.1.1" />
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="14dp"-->
+<!--        android:layout_marginRight="-14dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:padding="15dp">-->
 
-    </LinearLayout>
+<!--        <TextView-->
+<!--            style="@style/textbasic_title"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="IMEI Number:" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/imeiNumberTxt"-->
+<!--            style="@style/textbasic_title"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:text="1.1.1" />-->
+
+<!--    </LinearLayout>-->
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
@@ -168,7 +242,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"
         android:layout_alignParentRight="true"
-        android:src="@drawable/sync"
+        android:src="@drawable/sync_icon"
         android:id="@+id/sync"
-        android:padding="10dp" />
+        android:padding="10dp"
+        app:backgroundTint="@color/colorPrimary" />
+
+
 </RelativeLayout>

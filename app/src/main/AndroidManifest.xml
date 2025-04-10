@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.oilpalm3f.mainapp">
+    package="com.cis.palm360">
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -29,9 +29,9 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".Oil3FPalmMainApplication"
+        android:name="com.cis.palm360.Oil3FPalmMainApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/palm360_logo"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
@@ -39,57 +39,58 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".FiltermapsActivity"
+            android:name="com.cis.palm360.FiltermapsActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewmapsActivity"
+            android:name="com.cis.palm360.ViewmapsActivity"
             android:exported="false" />
         <activity
-            android:name=".palmcare.ClosecropMaintenanceList"
+            android:name="com.cis.palm360.palmcare.ClosecropMaintenanceList"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".palmcare.CloseHarvestingList"
+            android:name="com.cis.palm360.palmcare.CloseHarvestingList"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".palmcare.NoVisitPlotslistScreen"
+            android:name="com.cis.palm360.palmcare.NoVisitPlotslistScreen"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".palmcare.palmcareScreen"
+            android:name="com.cis.palm360.palmcare.palmcareScreen"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".PlantationAudit"
             android:exported="false" />
         <activity
-            android:name=".cropmaintenance.ViewRecoveryFarmers"
+            android:name="com.cis.palm360.cropmaintenance.ViewRecoveryFarmers"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".cropmaintenance.RecoveryFarmers"
+            android:name="com.cis.palm360.cropmaintenance.RecoveryFarmers"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".cropmaintenance.UploadImagesNew"
+            android:name="com.cis.palm360.cropmaintenance.UploadImagesNew"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".cropmaintenance.HarvestingActivity" />
-        <activity android:name=".cropmaintenance.PlantationAudit" />
-        <activity android:name=".transportservice.TransportActivity" />
-        <activity android:name=".transportservice.TransportServiceQuestionerActivity" />
+        <activity android:name="com.cis.palm360.cropmaintenance.HarvestingActivity" />
+        <activity android:name="com.cis.palm360.cropmaintenance.PlantationAudit" />
+        <activity android:name="com.cis.palm360.transportservice.TransportActivity" />
+        <activity android:name="com.cis.palm360.transportservice.TransportServiceQuestionerActivity" />
         <activity
-            android:name=".ui.SplashScreen"
+            android:name="com.cis.palm360.ui.SplashScreen"
+
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -98,89 +99,89 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.HomeScreen"
+            android:name="com.cis.palm360.ui.HomeScreen"
             android:label="@string/title_activity_home_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.ComplaintsScreenActivity"
+            android:name="com.cis.palm360.ui.ComplaintsScreenActivity"
             android:label="@string/title_activity_login_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".areaextension.RegistrationFlowScreen"
+            android:name="com.cis.palm360.areaextension.RegistrationFlowScreen"
             android:label="@string/title_activity_registration_flow_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".conversion.ConversionMainFlowActivity"
+            android:name="com.cis.palm360.conversion.ConversionMainFlowActivity"
             android:label="@string/conversiontitle"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".areaextension.MarketSurveyScreen"
+            android:name="com.cis.palm360.areaextension.MarketSurveyScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".areaextension.location.LocationSelectionScreen"
-            android:parentActivityName=".ui.HomeScreen"
+            android:name="com.cis.palm360.areaextension.location.LocationSelectionScreen"
+            android:parentActivityName="com.cis.palm360.ui.HomeScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".cropmaintenance.CropMaintenanceHomeScreen"
+            android:name="com.cis.palm360.cropmaintenance.CropMaintenanceHomeScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.OilPalmBaseActivity"
+            android:name="com.cis.palm360.ui.OilPalmBaseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".areacalculator.FieldCalculatorActivity"
+            android:name="com.cis.palm360.areacalculator.FieldCalculatorActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".farmersearch.SearchFarmerScreen"
+            android:name="com.cis.palm360.farmersearch.SearchFarmerScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".prospectiveFarmers.NewProspectiveFarmers"
+            android:name="com.cis.palm360.prospectiveFarmers.NewProspectiveFarmers"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".datasync.ui.RefreshSyncActivity"
+            android:name="com.cis.palm360.datasync.ui.RefreshSyncActivity"
             android:label="@string/title_activity_oil_palm_base"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activitylogdetails.LogBookScreenActivity"
+            android:name="com.cis.palm360.activitylogdetails.LogBookScreenActivity"
             android:label="@string/log_book"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.MainLoginScreen"
+            android:name="com.cis.palm360.ui.MainLoginScreen"
             android:label="@string/title_activity_main_login_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.PlotDetailsScreen"
+            android:name="com.cis.palm360.ui.PlotDetailsScreen"
             android:label="@string/title_activity_plot_details_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".areacalculator.PreViewAreaCalScreen"
+            android:name="com.cis.palm360.areacalculator.PreViewAreaCalScreen"
             android:label="@string/title_activity_pre_view_area_cal_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.KrasDisplayScreen"
+            android:name="com.cis.palm360.ui.KrasDisplayScreen"
             android:label="@string/title_activity_kras_display_screen"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".alerts.AlertsDisplayScreen"
+            android:name="com.cis.palm360.alerts.AlertsDisplayScreen"
             android:label="@string/title_activity_alerts_display_screen"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.NotificationsScreen"
+            android:name="com.cis.palm360.ui.NotificationsScreen"
             android:label="@string/title_activity_notifications_screen"
             android:theme="@style/AppTheme" />
 
@@ -201,21 +202,21 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <receiver android:name=".helper.NetworkReceiver">
+        <receiver android:name="com.cis.palm360.helper.NetworkReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".areacalculator.LocationService" />
+        <service android:name="com.cis.palm360.areacalculator.LocationService" />
         <service
-            android:name=".FaLogTracking.FalogService"
+            android:name="com.cis.palm360.FaLogTracking.FalogService"
             android:enabled="true"
             android:exported="true"
             android:stopWithTask="false" />
         <service
-            android:name=".cropmaintenance.RecordingService"
+            android:name="com.cis.palm360.cropmaintenance.RecordingService"
             android:enabled="true" />
 
         <uses-library

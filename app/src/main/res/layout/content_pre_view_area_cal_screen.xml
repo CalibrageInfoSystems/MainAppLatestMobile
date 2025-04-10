@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.oilpalm3f.mainapp.areacalculator.PreViewAreaCalScreen"
+    tools:context="com.cis.palm360.areacalculator.PreViewAreaCalScreen"
     tools:showIn="@layout/activity_pre_view_area_cal_screen">
 
     <LinearLayout

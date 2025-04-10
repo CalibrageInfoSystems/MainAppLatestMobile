@@ -5,7 +5,7 @@
     android:background="@color/white"
     android:fitsSystemWindows="true"
     android:focusableInTouchMode="false"
-    tools:context="com.oilpalm3f.mainapp.areaextension.ReferralsFragment">
+    tools:context="com.cis.palm360.areaextension.ReferralsFragment">
 
     <include
         android:id="@+id/toolbarlayout"

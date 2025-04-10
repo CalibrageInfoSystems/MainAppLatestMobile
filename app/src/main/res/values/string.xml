@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">3F SmartPalm</string>
+    <string name="app_name">Palm 360</string>
     <string name="farmer_nmae">Farmer Name</string>
     <string name="farmer_code">Farmer Code</string>
     <string name="user_name_comment_tag">User name of comment</string>
@@ -335,7 +335,7 @@
     <string name="soilDetails">Soil Details</string>
     <string name="new_plot_registration">New Plot Existing Farmer</string>
     <string name="title_activity_registration_flow_screen">RegistrationFlowScreen</string>
-    <string name="personal_details">Personal Details<font size="30"><big> *</big></font></string>
+    <string name="personal_details">Personal Details*</string>
     <string name="plot_details">Plot Details*</string>
     <string name="water_soil_power_details">Water, Soil, Power details</string>
     <string name="plot_geo_tag">Plot Geo Tag</string>
@@ -422,7 +422,8 @@
     <string name="view_snapshot">View snapshot</string>
     <string name="update_farmer_details">Update Farmer Details</string>
     <string name="update_plot_details">Update Plot Details</string>
-    <string name="update_water_soil_power_details">Update Water, Soil, Power details</string>
+    <string name="update_water_soil_power_details"> Water, Soil, Power details</string>
+    <string name="update_water_soil_power_detailss"> Water, Soil, Power details *</string>
     <string name="plantation_details">Plantation details*</string>
     <string name="plantation_details_cm">Plantation details</string>
     <string name="currentplantation_details">current Plantation*</string>
@@ -546,6 +547,7 @@
     <string name="weavils_seen">Weavils seen?</string>
     <string name="nutrient_details">Nutrient Deficiencies</string>
     <string name="fertilizer_details">Fertilizer Details</string>
+    <string name="fertilizer_detailss">Fertilizer Details *</string>
     <string name="Recom_fertilizer_details">Recommended Fertilizer Details</string>
     <string name="wmo_title">Weed Management and Other</string>
     <string name="nutrient_deficiency_noticed_in_previous_visit">Nutrient Deficiency Noticed in Previous Visit</string>
@@ -555,6 +557,7 @@
     <string name="name_of_chemical_being_applied">Name of Chemical being applied</string>
     <string name="result_seen_by_farmer">Result Seen by farmer?</string>
     <string name="pest_details">Pest Details*</string>
+    <string name="ganoderma_infestation">Ganoderma infestation*</string>
     <string name="pest_name">Pest Name</string>
     <string name="chemicals_used">Chemicals Used</string>
     <string name="results_seen_by_farmer">Results Seen by Farmer?</string>
@@ -715,6 +718,29 @@
     <string name="Fer_last_applied_date">Last Applied Date*</string>
     <string name="fer_Frequency_of_Application">Frequency of Application / yr</string>
     <string name="Fertilizer_Recommended">Fertilizer Recommended*</string>
+
+    <string name="yellowingOfLeaves">Yellowing Of Leaves*</string>
+    <string name="leafDroopingAndDrying">Leaf Drooping And Drying*</string>
+    <string name="bracketsIdentified">Brackets Identified*</string>
+    <string name="holeOnTheStem">Hole On The Stem / Putrefaction Of Stem*</string>
+    <string name="fallenPlants">Fallen Plants*</string>
+    <string name="Quantityinltr">Quantity In Liters*</string>
+    <string name="nooftimesapplied">No Of Times Applied In A Year*</string>
+    <string name="trichodermaApplied">Trichoderma Applied*</string>
+    <string name="otherBioProducts">Other Bio Products Used If Any Please Mention*</string>
+    <string name="uploadPhoto">Upload Photo Of Ganoderma Affected Tree*</string>
+    <string name="yellowingOfLeavess">Yellowing Of Leaves</string>
+    <string name="leafDroopingAndDryingg">Leaf Drooping And Drying</string>
+    <string name="bracketsIdentifiedd">Brackets Identified</string>
+    <string name="holeOnTheStemm">Hole On The Stem / Putrefaction Of Stem</string>
+    <string name="fallenPlantss">Fallen Plants</string>
+    <string name="Quantityinltrr">Quantity In Liters</string>
+    <string name="nooftimesappliedd">No Of Times Applied In A Year</string>
+    <string name="trichodermaAppliedd">Trichoderma Applied</string>
+    <string name="otherBioProductss">Other Bio Products Used If Any Please Mention</string>
+
+
+
     <string name="Fert_Recommended">Fertilizer Recommended</string>
     <string name="Recom_Dosage">Dosage*</string>
     <string name="Nutrient_Deficiency_Name">Nutrient Deficiency Name*</string>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.oilpalm3f.mainapp.areaextension.RegistrationFlowScreen">
+    tools:context="com.cis.palm360.areaextension.RegistrationFlowScreen">
 
     <include layout="@layout/content_registration_flow_screen" />
 

@@ -26,7 +26,7 @@
             app:title="Weed Management And Other History"
             app:titleTextColor="@android:color/white"
             android:id="@+id/titleToolbar"
-            android:background="@android:color/holo_green_dark"/>
+            android:background="@color/colorPrimary"/>
 
 >
       <LinearLayout

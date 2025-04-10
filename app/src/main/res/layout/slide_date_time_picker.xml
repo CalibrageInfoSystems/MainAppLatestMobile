@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.oilpalm3f.mainapp.uihelper.slidedatetimepicker.SlidingTabLayout
+    <com.cis.palm360.uihelper.slidedatetimepicker.SlidingTabLayout
         android:id="@+id/slidingTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.oilpalm3f.mainapp.uihelper.slidedatetimepicker.CustomViewPager
+    <com.cis.palm360.uihelper.slidedatetimepicker.CustomViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"

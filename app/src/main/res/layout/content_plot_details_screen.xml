@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.oilpalm3f.mainapp.ui.PlotDetailsScreen"
+    tools:context="com.cis.palm360.ui.PlotDetailsScreen"
     tools:showIn="@layout/activity_plot_details_screen">
 
 </android.support.constraint.ConstraintLayout>

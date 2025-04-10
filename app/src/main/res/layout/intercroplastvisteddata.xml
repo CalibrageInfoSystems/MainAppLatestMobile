@@ -23,72 +23,76 @@
             app:title="InterCrop Details History"
             app:titleTextColor="@android:color/white"
             android:id="@+id/titleToolbar"
-            android:background="@android:color/holo_green_dark"/>
+            android:background="@color/colorPrimary"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/intercropRecyclerView"
+            android:layout_width="500dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content" />
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:weightSum="1">-->
+
+<!--            <TextView-->
+<!--                style="@style/header_h1_text_title"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_weight="0.5"-->
+<!--                android:text="Crop Grown"-->
+<!--                android:gravity="center_vertical"/>-->
+
+<!--            <TextView-->
+<!--                style="@style/header_h1_text_title"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:layout_weight="0.1"-->
+<!--                android:text=" :  "/>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/intercropcropgrown"-->
+<!--                style="@style/header_h1_text_title"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:layout_weight="0.4" />-->
+<!--        </LinearLayout>-->
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:weightSum="1">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:weightSum="1">-->
 
-            <TextView
-                style="@style/header_h1_text_title"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:text="Crop Grown"
-                android:gravity="center_vertical"/>
+<!--            <TextView-->
+<!--                style="@style/header_h1_text_title"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="0.5"-->
+<!--                android:text="Recommended Crop"-->
+<!--                android:gravity="center_vertical"/>-->
 
-            <TextView
-                style="@style/header_h1_text_title"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:layout_weight="0.1"
-                android:text=" :  "/>
+<!--            <TextView-->
+<!--                style="@style/header_h1_text_title"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:layout_weight="0.1"-->
+<!--                android:text=" :  "/>-->
 
-            <TextView
-                android:id="@+id/intercropcropgrown"
-                style="@style/header_h1_text_title"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:layout_weight="0.4" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:weightSum="1">
-
-            <TextView
-                style="@style/header_h1_text_title"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:text="Recommended Crop"
-                android:gravity="center_vertical"/>
-
-            <TextView
-                style="@style/header_h1_text_title"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:layout_weight="0.1"
-                android:text=" :  "/>
-
-            <TextView
-                android:id="@+id/intercroprecommended"
-                style="@style/header_h1_text_title"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:layout_weight="0.4" />
-        </LinearLayout>
+<!--            <TextView-->
+<!--                android:id="@+id/intercroprecommended"-->
+<!--                style="@style/header_h1_text_title"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:layout_weight="0.4" />-->
+<!--        </LinearLayout>-->
 
     </LinearLayout>
 

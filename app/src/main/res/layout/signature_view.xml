@@ -50,7 +50,7 @@
         </LinearLayout>
 
 
-        <com.oilpalm3f.mainapp.common.SignatureView
+        <com.cis.palm360.common.SignatureView
             xmlns:sign="http://schemas.android.com/apk/res-auto"
             android:id="@+id/signature_view"
 

@@ -14,7 +14,16 @@
         android:orientation="vertical"
         android:paddingTop="?attr/actionBarSize">
 
-
+        <Button
+            android:id="@+id/waterhistoryBtn"
+            style="@style/dialogBasicBtnStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:layout_margin="4dp"
+            android:padding="4dp"
+            android:text="@string/last_visit_data" />
         <LinearLayout
             android:id="@+id/parent"
             android:layout_width="match_parent"
@@ -41,7 +50,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/spinner_bg"
+               style="@style/spinner_bg"
                     android:entries="@array/waterType_values" />
 
                 <EditText

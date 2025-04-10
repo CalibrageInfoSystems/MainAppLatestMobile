@@ -179,6 +179,7 @@
                     android:id="@+id/Monthyear"
                     android:layout_width="0dp"
                     android:editable="false"
+                    style="@style/editTxt_normal"
                     android:focusableInTouchMode="false"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/tv2"
@@ -199,6 +200,7 @@
                 <EditText
                     android:id="@+id/nameofshopEv"
                     android:layout_width="0dp"
+                    style="@style/editTxt_normal"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/tv2"
                     android:layout_weight="1"/>
@@ -243,6 +245,7 @@
                     android:id="@+id/commentsTv"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    style="@style/editTxt_normal"
                     android:layout_below="@+id/tv2"
                     android:layout_weight="1"/>
 
@@ -258,7 +261,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="App. Type" />
+                    android:text="App. Type *" />
 
                 <Spinner
                     android:id="@+id/apptype"
@@ -854,8 +857,153 @@
 
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginTop="10dp">
 
 
+                        <Spinner
+                            android:textColor="@color/black"
+                            android:id="@+id/bioFertilizerSpin3"
+                            style="@style/spinner_bg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="10dp"
+                        >
+
+
+                        <EditText
+                            android:id="@+id/dosageGivenEdt31"
+                            style="@style/editTxt_normal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:imeOptions="actionDone"
+                            android:inputType="numberDecimal"
+                            android:maxLength="10" />
+
+
+                    </RelativeLayout>
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginTop="10dp">
+
+
+                        <Spinner
+                            android:textColor="@color/black"
+                            android:id="@+id/bioFertilizerSpin4"
+                            style="@style/spinner_bg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="10dp"
+                        >
+
+
+                        <EditText
+                            android:id="@+id/dosageGivenEdt41"
+                            style="@style/editTxt_normal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:imeOptions="actionDone"
+                            android:inputType="numberDecimal"
+                            android:maxLength="10" />
+
+
+                    </RelativeLayout>
+
+
+
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginTop="10dp">
+
+
+                        <Spinner
+                            android:textColor="@color/black"
+                            android:id="@+id/bioFertilizerSpin5"
+                            style="@style/spinner_bg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="10dp"
+                        >
+
+
+                        <EditText
+                            android:id="@+id/dosageGivenEdt51"
+                            style="@style/editTxt_normal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:imeOptions="actionDone"
+                            android:inputType="numberDecimal"
+                            android:maxLength="10" />
+
+
+                    </RelativeLayout>
+
+
+
+
+
+                </LinearLayout>
 
             </LinearLayout>
 

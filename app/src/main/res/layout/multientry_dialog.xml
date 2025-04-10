@@ -25,9 +25,10 @@
         <Spinner
             android:id="@+id/currentCropSpinner"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/spinner_bg" />
+            style="@style/spinner_bg"
+            />
 
     </LinearLayout>
 
@@ -75,9 +76,9 @@
         <Spinner
             android:id="@+id/anualIncomeSpinner"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/spinner_bg" />
+            style="@style/spinner_bg"/>
 
 
     </LinearLayout>

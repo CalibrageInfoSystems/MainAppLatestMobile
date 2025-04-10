@@ -22,7 +22,7 @@
             app:title="Recommended Fertilizer History"
             app:titleTextColor="@android:color/white"
             android:id="@+id/titleToolbar"
-            android:background="@android:color/holo_green_dark"/>
+            android:background="@color/colorPrimary"/>
 
         <LinearLayout
             android:layout_width="match_parent"

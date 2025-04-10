@@ -49,7 +49,7 @@
                         style="@style/header_h1_text_title_multi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/details"
+                        android:text="Details                   "
                         android:gravity="center"/>
 
                 </LinearLayout>
@@ -81,16 +81,25 @@
                 android:layout_below="@+id/headerLL"
                 android:background="@color/colorPrimary" />
         </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/oldidRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/headerLL"
 
+            android:visibility="gone">
+
+        </android.support.v7.widget.RecyclerView>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/idProofsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/headerLL"
-            android:layout_marginTop="@dimen/margin_top_layout"
+            android:layout_below="@+id/oldidRecyclerView"
+
             android:visibility="gone">
 
         </android.support.v7.widget.RecyclerView>
+
 
         <Button
             android:id="@+id/saveBtn"

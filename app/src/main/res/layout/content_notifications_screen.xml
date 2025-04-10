@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.oilpalm3f.mainapp.ui.NotificationsScreen"
+    tools:context="com.cis.palm360.ui.NotificationsScreen"
     tools:showIn="@layout/activity_notifications_screen"
     android:orientation="vertical">
 

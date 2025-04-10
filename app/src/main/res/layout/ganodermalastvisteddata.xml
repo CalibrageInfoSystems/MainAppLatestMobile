@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/cp_card_view"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp"
+    card_view:cardUseCompatPadding="true"
+    app:ignore="NamespaceTypo">
+
+    <LinearLayout
+        android:id="@+id/ganomainlyt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Ganoderma History"
+            app:titleTextColor="@android:color/white"
+            android:id="@+id/titleToolbar"
+            android:background="@color/colorPrimary"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:weightSum="1">
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/yellowingOfLeavess" />
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/yellowingOfLeaves"
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
+            android:weightSum="1">
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical"
+                android:text="@string/leafDroopingAndDryingg" />
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/leafDroopingAndDrying"
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:weightSum="1">
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/bracketsIdentifiedd" />
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/bracketsIdentified"
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:weightSum="1">
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/holeOnTheStemm" />
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/holeOnTheStem"
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
+            android:weightSum="1">
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/fallenPlantss" />
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/fallenPlants"
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
+            android:weightSum="1">
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/trichodermaAppliedd" />
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/trichodermaApplied"
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
+            android:weightSum="1"
+            android:id="@+id/QuantityinltrrRel"
+            android:visibility="gone">
+
+
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/Quantityinltrr" />
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/Quantityinltr"
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:weightSum="1"
+            android:visibility="gone"
+            android:id="@+id/nooftimell">
+
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/nooftimesappliedd" />
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/nooftimesapplied"
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
+            android:weightSum="1"
+            android:id="@+id/hopbunchesweightll"
+        >
+
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/otherBioProductss" />
+
+            <TextView
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/otherBioProducts"
+                style="@style/header_h1_text_titlee"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/hopnorecord_tv"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="No Records Found"
+        android:textStyle="bold"
+        android:textSize="40dp"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:gravity="center"/>
+
+</android.support.v7.widget.CardView>

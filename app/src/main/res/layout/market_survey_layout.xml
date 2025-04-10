@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.oilpalm3f.mainapp.uihelper.InteractiveScrollView
+        <com.cis.palm360.uihelper.InteractiveScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -418,7 +418,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg"
+                        style="@style/spinner_bg"
+
                         android:entries="@array/yesOrNo_values" />
                 </LinearLayout>
 
@@ -441,7 +442,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg"
+                        style="@style/spinner_bg"
                         android:entries="@array/yesOrNo_values" />
                 </LinearLayout>
 
@@ -516,7 +517,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_bg"
+                        style="@style/spinner_bg"
                         android:entries="@array/yesOrNo_values" />
                 </LinearLayout>
 
@@ -747,7 +748,7 @@
                         android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
-        </com.oilpalm3f.mainapp.uihelper.InteractiveScrollView>
+        </com.cis.palm360.uihelper.InteractiveScrollView>
 
         <ImageView
             android:id="@+id/bottomScroll"

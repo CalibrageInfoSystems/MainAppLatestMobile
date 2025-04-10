@@ -12,7 +12,7 @@
         android:layout_margin="10dp">
 
 
-        <com.oilpalm3f.mainapp.uihelper.InteractiveScrollView
+        <com.cis.palm360.uihelper.InteractiveScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -346,7 +346,7 @@
                         android:layout_height="50dp"
                         android:layout_weight="1"
                         android:inputType="number|textNoSuggestions|textVisiblePassword"
-                        android:maxLength="15">
+                        android:maxLength="10">
 
                     </EditText>
                 </LinearLayout>
@@ -1241,6 +1241,7 @@
                         style="@style/editTxt_normal"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
+                        android:maxLength="10"
                         android:layout_weight="1"
                         android:inputType="number|textNoSuggestions|textVisiblePassword">
 
@@ -1592,7 +1593,7 @@
                     </Button>
                 </LinearLayout>
             </LinearLayout>
-        </com.oilpalm3f.mainapp.uihelper.InteractiveScrollView>
+        </com.cis.palm360.uihelper.InteractiveScrollView>
 
         <ImageView
             android:id="@+id/bottomScroll"

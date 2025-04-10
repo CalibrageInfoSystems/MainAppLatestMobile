@@ -22,7 +22,8 @@
             app:title="Health Plantation History"
             app:titleTextColor="@android:color/white"
             android:id="@+id/titleToolbar"
-            android:background="@android:color/holo_green_dark"/>
+            android:background="@color/colorPrimary"
+            />
 
 
         <LinearLayout
@@ -290,6 +291,39 @@
 
             <TextView
                 android:id="@+id/hopSpear"
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:weightSum="1">
+
+
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="Tying of Leaves" />
+
+            <TextView
+                style="@style/header_h1_text_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:text=" :  "/>
+
+            <TextView
+                android:id="@+id/TyingofLeaves"
                 style="@style/header_h1_text_title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

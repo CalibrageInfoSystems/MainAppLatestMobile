@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.oilpalm3f.mainapp.uihelper.slidedatetimepicker.CustomTimePicker
+<com.cis.palm360.uihelper.slidedatetimepicker.CustomTimePicker
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/timePicker"
     android:layout_width="wrap_content"
